@@ -1,0 +1,97 @@
+/* Contact Page - Contactanos */
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.contact-card {
+    background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    border: 0.125rem solid rgba(188, 170, 164, 0.3);
+    transition: all 0.3s;
+}
+
+.contact-card:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+.contact-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.contact-card h3 {
+    font-size: 1rem;
+    color: #3e1f1f;
+    margin-bottom: 0.5rem;
+}
+
+.contact-card p {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin: 0.25rem 0;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.social-link:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.5rem 1.25rem rgba(161, 99, 92, 0.3);
+}
+
+.map-placeholder {
+    background: linear-gradient(135deg, #efebe9 0%, #d7ccc8 100%);
+    border-radius: 1rem;
+    padding: 3.75rem;
+    text-align: center;
+    border: 0.125rem dashed rgba(188, 170, 164, 0.5);
+}
+
+.map-placeholder span {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.map-placeholder p {
+    color: #8d6e63;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 56.25rem) {
+    .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 31.25rem) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}

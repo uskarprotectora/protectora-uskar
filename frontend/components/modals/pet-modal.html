@@ -1,0 +1,108 @@
+<!-- Modal Agregar/Editar Animal -->
+<div class="modal-overlay" id="petModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">Nuevo Animal</h2>
+            <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <form id="petForm">
+            <input type="hidden" id="petId">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-input" id="petName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tipo</label>
+                    <select class="form-input" id="petType" required>
+                        <option value="">Seleccionar</option>
+                        <option value="dog">Perro</option>
+                        <option value="cat">Gato</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Raza</label>
+                    <input type="text" class="form-input" id="petBreed" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Edad (anos)</label>
+                    <input type="number" class="form-input" id="petAge" min="0" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Peso (kg)</label>
+                    <input type="number" class="form-input" id="petWeight" min="0" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Genero</label>
+                    <select class="form-input" id="petGender" required>
+                        <option value="">Seleccionar</option>
+                        <option value="male">Macho</option>
+                        <option value="female">Hembra</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descripcion</label>
+                <textarea class="form-input form-textarea" id="petDescription" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Estado</label>
+                    <select class="form-input" id="petStatus">
+                        <option value="active">Disponible</option>
+                        <option value="scheduled">Reservado</option>
+                        <option value="inactive">Adoptado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Padrinos</label>
+                    <input type="number" class="form-input" id="petSponsors" min="0" value="0">
+                </div>
+            </div>
+
+            <div class="form-divider"></div>
+            <h3 class="form-section-title">Fotos y Videos</h3>
+
+            <div class="form-group">
+                <label class="form-label">Fotos (la primera sera la principal)</label>
+                <div class="file-upload-area" id="photoUploadArea">
+                    <input type="file" id="petPhotos" multiple accept="image/*" class="file-input">
+                    <div class="file-upload-content">
+                        <span class="file-upload-icon">📷</span>
+                        <span>Arrastra fotos aqui o haz clic para seleccionar</span>
+                        <span class="file-upload-hint">Maximo 10 fotos (JPG, PNG)</span>
+                    </div>
+                </div>
+                <div class="photo-preview-grid" id="photoPreviewGrid"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Videos y mas fotos</label>
+                <div class="file-upload-area" id="videoUploadArea">
+                    <input type="file" id="petVideos" multiple accept="image/*,video/*" class="file-input">
+                    <div class="file-upload-content">
+                        <span class="file-upload-icon">🎬</span>
+                        <span>Arrastra fotos o videos aqui</span>
+                        <span class="file-upload-hint">Maximo 5 archivos (JPG, PNG, MP4, MOV)</span>
+                    </div>
+                </div>
+                <div class="video-preview-list" id="videoPreviewList"></div>
+            </div>
+
+            <div class="existing-media" id="existingMedia" style="display: none;">
+                <h4 class="form-section-title">Media Existente</h4>
+                <div class="existing-photos" id="existingPhotos"></div>
+                <div class="existing-videos" id="existingVideos"></div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>

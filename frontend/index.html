@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Protectora de Animales Uskar</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/pages/about.css">
+    <link rel="stylesheet" href="css/pages/contact.css">
 </head>
 <body>
     <div class="app-window">
-        <!-- Barra de Título -->
+        <!-- Barra de Titulo -->
         <div class="title-bar">
             <div class="title-bar-left">
                 <button class="menu-toggle" id="menuToggle">☰</button>
@@ -19,7 +21,7 @@
             <div class="window-controls">
                 <button class="login-btn" id="loginBtn">
                     <span>👤</span>
-                    <span>Iniciar Sesión</span>
+                    <span>Iniciar Sesion</span>
                 </button>
             </div>
         </div>
@@ -35,7 +37,7 @@
                     <div class="sidebar-title">Formulario</div>
                     <button class="adoption-form-btn" id="openAdoptionFormBtn">
                         <span>📋</span>
-                        <span>Formulario de Adopción</span>
+                        <span>Formulario de Adopcion</span>
                     </button>
                     <button class="adoption-form-btn admin-only" id="viewAdoptionRequestsBtn">
                         <span>📊</span>
@@ -47,7 +49,7 @@
                     <div class="filter-title">Descubre nuestros animales</div>
                     <button class="filter-btn active" data-filter="view" data-value="adoption">
                         <span class="filter-icon">🐾</span>
-                        <span>Animales en adopción</span>
+                        <span>Animales en adopcion</span>
                     </button>
                     <button class="filter-btn" data-filter="view" data-value="happy">
                         <span class="filter-icon">🏠</span>
@@ -59,16 +61,16 @@
                     <div class="filter-title">Conocenos</div>
                     <button class="filter-btn" data-filter="view" data-value="about">
                         <span class="filter-icon">ℹ️</span>
-                        <span>Quiénes somos</span>
+                        <span>Quienes somos</span>
                     </button>
                     <button class="filter-btn" data-filter="view" data-value="contact">
                         <span class="filter-icon">📞</span>
-                        <span>Contáctanos</span>
+                        <span>Contactanos</span>
                     </button>
                 </div>
 
                 <div class="filter-section">
-                    <div class="filter-title">Ayúdanos</div>
+                    <div class="filter-title">Ayudanos</div>
                     <button class="filter-btn help-btn" data-action="donaciones">
                         <span class="filter-icon">💝</span>
                         <span>Donaciones</span>
@@ -127,428 +129,15 @@
         </div>
     </div>
 
-    <!-- Modal Agregar/Editar Animal -->
-    <div class="modal-overlay" id="petModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Nuevo Animal</h2>
-                <button class="modal-close" id="closeModal">&times;</button>
-            </div>
-            <form id="petForm">
-                <input type="hidden" id="petId">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Nombre</label>
-                        <input type="text" class="form-input" id="petName" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Tipo</label>
-                        <select class="form-input" id="petType" required>
-                            <option value="">Seleccionar</option>
-                            <option value="dog">Perro</option>
-                            <option value="cat">Gato</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Raza</label>
-                        <input type="text" class="form-input" id="petBreed" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Edad (años)</label>
-                        <input type="number" class="form-input" id="petAge" min="0" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Peso (kg)</label>
-                        <input type="number" class="form-input" id="petWeight" min="0" step="0.1" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Genero</label>
-                        <select class="form-input" id="petGender" required>
-                            <option value="">Seleccionar</option>
-                            <option value="male">Macho</option>
-                            <option value="female">Hembra</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Descripcion</label>
-                    <textarea class="form-input form-textarea" id="petDescription" rows="3"></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Estado</label>
-                        <select class="form-input" id="petStatus">
-                            <option value="active">Disponible</option>
-                            <option value="scheduled">Reservado</option>
-                            <option value="inactive">Adoptado</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Padrinos</label>
-                        <input type="number" class="form-input" id="petSponsors" min="0" value="0">
-                    </div>
-                </div>
-
-                <div class="form-divider"></div>
-                <h3 class="form-section-title">Fotos y Videos</h3>
-
-                <div class="form-group">
-                    <label class="form-label">Fotos (la primera sera la principal)</label>
-                    <div class="file-upload-area" id="photoUploadArea">
-                        <input type="file" id="petPhotos" multiple accept="image/*" class="file-input">
-                        <div class="file-upload-content">
-                            <span class="file-upload-icon">📷</span>
-                            <span>Arrastra fotos aqui o haz clic para seleccionar</span>
-                            <span class="file-upload-hint">Maximo 10 fotos (JPG, PNG)</span>
-                        </div>
-                    </div>
-                    <div class="photo-preview-grid" id="photoPreviewGrid"></div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Videos y mas fotos</label>
-                    <div class="file-upload-area" id="videoUploadArea">
-                        <input type="file" id="petVideos" multiple accept="image/*,video/*" class="file-input">
-                        <div class="file-upload-content">
-                            <span class="file-upload-icon">🎬</span>
-                            <span>Arrastra fotos o videos aqui</span>
-                            <span class="file-upload-hint">Maximo 5 archivos (JPG, PNG, MP4, MOV)</span>
-                        </div>
-                    </div>
-                    <div class="video-preview-list" id="videoPreviewList"></div>
-                </div>
-
-                <div class="existing-media" id="existingMedia" style="display: none;">
-                    <h4 class="form-section-title">Media Existente</h4>
-                    <div class="existing-photos" id="existingPhotos"></div>
-                    <div class="existing-videos" id="existingVideos"></div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Ver Perfil -->
-    <div class="modal-overlay" id="profileModal">
-        <div class="modal modal-large">
-            <div class="modal-header">
-                <h2 class="modal-title">Perfil del Animal</h2>
-                <button class="modal-close" id="closeProfileModal">&times;</button>
-            </div>
-            <div class="profile-content" id="profileContent">
-                <!-- El contenido del perfil se renderizara aqui -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Ayudanos -->
-    <div class="modal-overlay" id="helpModal">
-        <div class="modal modal-large">
-            <div class="modal-header">
-                <h2 class="modal-title" id="helpModalTitle">Ayudanos</h2>
-                <button class="modal-close" id="closeHelpModal">&times;</button>
-            </div>
-            <div class="help-content" id="helpContent">
-                <!-- El contenido de ayuda se renderizara aqui -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Quienes Somos -->
-    <div class="modal-overlay" id="aboutModal">
-        <div class="modal modal-large">
-            <div class="modal-header">
-                <h2 class="modal-title">ℹ️ Quienes Somos</h2>
-                <button class="modal-close" id="closeAboutModal">&times;</button>
-            </div>
-            <div class="about-content">
-                <div class="about-hero">
-                    <div class="about-hero-icon">🐾</div>
-                    <h3>Protectora de Animales Uskar</h3>
-                    <p>Rescatando vidas, creando familias desde 2010</p>
-                </div>
-
-                <div class="about-section">
-                    <h4>Nuestra Mision</h4>
-                    <p>Somos una organizacion sin animo de lucro dedicada al rescate, rehabilitacion y busqueda de hogares para animales abandonados y maltratados. Trabajamos incansablemente para darles una segunda oportunidad.</p>
-                </div>
-
-                <div class="about-section">
-                    <h4>Que Hacemos</h4>
-                    <div class="about-cards">
-                        <div class="about-card">
-                            <span class="about-card-icon">🚑</span>
-                            <h5>Rescate</h5>
-                            <p>Rescatamos animales en situacion de abandono o maltrato.</p>
-                        </div>
-                        <div class="about-card">
-                            <span class="about-card-icon">💊</span>
-                            <h5>Cuidados</h5>
-                            <p>Proporcionamos atencion veterinaria y rehabilitacion.</p>
-                        </div>
-                        <div class="about-card">
-                            <span class="about-card-icon">🏠</span>
-                            <h5>Adopcion</h5>
-                            <p>Buscamos familias responsables para cada animal.</p>
-                        </div>
-                        <div class="about-card">
-                            <span class="about-card-icon">📢</span>
-                            <h5>Concienciacion</h5>
-                            <p>Educamos sobre tenencia responsable de animales.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="about-section">
-                    <h4>Contacto</h4>
-                    <div class="about-contact">
-                        <p>📍 Direccion: Calle Example 123, Ciudad</p>
-                        <p>📞 Telefono: +34 600 000 000</p>
-                        <p>✉️ Email: info@protectorauskar.org</p>
-                        <p>🕐 Horario: Lunes a Domingo de 10:00 a 18:00</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Formulario de Adopcion -->
-    <div class="modal-overlay" id="adoptionFormModal">
-        <div class="modal modal-large">
-            <div class="modal-header">
-                <h2 class="modal-title">📋 Formulario de Adopcion</h2>
-                <button class="modal-close" id="closeAdoptionFormModal">&times;</button>
-            </div>
-            <form id="adoptionForm" class="adoption-form-content">
-                <input type="hidden" id="adoptionPetId">
-                <input type="hidden" id="adoptionPetName">
-
-                <div class="form-section-header">
-                    <h3>🐾 Animal de interes</h3>
-                </div>
-                <div class="pet-interest-display" id="petInterestDisplay">
-                    <span>Solicitud general de adopcion</span>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nombre del animal que te interesa</label>
-                    <input type="text" class="form-input" id="adoptPetNameInput" placeholder="Escribe el nombre del animal...">
-                </div>
-
-                <div class="form-section-header">
-                    <h3>🎥 Video de Presentacion</h3>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Grabate un video presentandote (opcional)</label>
-                    <div class="file-upload-area" id="adoptVideoUploadArea">
-                        <input type="file" id="adoptPresentationVideo" accept="video/*" class="file-input">
-                        <div class="file-upload-content">
-                            <span class="file-upload-icon">🎬</span>
-                            <span>Arrastra tu video aqui o haz clic para seleccionar</span>
-                            <span class="file-upload-hint">Maximo 30MB (MP4, MOV)</span>
-                        </div>
-                    </div>
-                    <div class="adopt-video-preview" id="adoptVideoPreview"></div>
-                </div>
-
-                <div class="form-section-header">
-                    <h3>👤 Datos Personales</h3>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Nombre completo *</label>
-                        <input type="text" class="form-input" id="adoptFullName" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Edad *</label>
-                        <input type="number" class="form-input" id="adoptAge" min="18" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Email *</label>
-                        <input type="email" class="form-input" id="adoptEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Telefono *</label>
-                        <input type="tel" class="form-input" id="adoptPhone" required>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Direccion *</label>
-                        <input type="text" class="form-input" id="adoptAddress" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Ciudad *</label>
-                        <input type="text" class="form-input" id="adoptCity" required>
-                    </div>
-                </div>
-
-                <div class="form-section-header">
-                    <h3>🏠 Vivienda</h3>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Tipo de vivienda *</label>
-                        <select class="form-input" id="adoptHousingType" required>
-                            <option value="">Seleccionar</option>
-                            <option value="piso">Piso</option>
-                            <option value="casa">Casa</option>
-                            <option value="chalet">Chalet</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Propietario o alquiler *</label>
-                        <select class="form-input" id="adoptOwnerOrRenter" required>
-                            <option value="">Seleccionar</option>
-                            <option value="propietario">Propietario</option>
-                            <option value="alquiler">Alquiler</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="adoptHasGarden">
-                            <span>Tengo jardin o terraza</span>
-                        </label>
-                    </div>
-                    <div class="form-group checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="adoptLandlordAllows" checked>
-                            <span>El propietario permite mascotas (si alquiler)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-section-header">
-                    <h3>👨‍👩‍👧‍👦 Situacion Familiar</h3>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Miembros en el hogar *</label>
-                        <input type="number" class="form-input" id="adoptFamilyMembers" min="1" value="1" required>
-                    </div>
-                    <div class="form-group checkbox-group" style="padding-top: 28px;">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="adoptHasChildren">
-                            <span>Hay ninos en casa</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="form-group" id="childrenAgesGroup" style="display: none;">
-                    <label class="form-label">Edades de los ninos</label>
-                    <input type="text" class="form-input" id="adoptChildrenAges" placeholder="Ej: 5 y 8 años">
-                </div>
-                <div class="form-group checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="adoptAllAgree" required>
-                        <span>Todos los miembros del hogar estan de acuerdo con la adopcion *</span>
-                    </label>
-                </div>
-
-                <div class="form-section-header">
-                    <h3>🐕 Experiencia con Animales</h3>
-                </div>
-                <div class="form-group checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="adoptHasOtherPets">
-                        <span>Tengo otras mascotas actualmente</span>
-                    </label>
-                </div>
-                <div class="form-group" id="otherPetsGroup" style="display: none;">
-                    <label class="form-label">Describe tus mascotas actuales</label>
-                    <textarea class="form-input form-textarea" id="adoptOtherPetsDesc" rows="2" placeholder="Tipo, raza, edad, caracter..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Experiencia previa con animales</label>
-                    <textarea class="form-input form-textarea" id="adoptPreviousExperience" rows="2" placeholder="Cuentanos si has tenido mascotas antes..."></textarea>
-                </div>
-
-                <div class="form-section-header">
-                    <h3>❤️ Sobre la Adopcion</h3>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Por que quieres adoptar? *</label>
-                    <textarea class="form-input form-textarea" id="adoptWhyAdopt" rows="3" required placeholder="Cuentanos tus motivaciones..."></textarea>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Horas que estara solo el animal *</label>
-                        <input type="number" class="form-input" id="adoptHoursAlone" min="0" max="24" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Plan para vacaciones</label>
-                        <input type="text" class="form-input" id="adoptVacationPlan" placeholder="Que haras con el animal?">
-                    </div>
-                </div>
-                <div class="form-group checkbox-group">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="adoptCommitment" required>
-                        <span>Entiendo que adoptar es un compromiso de por vida y me hago responsable *</span>
-                    </label>
-                </div>
-
-                <div class="form-section-header">
-                    <h3>🤖 Verificacion</h3>
-                </div>
-                <div class="captcha-container">
-                    <div class="captcha-question">
-                        <span id="captchaQuestion">Cargando...</span>
-                        <button type="button" class="captcha-refresh" onclick="generateCaptcha()" title="Nueva pregunta">🔄</button>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Tu respuesta *</label>
-                        <input type="number" class="form-input captcha-input" id="captchaAnswer" required placeholder="Escribe el resultado">
-                    </div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelAdoptionBtn">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Iniciar Sesion -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal modal-small">
-            <div class="modal-header">
-                <h2 class="modal-title">🔐 Iniciar Sesion</h2>
-                <button class="modal-close" id="closeLoginModal">&times;</button>
-            </div>
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label class="form-label">Usuario</label>
-                    <input type="text" class="form-input" id="loginUser" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Contrasena</label>
-                    <input type="password" class="form-input" id="loginPassword" required>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" id="cancelLoginBtn">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Entrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- Contenedor para modales cargados dinamicamente -->
+    <div id="modals-container"></div>
 
     <!-- Configuracion -->
     <script src="js/config.js"></script>
 
     <!-- Utilidades y Estado -->
     <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/componentLoader.js"></script>
     <script src="js/state.js"></script>
 
     <!-- API -->

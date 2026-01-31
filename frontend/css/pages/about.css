@@ -1,0 +1,131 @@
+/* About Page - Quienes Somos */
+
+.static-page {
+    width: 100%;
+    padding: 1.875rem;
+    box-sizing: border-box;
+}
+
+.static-page .about-hero {
+    text-align: center;
+    padding: 3.75rem 2.5rem;
+    background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
+    border-radius: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.static-page .about-hero-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.static-page .about-hero h1 {
+    font-size: 2.375rem;
+    color: #3e1f1f;
+    margin-bottom: 0.75rem;
+}
+
+.static-page .about-hero p {
+    font-size: 1rem;
+    color: #5d4037;
+}
+
+.about-section-content {
+    margin-bottom: 2.5rem;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 1.5rem;
+    border-radius: 1rem;
+}
+
+.about-section-content h2 {
+    font-size: 1.25rem;
+    color: #3e1f1f;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.125rem solid #a1635c;
+}
+
+.about-section-content p {
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: #5d4037;
+    margin-bottom: 0.75rem;
+}
+
+.about-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+}
+
+.about-card-item {
+    background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    border: 0.125rem solid rgba(188, 170, 164, 0.3);
+    transition: all 0.3s;
+}
+
+.about-card-item:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+}
+
+.about-card-item .about-card-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.about-card-item h3 {
+    font-size: 1rem;
+    color: #3e1f1f;
+    margin-bottom: 0.5rem;
+}
+
+.about-card-item p {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 56.25rem) {
+    .about-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 48rem) {
+    .static-page {
+        padding: 1rem;
+    }
+
+    .static-page .about-hero {
+        padding: 2.5rem 1.25rem;
+    }
+
+    .static-page .about-hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .about-section-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 31.25rem) {
+    .about-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .static-page .about-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .static-page .about-hero-icon {
+        font-size: 3rem;
+    }
+}

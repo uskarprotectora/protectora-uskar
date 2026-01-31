@@ -1,0 +1,199 @@
+<!-- Modal Formulario de Adopcion -->
+<div class="modal-overlay" id="adoptionFormModal">
+    <div class="modal modal-large">
+        <div class="modal-header">
+            <h2 class="modal-title">📋 Formulario de Adopcion</h2>
+            <button class="modal-close" id="closeAdoptionFormModal">&times;</button>
+        </div>
+        <form id="adoptionForm" class="adoption-form-content">
+            <input type="hidden" id="adoptionPetId">
+            <input type="hidden" id="adoptionPetName">
+
+            <div class="form-section-header">
+                <h3>🐾 Animal de interes</h3>
+            </div>
+            <div class="pet-interest-display" id="petInterestDisplay">
+                <span>Solicitud general de adopcion</span>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre del animal que te interesa</label>
+                <input type="text" class="form-input" id="adoptPetNameInput" placeholder="Escribe el nombre del animal...">
+            </div>
+
+            <div class="form-section-header">
+                <h3>🎥 Video de Presentacion</h3>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Grabate un video presentandote (opcional)</label>
+                <div class="file-upload-area" id="adoptVideoUploadArea">
+                    <input type="file" id="adoptPresentationVideo" accept="video/*" class="file-input">
+                    <div class="file-upload-content">
+                        <span class="file-upload-icon">🎬</span>
+                        <span>Arrastra tu video aqui o haz clic para seleccionar</span>
+                        <span class="file-upload-hint">Maximo 30MB (MP4, MOV)</span>
+                    </div>
+                </div>
+                <div class="adopt-video-preview" id="adoptVideoPreview"></div>
+            </div>
+
+            <div class="form-section-header">
+                <h3>👤 Datos Personales</h3>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Nombre completo *</label>
+                    <input type="text" class="form-input" id="adoptFullName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Edad *</label>
+                    <input type="number" class="form-input" id="adoptAge" min="18" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" id="adoptEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Telefono *</label>
+                    <input type="tel" class="form-input" id="adoptPhone" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Direccion *</label>
+                    <input type="text" class="form-input" id="adoptAddress" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ciudad *</label>
+                    <input type="text" class="form-input" id="adoptCity" required>
+                </div>
+            </div>
+
+            <div class="form-section-header">
+                <h3>🏠 Vivienda</h3>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Tipo de vivienda *</label>
+                    <select class="form-input" id="adoptHousingType" required>
+                        <option value="">Seleccionar</option>
+                        <option value="piso">Piso</option>
+                        <option value="casa">Casa</option>
+                        <option value="chalet">Chalet</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Propietario o alquiler *</label>
+                    <select class="form-input" id="adoptOwnerOrRenter" required>
+                        <option value="">Seleccionar</option>
+                        <option value="propietario">Propietario</option>
+                        <option value="alquiler">Alquiler</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="adoptHasGarden">
+                        <span>Tengo jardin o terraza</span>
+                    </label>
+                </div>
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="adoptLandlordAllows" checked>
+                        <span>El propietario permite mascotas (si alquiler)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section-header">
+                <h3>👨‍👩‍👧‍👦 Situacion Familiar</h3>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Miembros en el hogar *</label>
+                    <input type="number" class="form-input" id="adoptFamilyMembers" min="1" value="1" required>
+                </div>
+                <div class="form-group checkbox-group" style="padding-top: 28px;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="adoptHasChildren">
+                        <span>Hay ninos en casa</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" id="childrenAgesGroup" style="display: none;">
+                <label class="form-label">Edades de los ninos</label>
+                <input type="text" class="form-input" id="adoptChildrenAges" placeholder="Ej: 5 y 8 anos">
+            </div>
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="adoptAllAgree" required>
+                    <span>Todos los miembros del hogar estan de acuerdo con la adopcion *</span>
+                </label>
+            </div>
+
+            <div class="form-section-header">
+                <h3>🐕 Experiencia con Animales</h3>
+            </div>
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="adoptHasOtherPets">
+                    <span>Tengo otras mascotas actualmente</span>
+                </label>
+            </div>
+            <div class="form-group" id="otherPetsGroup" style="display: none;">
+                <label class="form-label">Describe tus mascotas actuales</label>
+                <textarea class="form-input form-textarea" id="adoptOtherPetsDesc" rows="2" placeholder="Tipo, raza, edad, caracter..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Experiencia previa con animales</label>
+                <textarea class="form-input form-textarea" id="adoptPreviousExperience" rows="2" placeholder="Cuentanos si has tenido mascotas antes..."></textarea>
+            </div>
+
+            <div class="form-section-header">
+                <h3>❤️ Sobre la Adopcion</h3>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Por que quieres adoptar? *</label>
+                <textarea class="form-input form-textarea" id="adoptWhyAdopt" rows="3" required placeholder="Cuentanos tus motivaciones..."></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Horas que estara solo el animal *</label>
+                    <input type="number" class="form-input" id="adoptHoursAlone" min="0" max="24" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Plan para vacaciones</label>
+                    <input type="text" class="form-input" id="adoptVacationPlan" placeholder="Que haras con el animal?">
+                </div>
+            </div>
+            <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="adoptCommitment" required>
+                    <span>Entiendo que adoptar es un compromiso de por vida y me hago responsable *</span>
+                </label>
+            </div>
+
+            <div class="form-section-header">
+                <h3>🤖 Verificacion</h3>
+            </div>
+            <div class="captcha-container">
+                <div class="captcha-question">
+                    <span id="captchaQuestion">Cargando...</span>
+                    <button type="button" class="captcha-refresh" onclick="generateCaptcha()" title="Nueva pregunta">🔄</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tu respuesta *</label>
+                    <input type="number" class="form-input captcha-input" id="captchaAnswer" required placeholder="Escribe el resultado">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" id="cancelAdoptionBtn">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+            </div>
+        </form>
+    </div>
+</div>
