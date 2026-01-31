@@ -15,10 +15,11 @@
                 <div class="app-icon">🐾</div>
                 <span class="app-name">Protectora de Animales Uskar</span>
             </div>
+            <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre, raza...">
             <div class="window-controls">
                 <button class="login-btn" id="loginBtn">
                     <span>👤</span>
-                    <span>Iniciar Sesion</span>
+                    <span>Iniciar Sesión</span>
                 </button>
             </div>
         </div>
@@ -31,11 +32,10 @@
             <!-- Barra Lateral -->
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <div class="sidebar-title">Buscar</div>
-                    <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre, raza...">
+                    <div class="sidebar-title">Formulario</div>
                     <button class="adoption-form-btn" id="openAdoptionFormBtn">
                         <span>📋</span>
-                        <span>Formulario de Adopcion</span>
+                        <span>Formulario de Adopción</span>
                     </button>
                     <button class="adoption-form-btn admin-only" id="viewAdoptionRequestsBtn">
                         <span>📊</span>
@@ -47,7 +47,7 @@
                     <div class="filter-title">Descubre nuestros animales</div>
                     <button class="filter-btn active" data-filter="view" data-value="adoption">
                         <span class="filter-icon">🐾</span>
-                        <span>Animales en adopcion</span>
+                        <span>Animales en adopción</span>
                     </button>
                     <button class="filter-btn" data-filter="view" data-value="happy">
                         <span class="filter-icon">🏠</span>
@@ -59,16 +59,16 @@
                     <div class="filter-title">Conocenos</div>
                     <button class="filter-btn" data-filter="view" data-value="about">
                         <span class="filter-icon">ℹ️</span>
-                        <span>Quienes somos</span>
+                        <span>Quiénes somos</span>
                     </button>
                     <button class="filter-btn" data-filter="view" data-value="contact">
                         <span class="filter-icon">📞</span>
-                        <span>Contactanos</span>
+                        <span>Contáctanos</span>
                     </button>
                 </div>
 
                 <div class="filter-section">
-                    <div class="filter-title">Ayudanos</div>
+                    <div class="filter-title">Ayúdanos</div>
                     <button class="filter-btn help-btn" data-action="donaciones">
                         <span class="filter-icon">💝</span>
                         <span>Donaciones</span>
@@ -544,29 +544,30 @@
         </div>
     </div>
 
+    <!-- Configuracion -->
     <script src="js/config.js"></script>
-    <script src="js/app.js"></script>
-    <script>
-        // Menu hamburguesa para movil
-        document.addEventListener('DOMContentLoaded', function() {
-            var menuToggle = document.getElementById('menuToggle');
-            var sidebar = document.getElementById('sidebar');
-            var sidebarOverlay = document.getElementById('sidebarOverlay');
 
-            if (menuToggle) {
-                menuToggle.onclick = function() {
-                    sidebar.classList.toggle('active');
-                    sidebarOverlay.classList.toggle('active');
-                };
-            }
+    <!-- Utilidades y Estado -->
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/state.js"></script>
 
-            if (sidebarOverlay) {
-                sidebarOverlay.onclick = function() {
-                    sidebar.classList.remove('active');
-                    sidebarOverlay.classList.remove('active');
-                };
-            }
-        });
-    </script>
+    <!-- API -->
+    <script src="js/api.js"></script>
+
+    <!-- Componentes -->
+    <script src="js/components/auth.js"></script>
+    <script src="js/components/petCard.js"></script>
+    <script src="js/components/petProfile.js"></script>
+    <script src="js/components/helpModals.js"></script>
+    <script src="js/components/adoptionForm.js"></script>
+    <script src="js/components/petForm.js"></script>
+
+    <!-- Paginas -->
+    <script src="js/pages/about.js"></script>
+    <script src="js/pages/contact.js"></script>
+    <script src="js/pages/requests.js"></script>
+
+    <!-- Aplicacion Principal -->
+    <script src="js/app-main.js"></script>
 </body>
 </html>
