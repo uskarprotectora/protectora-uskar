@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quienes Somos - Protectora de Animales Uskar</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            overflow-y: auto;
+        }
+        .about-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #efebe9 0%, #faf8f7 100%);
+        }
+        .about-header {
+            background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+        .about-header-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .about-header h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .about-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .about-nav {
+            background: white;
+            padding: 16px 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .about-nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            color: #5d4037;
+            text-decoration: none;
+        }
+        .about-nav-logo span:first-child {
+            font-size: 28px;
+        }
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #a1635c 0%, #8d6e63 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(161, 99, 92, 0.3);
+        }
+        .about-main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        .about-section {
+            margin-bottom: 60px;
+        }
+        .about-section h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #4e342e;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #a1635c;
+            display: inline-block;
+        }
+        .about-section p {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #5d4037;
+            margin-bottom: 16px;
+        }
+        .mission-box {
+            background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+        .mission-box h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .mission-box p {
+            color: rgba(255,255,255,0.95);
+            font-size: 18px;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+        .service-card {
+            background: white;
+            border: 2px solid rgba(188, 170, 164, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(161, 99, 92, 0.15);
+            border-color: #a1635c;
+        }
+        .service-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .service-card h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4e342e;
+            margin-bottom: 10px;
+        }
+        .service-card p {
+            font-size: 14px;
+            color: #6d4c41;
+            margin: 0;
+        }
+        .team-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #efebe9 0%, #d7ccc8 100%);
+            border-radius: 16px;
+        }
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            color: #a1635c;
+            display: block;
+        }
+        .stat-text {
+            font-size: 14px;
+            color: #5d4037;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .contact-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        .contact-info h4 {
+            font-size: 20px;
+            color: #4e342e;
+            margin-bottom: 20px;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(188, 170, 164, 0.3);
+        }
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        .contact-item span:first-child {
+            font-size: 24px;
+        }
+        .contact-item span:last-child {
+            color: #5d4037;
+        }
+        .map-placeholder {
+            background: linear-gradient(135deg, #d7ccc8 0%, #bcaaa4 100%);
+            border-radius: 16px;
+            height: 100%;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+        }
+        .about-footer {
+            background: #4e342e;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+        }
+        .about-footer p {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .contact-section {
+                grid-template-columns: 1fr;
+            }
+            .about-header h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="about-page">
+        <nav class="about-nav">
+            <a href="/" class="about-nav-logo">
+                <span>🐾</span>
+                <span>Protectora Uskar</span>
+            </a>
+            <a href="/" class="back-btn">
+                <span>←</span>
+                <span>Volver al inicio</span>
+            </a>
+        </nav>
+
+        <header class="about-header">
+            <div class="about-header-icon">🐾</div>
+            <h1>Protectora de Animales Uskar</h1>
+            <p>Rescatando vidas, creando familias desde 2010</p>
+        </header>
+
+        <main class="about-main">
+            <section class="about-section">
+                <h2>Nuestra Historia</h2>
+                <p>
+                    La Protectora de Animales Uskar nacio en 2010 de la mano de un pequeno grupo de voluntarios
+                    apasionados por el bienestar animal. Lo que comenzo como una iniciativa local para ayudar
+                    a los animales abandonados de nuestra comunidad, se ha convertido en una organizacion
+                    consolidada que ha salvado miles de vidas.
+                </p>
+                <p>
+                    A lo largo de estos años, hemos crecido gracias al apoyo incondicional de nuestros
+                    voluntarios, colaboradores y adoptantes. Cada animal que pasa por nuestras instalaciones
+                    recibe el cuidado, el carino y la atencion que merece mientras busca su hogar definitivo.
+                </p>
+
+                <div class="mission-box">
+                    <h3>Nuestra Mision</h3>
+                    <p>
+                        Rescatar, rehabilitar y encontrar hogares amorosos para animales abandonados y maltratados,
+                        promoviendo una cultura de respeto y tenencia responsable en nuestra sociedad.
+                    </p>
+                </div>
+            </section>
+
+            <section class="about-section">
+                <h2>Que Hacemos</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">🚑</div>
+                        <h4>Rescate</h4>
+                        <p>Rescatamos animales en situacion de abandono, maltrato o peligro en toda la region.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">💊</div>
+                        <h4>Atencion Veterinaria</h4>
+                        <p>Proporcionamos cuidados medicos completos, vacunacion, esterilizacion y rehabilitacion.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🏠</div>
+                        <h4>Adopcion Responsable</h4>
+                        <p>Buscamos familias comprometidas mediante un proceso de adopcion cuidadoso.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">📢</div>
+                        <h4>Concienciacion</h4>
+                        <p>Educamos sobre tenencia responsable y bienestar animal en colegios y comunidades.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🏥</div>
+                        <h4>Acogida Temporal</h4>
+                        <p>Red de casas de acogida para animales que necesitan un entorno familiar.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">❤️</div>
+                        <h4>Seguimiento</h4>
+                        <p>Realizamos seguimiento post-adopcion para asegurar el bienestar del animal.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-section">
+                <h2>Nuestros Numeros</h2>
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <span class="stat-number">2,500+</span>
+                        <span class="stat-text">Animales rescatados</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">1,800+</span>
+                        <span class="stat-text">Adopciones exitosas</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-text">Voluntarios activos</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">14</span>
+                        <span class="stat-text">Anos de experiencia</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-section">
+                <h2>Contacto</h2>
+                <div class="contact-section">
+                    <div class="contact-info">
+                        <h4>Informacion de Contacto</h4>
+                        <div class="contact-item">
+                            <span>📍</span>
+                            <span>Calle Example 123, Ciudad, CP 12345</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <span>+34 600 000 000</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <span>info@protectorauskar.org</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>🕐</span>
+                            <span>Lunes a Domingo: 10:00 - 18:00</span>
+                        </div>
+                        <div class="contact-item">
+                            <span>📱</span>
+                            <span>@protectorauskar</span>
+                        </div>
+                    </div>
+                    <div class="map-placeholder">
+                        📍
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="about-footer">
+            <p>© 2024 Protectora de Animales Uskar. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>
