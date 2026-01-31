@@ -12,19 +12,13 @@ const helpContent = {
                     <div class="help-card">
                         <div class="help-card-icon">🏦</div>
                         <h4>Transferencia Bancaria</h4>
-                        <p>IBAN: ES00 0000 0000 0000 0000 0000</p>
+                        <p>IBAN: ES70 0049 3327 3721 1405 4110</p>
                         <p>Concepto: Donacion Uskar</p>
-                    </div>
-                    <div class="help-card">
-                        <div class="help-card-icon">💳</div>
-                        <h4>Bizum</h4>
-                        <p>Numero: 000 000 000</p>
-                        <p>Concepto: Donacion</p>
                     </div>
                     <div class="help-card">
                         <div class="help-card-icon">🎁</div>
                         <h4>Donaciones en Especie</h4>
-                        <p>Aceptamos pienso, mantas, medicamentos y material veterinario.</p>
+                        <p>Aceptamos pienso, mantas, medicamentos y material veterinario...</p>
                     </div>
                 </div>
             </div>
@@ -56,12 +50,12 @@ const helpContent = {
                     <div class="help-card">
                         <div class="help-card-icon">🧹</div>
                         <h4>Tareas en el Refugio</h4>
-                        <p>Ayuda con limpieza, paseos y socializacion de animales.</p>
+                        <p>Ayuda con limpieza, cuidado y socializacion de animales.</p>
                     </div>
                 </div>
 
                 <div class="help-cta">
-                    <p style="margin-bottom: 16px; color: #78350f;">Contactaños para mas informacion sobre como ser voluntario.</p>
+                    <p style="margin-bottom: 16px; color: #78350f;">Contáctanos para mas información sobre cómo ser voluntario.</p>
                 </div>
             </div>
         `
@@ -76,25 +70,32 @@ const helpContent = {
                 <div class="help-highlight">
                     <div class="help-highlight-icon">⭐</div>
                     <h3>Solo 1 euro al mes</h3>
-                    <p>Un pequeno gesto que marca una gran diferencia</p>
+                    <p>Un pequeño gesto que marca una gran diferencia</p>
                 </div>
 
                 <div class="help-cards">
                     <div class="help-card full-width">
                         <div class="help-card-icon">💡</div>
                         <h4>Como funciona Teaming?</h4>
-                        <ol class="help-list">
-                            <li>Entra en nuestra pagina de Teaming</li>
-                            <li>Registrate con tu email</li>
-                            <li>Configura tu donacion mensual de 1 euro</li>
-                            <li>Listo! Ya estas ayudando cada mes</li>
-                        </ol>
+                        <div class="teaming-content-columns">
+                            <div class="teaming-list-column">
+                                <ol class="help-list">
+                                    <li>Entra en nuestra página de Teaming</li>
+                                    <li>Regístrate con tu email</li>
+                                    <li>Configura tu donación mensual de 1 euro</li>
+                                    <li>Listo! Ya estás ayudando cada mes</li>
+                                </ol>
+                            </div>
+                            <div class="teaming-cta-column">
+                                <a href="https://www.teaming.net/protectoraanimalesuskar" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                                    <button class="btn btn-primary btn-large">Unirme al Teaming</button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="help-cta">
-                    <button class="btn btn-primary btn-large">Unirme al Teaming</button>
-                </div>
+                
             </div>
         `
     },

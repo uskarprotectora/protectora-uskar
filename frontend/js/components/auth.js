@@ -36,17 +36,20 @@ function updateUIForLogin() {
     const loginBtn = document.getElementById('loginBtn');
     const addPetBtn = document.getElementById('addPetBtn');
     const viewRequestsBtn = document.getElementById('viewAdoptionRequestsBtn');
+    const apadrinaBtn = document.getElementById('apadrinaBtn');
 
     if (AppState.isLoggedIn) {
         loginBtn.innerHTML = '<span>🔓</span><span>Cerrar Sesion</span>';
         loginBtn.classList.add('logged-in');
         addPetBtn.classList.add('visible');
         viewRequestsBtn.classList.add('visible');
+        if (apadrinaBtn) apadrinaBtn.classList.add('visible');
     } else {
         loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesion</span>';
         loginBtn.classList.remove('logged-in');
         addPetBtn.classList.remove('visible');
         viewRequestsBtn.classList.remove('visible');
+        if (apadrinaBtn) apadrinaBtn.classList.remove('visible');
 
         if (AppState.currentView === 'requests') {
             AppState.currentView = 'adoption';
