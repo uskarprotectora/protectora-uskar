@@ -8,10 +8,8 @@
 
 .static-page .about-hero {
     text-align: center;
-    padding: 3.75rem 2.5rem;
     background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
     border-radius: 1.25rem;
-    margin-bottom: 2.5rem;
 }
 
 .static-page .about-hero-icon {
