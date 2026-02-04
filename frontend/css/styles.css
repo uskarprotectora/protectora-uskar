@@ -415,7 +415,7 @@ a.adoption-form-btn {
 .pet-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1643,7 +1643,7 @@ a.adoption-form-btn {
 .pet-image-container img.pet-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 /* Static Pages Layout */

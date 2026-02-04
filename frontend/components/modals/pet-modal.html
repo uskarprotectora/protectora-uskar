@@ -27,15 +27,26 @@
                     <input type="text" class="form-input" id="petBreed" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Edad (anos)</label>
-                    <input type="number" class="form-input" id="petAge" min="0" required>
+                    <label class="form-label">Tamaño</label>
+                    <select class="form-input" id="petSize">
+                        <option value="">Seleccionar</option>
+                        <option value="small">Pequeño</option>
+                        <option value="medium">Mediano</option>
+                        <option value="large">Grande</option>
+                    </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label class="form-label">Peso (kg)</label>
-                    <input type="number" class="form-input" id="petWeight" min="0" step="0.1" required>
+                    <label class="form-label">Mes de nacimiento</label>
+                    <input type="month" class="form-input" id="petBirthDate">
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Peso (kg)</label>
+                    <input type="number" class="form-input" id="petWeight" min="0" step="0.1">
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
                     <label class="form-label">Genero</label>
                     <select class="form-input" id="petGender" required>
@@ -43,6 +54,17 @@
                         <option value="male">Macho</option>
                         <option value="female">Hembra</option>
                     </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label"><input type="checkbox" id="petNeutered"> Castrado</label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><input type="checkbox" id="petVaccinated"> Vacunado</label>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><input type="checkbox" id="petChipped"> Chipado</label>
                 </div>
             </div>
             <div class="form-group">

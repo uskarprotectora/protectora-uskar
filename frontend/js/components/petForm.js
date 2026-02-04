@@ -29,9 +29,13 @@ function openEditModal(id) {
     document.getElementById('petName').value = pet.name;
     document.getElementById('petType').value = pet.type;
     document.getElementById('petBreed').value = pet.breed;
-    document.getElementById('petAge').value = pet.age;
-    document.getElementById('petWeight').value = pet.weight;
+    document.getElementById('petBirthDate').value = pet.birthDate ? pet.birthDate.substring(0, 7) : '';
+    document.getElementById('petWeight').value = pet.weight ?? '';
+    document.getElementById('petSize').value = pet.size || '';
     document.getElementById('petGender').value = pet.gender;
+    document.getElementById('petNeutered').checked = pet.neutered || false;
+    document.getElementById('petVaccinated').checked = pet.vaccinated || false;
+    document.getElementById('petChipped').checked = pet.chipped || false;
     document.getElementById('petDescription').value = pet.description || '';
     document.getElementById('petStatus').value = pet.status;
     document.getElementById('petSponsors').value = pet.sponsors || 0;
@@ -66,13 +70,18 @@ function closeModal() {
 function handleFormSubmit(e) {
     e.preventDefault();
 
+    const birthDateVal = document.getElementById('petBirthDate').value;
+    const weightVal = document.getElementById('petWeight').value;
+    const sizeVal = document.getElementById('petSize').value;
+
     const petData = {
         name: document.getElementById('petName').value,
         type: document.getElementById('petType').value,
         breed: document.getElementById('petBreed').value,
-        age: parseInt(document.getElementById('petAge').value),
-        weight: parseFloat(document.getElementById('petWeight').value),
         gender: document.getElementById('petGender').value,
+        neutered: document.getElementById('petNeutered').checked,
+        vaccinated: document.getElementById('petVaccinated').checked,
+        chipped: document.getElementById('petChipped').checked,
         description: document.getElementById('petDescription').value,
         status: document.getElementById('petStatus').value,
         sponsors: parseInt(document.getElementById('petSponsors').value) || 0,
@@ -82,6 +91,10 @@ function handleFormSubmit(e) {
             phone: ''
         }
     };
+
+    if (birthDateVal) petData.birthDate = birthDateVal + '-01';
+    if (weightVal !== '') petData.weight = parseFloat(weightVal);
+    if (sizeVal) petData.size = sizeVal;
 
     savePet(petData);
 }

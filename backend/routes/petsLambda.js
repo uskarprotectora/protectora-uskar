@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Pet = require('../models/Pet');
-const upload = require('../config/uploadS3');
-const { S3Client, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, DeleteObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const path = require('path');
 
 const s3Client = new S3Client({
     region: process.env.AWS_REGION || 'eu-west-1'
@@ -64,29 +65,56 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create new pet with file uploads to S3
-router.post('/', upload.fields([
-    { name: 'photos', maxCount: 10 },
-    { name: 'videos', maxCount: 5 }
-]), async (req, res) => {
+// Generate presigned URLs for direct S3 upload from browser
+router.post('/presign', async (req, res) => {
     try {
-        const petData = JSON.parse(req.body.data || '{}');
+        const { files } = req.body;
+        const urls = await Promise.all(files.map(async (file) => {
+            const folder = file.type.startsWith('image/') ? 'photos' : 'videos';
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const ext = path.extname(file.name);
+            const key = `uploads/${folder}/${uniqueSuffix}${ext}`;
 
-        // Process uploaded photos from S3
-        if (req.files && req.files.photos) {
-            petData.photos = req.files.photos.map((file, index) => ({
-                filename: file.key,
-                url: file.location,
+            const command = new PutObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: key,
+                ContentType: file.type,
+            });
+
+            const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 300 });
+            const publicUrl = `https://${BUCKET_NAME}.s3.eu-west-1.amazonaws.com/${key}`;
+
+            return { uploadUrl, publicUrl, key };
+        }));
+
+        res.json(urls);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Create new pet
+router.post('/', async (req, res) => {
+    try {
+        const petData = req.body;
+
+        // Process photos from presigned upload
+        if (petData.newPhotos) {
+            petData.photos = petData.newPhotos.map((photo, index) => ({
+                filename: photo.filename,
+                url: photo.url,
                 isMain: index === 0
             }));
+            delete petData.newPhotos;
         }
 
-        // Process uploaded videos from S3
-        if (req.files && req.files.videos) {
-            petData.videos = req.files.videos.map(file => ({
-                filename: file.key,
-                url: file.location
+        // Process videos from presigned upload
+        if (petData.newVideos) {
+            petData.videos = petData.newVideos.map(video => ({
+                filename: video.filename,
+                url: video.url
             }));
+            delete petData.newVideos;
         }
 
         const pet = new Pet(petData);
@@ -98,37 +126,36 @@ router.post('/', upload.fields([
 });
 
 // Update pet
-router.put('/:id', upload.fields([
-    { name: 'photos', maxCount: 10 },
-    { name: 'videos', maxCount: 5 }
-]), async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
-        const petData = JSON.parse(req.body.data || '{}');
+        const petData = req.body;
         const existingPet = await Pet.findById(req.params.id);
 
         if (!existingPet) {
             return res.status(404).json({ message: 'Pet not found' });
         }
 
-        // Process new photos from S3
-        if (req.files && req.files.photos && req.files.photos.length > 0) {
-            const newPhotos = req.files.photos.map(file => ({
-                filename: file.key,
-                url: file.location,
+        // Process new photos from presigned upload
+        if (petData.newPhotos && petData.newPhotos.length > 0) {
+            const newPhotos = petData.newPhotos.map(photo => ({
+                filename: photo.filename,
+                url: photo.url,
                 isMain: false
             }));
             petData.photos = [...(existingPet.photos || []), ...newPhotos];
+            delete petData.newPhotos;
         } else if (!petData.photos) {
             petData.photos = existingPet.photos;
         }
 
-        // Process new videos from S3
-        if (req.files && req.files.videos && req.files.videos.length > 0) {
-            const newVideos = req.files.videos.map(file => ({
-                filename: file.key,
-                url: file.location
+        // Process new videos from presigned upload
+        if (petData.newVideos && petData.newVideos.length > 0) {
+            const newVideos = petData.newVideos.map(video => ({
+                filename: video.filename,
+                url: video.url
             }));
             petData.videos = [...(existingPet.videos || []), ...newVideos];
+            delete petData.newVideos;
         } else if (!petData.videos) {
             petData.videos = existingPet.videos;
         }

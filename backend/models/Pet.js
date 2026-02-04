@@ -17,21 +17,35 @@ const petSchema = new mongoose.Schema({
         required: [true, 'Breed is required'],
         trim: true
     },
-    age: {
-        type: Number,
-        required: [true, 'Age is required'],
-        min: 0
+    birthDate: {
+        type: Date
     },
     weight: {
         type: Number,
-        required: [true, 'Weight is required'],
         min: 0
+    },
+    size: {
+        type: String,
+        enum: ['small', 'medium', 'large'],
+        lowercase: true
     },
     gender: {
         type: String,
         required: [true, 'Gender is required'],
         enum: ['male', 'female'],
         lowercase: true
+    },
+    neutered: {
+        type: Boolean,
+        default: false
+    },
+    vaccinated: {
+        type: Boolean,
+        default: false
+    },
+    chipped: {
+        type: Boolean,
+        default: false
     },
     description: {
         type: String,

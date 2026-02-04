@@ -5,6 +5,7 @@ function createPetCard(pet) {
     const typeText = pet.type === 'dog' ? 'PERRO' : 'GATO';
     const badgeClass = pet.type === 'dog' ? 'badge-dog' : 'badge-cat';
     const genderText = pet.gender === 'male' ? 'Macho' : 'Hembra';
+    const sizeText = { small: 'Pequeño', medium: 'Mediano', large: 'Grande' };
     const statusText = {
         active: 'Disponible',
         scheduled: 'Reservado',
@@ -43,19 +44,27 @@ function createPetCard(pet) {
                         <h3 class="pet-name">${pet.name}</h3>
                         <p class="pet-breed">${pet.breed}</p>
                     </div>
-                    <div class="pet-age">${pet.age} ${pet.age === 1 ? 'año' : 'años'}</div>
+                    ${pet.birthDate ? `<div class="pet-age">${formatAge(pet.birthDate)}</div>` : ''}
                 </div>
                 <p class="pet-description">
                     ${pet.description || 'Este adorable animal busca un hogar lleno de amor.'}
                 </p>
                 <div class="pet-details">
-                    <div class="detail-item">
+                    ${pet.size ? `<div class="detail-item">
+                        <div class="detail-label">Tamaño</div>
+                        <div class="detail-value">${sizeText[pet.size] || pet.size}</div>
+                    </div>` : ''}
+                    ${pet.weight != null ? `<div class="detail-item">
                         <div class="detail-label">Peso</div>
                         <div class="detail-value">${pet.weight} kg</div>
-                    </div>
+                    </div>` : ''}
                     <div class="detail-item">
                         <div class="detail-label">Genero</div>
                         <div class="detail-value">${genderText}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Salud</div>
+                        <div class="detail-value">${pet.neutered ? '✂️' : ''}${pet.vaccinated ? '💉' : ''}${pet.chipped ? '📟' : ''}${!pet.neutered && !pet.vaccinated && !pet.chipped ? '-' : ''}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Padrinos</div>

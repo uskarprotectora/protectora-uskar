@@ -35,7 +35,7 @@ function openAdoptionFormModal(pet = null) {
                 ${photoHtml}
                 <div class="pet-details">
                     <h4>${pet.name}</h4>
-                    <p>${typeText} - ${pet.breed} - ${pet.age} ${pet.age === 1 ? 'año' : 'años'}</p>
+                    <p>${typeText} - ${pet.breed}${pet.birthDate ? ' - ' + formatAge(pet.birthDate) : ''}</p>
                 </div>
             </div>
         `;

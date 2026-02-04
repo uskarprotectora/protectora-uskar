@@ -6,7 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeApp();
 });
 
-function initializeApp() {
+async function initializeApp() {
+    // Cargar los modales HTML antes de configurar los listeners
+    await loadModals();
+
     loadPets();
     loadStats();
     setupMainEventListeners();
@@ -14,6 +17,25 @@ function initializeApp() {
     setupPetFormListeners();
     setupAdoptionFormListeners();
     setupHelpListeners();
+}
+
+// Cargar todos los modales HTML en el contenedor
+async function loadModals() {
+    const modalsContainer = document.getElementById('modals-container');
+    const modalPaths = [
+        'components/modals/login-modal.html',
+        'components/modals/profile-modal.html',
+        'components/modals/pet-modal.html',
+        'components/modals/adoption-form-modal.html',
+        'components/modals/help-modal.html'
+    ];
+
+    try {
+        const htmls = await ComponentLoader.loadMultiple(modalPaths);
+        modalsContainer.innerHTML = htmls.join('');
+    } catch (error) {
+        console.error('Error cargando modales:', error);
+    }
 }
 
 // Event Listeners principales

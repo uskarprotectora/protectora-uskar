@@ -4,6 +4,7 @@ function renderProfile(pet) {
     const emoji = pet.type === 'dog' ? '🐕' : '🐱';
     const typeText = pet.type === 'dog' ? 'Perro' : 'Gato';
     const genderText = pet.gender === 'male' ? 'Macho' : 'Hembra';
+    const sizeText = { small: 'Pequeño', medium: 'Mediano', large: 'Grande' };
     const statusText = {
         active: 'Disponible',
         scheduled: 'Reservado',
@@ -72,17 +73,33 @@ function renderProfile(pet) {
         <div class="profile-section">
             <h3 class="profile-section-title">Detalles</h3>
             <div class="profile-details-grid">
-                <div class="profile-detail-item">
+                ${pet.size ? `<div class="profile-detail-item">
+                    <div class="profile-detail-label">Tamaño</div>
+                    <div class="profile-detail-value">${sizeText[pet.size] || pet.size}</div>
+                </div>` : ''}
+                ${pet.birthDate ? `<div class="profile-detail-item">
                     <div class="profile-detail-label">Edad</div>
-                    <div class="profile-detail-value">${pet.age} ${pet.age === 1 ? 'año' : 'años'}</div>
-                </div>
-                <div class="profile-detail-item">
+                    <div class="profile-detail-value">${formatAge(pet.birthDate)}</div>
+                </div>` : ''}
+                ${pet.weight != null ? `<div class="profile-detail-item">
                     <div class="profile-detail-label">Peso</div>
                     <div class="profile-detail-value">${pet.weight} kg</div>
-                </div>
+                </div>` : ''}
                 <div class="profile-detail-item">
                     <div class="profile-detail-label">Genero</div>
                     <div class="profile-detail-value">${genderText}</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="profile-detail-label">Castrado</div>
+                    <div class="profile-detail-value">${pet.neutered ? 'Si' : 'No'}</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="profile-detail-label">Vacunado</div>
+                    <div class="profile-detail-value">${pet.vaccinated ? 'Si' : 'No'}</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="profile-detail-label">Chipado</div>
+                    <div class="profile-detail-value">${pet.chipped ? 'Si' : 'No'}</div>
                 </div>
                 <div class="profile-detail-item">
                     <div class="profile-detail-label">Padrinos</div>
