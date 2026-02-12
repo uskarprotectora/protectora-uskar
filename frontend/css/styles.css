@@ -407,8 +407,11 @@ a.adoption-form-btn {
 .pet-image-container {
     position: relative;
     width: 100%;
-    height: 11.25rem;
-    background: linear-gradient(135deg, #bcaaa4 0%, #8d6e63 100%);
+    height: 14rem;
+    background: linear-gradient(135deg, #f5f0ed 0%, #e8e0dc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
 }
 
@@ -416,11 +419,13 @@ a.adoption-form-btn {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    object-position: center;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.5rem;
 }
 
 .pet-card:hover .pet-image {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .pet-badge {
@@ -2346,6 +2351,358 @@ a.adoption-form-btn {
 
     /* Detail grid mobile */
     .detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Sponsor Animals Grid */
+.sponsor-animals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.sponsor-animal-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem;
+    text-align: center;
+    border: 0.125rem solid rgba(188, 170, 164, 0.3);
+    transition: all 0.3s ease;
+}
+
+.sponsor-animal-card:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1.5rem rgba(161, 99, 92, 0.15);
+    border-color: #a1635c;
+}
+
+.sponsor-animal-image {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto 0.75rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #efebe9 0%, #d7ccc8 100%);
+}
+
+.sponsor-animal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sponsor-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.sponsor-animal-info h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3e1f1f;
+    margin-bottom: 0.25rem;
+}
+
+.sponsor-animal-info p {
+    font-size: 0.75rem;
+    color: #5d4037;
+    margin-bottom: 0.25rem;
+}
+
+.sponsor-count {
+    font-size: 0.6875rem !important;
+    color: #a1635c !important;
+    font-weight: 600;
+}
+
+/* Clickable Cards */
+.help-card.clickable-card {
+    cursor: pointer;
+    position: relative;
+}
+
+.help-card.clickable-card:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1.5rem rgba(161, 99, 92, 0.15);
+    border-color: #a1635c;
+}
+
+.card-action-hint {
+    display: block;
+    font-size: 0.6875rem;
+    color: #a1635c;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+/* Amount Selector */
+.amount-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.amount-btn {
+    padding: 0.5rem 1rem;
+    background: rgba(239, 235, 233, 0.8);
+    border: 0.125rem solid rgba(188, 170, 164, 0.4);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #5d4037;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.amount-btn:hover {
+    border-color: #a1635c;
+    background: rgba(161, 99, 92, 0.1);
+}
+
+.amount-btn.active {
+    background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+    color: white;
+    border-color: #a1635c;
+}
+
+.amount-input {
+    width: 5rem;
+    text-align: center;
+}
+
+/* Invoices Grid */
+.invoices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.invoice-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    border: 0.125rem solid rgba(188, 170, 164, 0.3);
+    transition: all 0.3s ease;
+}
+
+.invoice-card:hover {
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.invoice-card.invoice-complete {
+    opacity: 0.7;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.invoice-animal {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #3e1f1f;
+}
+
+.invoice-animal-icon {
+    font-size: 1.25rem;
+}
+
+.invoice-date {
+    font-size: 0.75rem;
+    color: #8d6e63;
+}
+
+.invoice-description {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin-bottom: 0.75rem;
+}
+
+.invoice-amounts {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.invoice-total {
+    font-size: 0.875rem;
+    color: #5d4037;
+}
+
+.invoice-remaining {
+    font-size: 0.875rem;
+    color: #dc2626;
+}
+
+.invoice-remaining.complete {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.invoice-progress {
+    height: 0.5rem;
+    background: rgba(188, 170, 164, 0.3);
+    border-radius: 0.25rem;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.invoice-progress-bar {
+    height: 100%;
+    background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+    border-radius: 0.25rem;
+    transition: width 0.3s ease;
+}
+
+.invoice-thanks {
+    display: block;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* Volunteer Form */
+.volunteer-form-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.volunteer-icon {
+    font-size: 2.5rem;
+}
+
+.volunteer-form-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3e1f1f;
+    margin: 0;
+}
+
+.form-hint {
+    font-size: 0.75rem;
+    color: #8d6e63;
+    margin-bottom: 0.75rem;
+}
+
+/* Transport Dates */
+.transport-dates-container {
+    background: rgba(239, 235, 233, 0.5);
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.transport-date-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    gap: 0.75rem;
+    align-items: end;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 0.0625rem solid rgba(188, 170, 164, 0.2);
+}
+
+.transport-date-row:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.btn-remove-row {
+    width: 2rem;
+    height: 2rem;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-remove-row:hover {
+    background: #b91c1c;
+}
+
+/* Availability Grid */
+.availability-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 0.5rem;
+}
+
+/* Sponsor Form */
+.sponsor-form-content h3,
+.foster-form-content h3,
+.contribute-form-content h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3e1f1f;
+    margin-bottom: 0.5rem;
+}
+
+.sponsor-payment-info {
+    background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border: 0.0625rem solid rgba(188, 170, 164, 0.3);
+}
+
+.sponsor-payment-info p {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin-bottom: 0.5rem;
+}
+
+.sponsor-payment-info p:last-child {
+    margin-bottom: 0;
+}
+
+.contribute-remaining {
+    font-size: 1.125rem;
+    color: #dc2626;
+    margin-bottom: 1rem;
+}
+
+/* Button Sizes */
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 48rem) {
+    .transport-date-row {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sponsor-animals-grid {
+        grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+    }
+
+    .invoices-grid {
         grid-template-columns: 1fr;
     }
 }

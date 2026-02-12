@@ -14,12 +14,16 @@ const AppState = {
     captchaAnswer: null
 };
 
-// Credenciales de admin (en produccion esto estaria en el backend)
-const ADMIN_CREDENTIALS = {
-    user: 'admin',
-    password: 'uskar2024'
-};
+// Las credenciales se cargan desde un archivo externo (credentials.js)
+// Ese archivo NO debe estar en el repositorio
+// Si ADMIN_CREDENTIALS no esta definido, se usan valores por defecto que no funcionaran
+if (typeof ADMIN_CREDENTIALS === 'undefined') {
+    console.warn('Credenciales no encontradas. Crea el archivo credentials.js con las credenciales de admin.');
+    window.ADMIN_CREDENTIALS = {
+        user: '',
+        password: ''
+    };
+}
 
 // Exponer globalmente
 window.AppState = AppState;
-window.ADMIN_CREDENTIALS = ADMIN_CREDENTIALS;

@@ -6,6 +6,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# Credenciales (IMPORTANTE: no subir al repositorio)
+frontend/js/credentials.js
+
 # OS files
 .DS_Store
 Thumbs.db
