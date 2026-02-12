@@ -53,61 +53,98 @@ async function savePet(petData) {
             ...AppState.selectedVideos.map(f => ({ file: f, field: 'videos' })),
         ];
 
+        let useFormData = false;
+
         if (allFiles.length > 0) {
-            // Get presigned URLs from backend
-            const presignResponse = await fetch(`${API_URL}/presign`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    files: allFiles.map(f => ({ name: f.file.name, type: f.file.type }))
-                })
-            });
-
-            if (!presignResponse.ok) {
-                throw new Error('Error obteniendo URLs de subida');
-            }
-
-            const presignedUrls = await presignResponse.json();
-
-            // Upload each file directly to S3
-            await Promise.all(allFiles.map(async (f, i) => {
-                const uploadRes = await fetch(presignedUrls[i].uploadUrl, {
-                    method: 'PUT',
-                    body: f.file,
-                    headers: { 'Content-Type': f.file.type }
+            // Intentar obtener presigned URLs (funciona en producción con S3)
+            try {
+                const presignResponse = await fetch(`${API_URL}/presign`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        files: allFiles.map(f => ({ name: f.file.name, type: f.file.type }))
+                    })
                 });
-                if (!uploadRes.ok) {
-                    throw new Error(`Error subiendo ${f.file.name}`);
-                }
-            }));
 
-            // Attach S3 URLs to pet data
-            const newPhotos = [];
-            const newVideos = [];
-            allFiles.forEach((f, i) => {
-                const urlData = {
-                    filename: presignedUrls[i].key,
-                    url: presignedUrls[i].publicUrl
-                };
-                if (f.field === 'photos') {
-                    newPhotos.push(urlData);
+                if (presignResponse.ok) {
+                    const presignedUrls = await presignResponse.json();
+
+                    // Verificar si son URLs de S3 (producción) o locales
+                    const isS3 = presignedUrls[0]?.uploadUrl?.includes('s3') ||
+                                 presignedUrls[0]?.uploadUrl?.includes('amazonaws');
+
+                    if (isS3) {
+                        // Upload each file directly to S3
+                        await Promise.all(allFiles.map(async (f, i) => {
+                            const uploadRes = await fetch(presignedUrls[i].uploadUrl, {
+                                method: 'PUT',
+                                body: f.file,
+                                headers: { 'Content-Type': f.file.type }
+                            });
+                            if (!uploadRes.ok) {
+                                throw new Error(`Error subiendo ${f.file.name}`);
+                            }
+                        }));
+
+                        // Attach S3 URLs to pet data
+                        const newPhotos = [];
+                        const newVideos = [];
+                        allFiles.forEach((f, i) => {
+                            const urlData = {
+                                filename: presignedUrls[i].key,
+                                url: presignedUrls[i].publicUrl
+                            };
+                            if (f.field === 'photos') {
+                                newPhotos.push(urlData);
+                            } else {
+                                newVideos.push(urlData);
+                            }
+                        });
+
+                        if (newPhotos.length > 0) petData.newPhotos = newPhotos;
+                        if (newVideos.length > 0) petData.newVideos = newVideos;
+                    } else {
+                        // URLs locales - usar FormData
+                        useFormData = true;
+                    }
                 } else {
-                    newVideos.push(urlData);
+                    useFormData = true;
                 }
-            });
-
-            if (newPhotos.length > 0) petData.newPhotos = newPhotos;
-            if (newVideos.length > 0) petData.newVideos = newVideos;
+            } catch (e) {
+                console.log('Presign no disponible, usando FormData');
+                useFormData = true;
+            }
         }
 
-        const response = await fetch(
-            isEdit ? `${API_URL}/${petId}` : API_URL,
-            {
-                method: isEdit ? 'PUT' : 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(petData)
-            }
-        );
+        let response;
+
+        if (useFormData && allFiles.length > 0) {
+            // Usar FormData para subir archivos (desarrollo local)
+            const formData = new FormData();
+            formData.append('data', JSON.stringify(petData));
+
+            allFiles.forEach(f => {
+                formData.append(f.field, f.file);
+            });
+
+            response = await fetch(
+                isEdit ? `${API_URL}/${petId}` : API_URL,
+                {
+                    method: isEdit ? 'PUT' : 'POST',
+                    body: formData
+                }
+            );
+        } else {
+            // Usar JSON (sin archivos o después de subir a S3)
+            response = await fetch(
+                isEdit ? `${API_URL}/${petId}` : API_URL,
+                {
+                    method: isEdit ? 'PUT' : 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(petData)
+                }
+            );
+        }
 
         if (!response.ok) {
             const error = await response.json();

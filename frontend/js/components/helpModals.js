@@ -187,13 +187,77 @@ const helpContent = {
         title: 'Facturas veterinarias',
         icon: '🏥',
         content: generateInvoicesContent()
+    },
+    feedback: {
+        title: 'Tu opinión',
+        icon: '💬',
+        content: generateFeedbackContent()
     }
 };
+
+// Genera el contenido del formulario de opiniones
+function generateFeedbackContent() {
+    return `
+        <div class="help-section">
+            <p class="help-intro">Tu opinión nos ayuda a mejorar. Cuéntanos qué te parece nuestra página web y cómo podemos mejorar.</p>
+
+            <form id="feedbackForm" class="feedback-form">
+                <div class="form-group">
+                    <label class="form-label">¿Cómo valorarías tu experiencia en la web? *</label>
+                    <div class="rating-selector">
+                        <button type="button" class="rating-btn" data-rating="1" onclick="setRating(1)">😞</button>
+                        <button type="button" class="rating-btn" data-rating="2" onclick="setRating(2)">😕</button>
+                        <button type="button" class="rating-btn" data-rating="3" onclick="setRating(3)">😐</button>
+                        <button type="button" class="rating-btn" data-rating="4" onclick="setRating(4)">🙂</button>
+                        <button type="button" class="rating-btn" data-rating="5" onclick="setRating(5)">😍</button>
+                    </div>
+                    <input type="hidden" id="feedbackRating" value="">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">¿Qué es lo que más te ha gustado?</label>
+                    <textarea class="form-input form-textarea" id="feedbackLikes" rows="2" placeholder="Cuéntanos qué te ha gustado..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">¿Qué podríamos mejorar?</label>
+                    <textarea class="form-input form-textarea" id="feedbackImprovements" rows="2" placeholder="Danos sugerencias para mejorar..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Comentarios adicionales</label>
+                    <textarea class="form-input form-textarea" id="feedbackComments" rows="3" placeholder="Cualquier otro comentario que quieras compartir..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tu nombre (opcional)</label>
+                        <input type="text" class="form-input" id="feedbackName" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tu email (opcional)</label>
+                        <input type="email" class="form-input" id="feedbackEmail" placeholder="tu@email.com">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Enviar opinión</button>
+                </div>
+            </form>
+        </div>
+    `;
+}
 
 // Genera el contenido de apadrinamiento con los animales disponibles
 function generateSponsorContent() {
     return `
         <div class="help-section">
+            <div class="coming-soon-banner">
+                <span class="coming-soon-icon">🚧</span>
+                <span>PRÓXIMAMENTE</span>
+                <p>Estamos trabajando para habilitar el apadrinamiento online. Mientras tanto, puedes contactarnos directamente.</p>
+            </div>
+
             <p class="help-intro">Apadrina a uno de nuestros animales y ayúdanos a cubrir sus gastos. Recibirás actualizaciones periódicas sobre tu ahijado.</p>
 
             <div class="help-highlight">
@@ -217,6 +281,11 @@ function generateSponsorContent() {
                     <li>Certificado de apadrinamiento</li>
                     <li>Desgravación fiscal</li>
                 </ul>
+            </div>
+
+            <div class="sponsor-contact-info">
+                <h4>¿Quieres apadrinar ahora?</h4>
+                <p>Contacta con nosotros en <strong>uskar.protectora@gmail.com</strong> indicando el nombre del animal que quieres apadrinar.</p>
             </div>
         </div>
     `;
@@ -286,6 +355,8 @@ function openHelpModal(action) {
         helpContent.apadrina.content = generateSponsorContent();
     } else if (action === 'facturas') {
         helpContent.facturas.content = generateInvoicesContent();
+    } else if (action === 'feedback') {
+        helpContent.feedback.content = generateFeedbackContent();
     }
 
     const content = helpContent[action];
@@ -306,6 +377,15 @@ function openHelpModal(action) {
     // Si es apadrinamiento, cargar los animales
     if (action === 'apadrina') {
         loadSponsorAnimals();
+    }
+
+    // Si es feedback, configurar el event listener del formulario
+    if (action === 'feedback') {
+        currentRating = 0;
+        const feedbackForm = document.getElementById('feedbackForm');
+        if (feedbackForm) {
+            feedbackForm.addEventListener('submit', handleFeedbackSubmit);
+        }
     }
 }
 
@@ -346,12 +426,13 @@ async function loadSponsorAnimals() {
                 ? animal.photos.find(p => p.isMain) || animal.photos[0]
                 : null;
             const emoji = animal.type === 'dog' ? '🐕' : '🐱';
+            const photoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
 
             return `
                 <div class="sponsor-animal-card">
                     <div class="sponsor-animal-image">
-                        ${mainPhoto && mainPhoto.url
-                            ? `<img src="${mainPhoto.url}" alt="${animal.name}" onerror="this.parentElement.innerHTML='<div class=\\'sponsor-placeholder\\'>${emoji}</div>'">`
+                        ${photoUrl
+                            ? `<img src="${photoUrl}" alt="${animal.name}" onerror="this.parentElement.innerHTML='<div class=\\'sponsor-placeholder\\'>${emoji}</div>'">`
                             : `<div class="sponsor-placeholder">${emoji}</div>`
                         }
                     </div>
@@ -461,16 +542,60 @@ function backToSponsorList() {
     openHelpModal('apadrina');
 }
 
+// Validación de formulario de apadrinamiento
+function validateSponsorForm() {
+    const errors = [];
+    const fieldLabels = {
+        'sponsorName': 'Nombre completo',
+        'sponsorEmail': 'Correo electrónico',
+        'sponsorAmount': 'Cantidad mensual',
+        'sponsorDataConsent': 'Política de protección de datos'
+    };
+
+    const requiredFields = ['sponsorName', 'sponsorEmail', 'sponsorAmount'];
+    const requiredCheckboxes = ['sponsorDataConsent'];
+
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && (!field.value || field.value.trim() === '')) {
+            errors.push(fieldLabels[fieldId] || fieldId);
+        }
+    });
+
+    requiredCheckboxes.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && !field.checked) {
+            errors.push(fieldLabels[fieldId] || fieldId);
+        }
+    });
+
+    // Validar email
+    const email = document.getElementById('sponsorEmail')?.value;
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push('El correo electrónico no tiene un formato válido');
+    }
+
+    // Validar cantidad mínima
+    const amount = parseInt(document.getElementById('sponsorAmount')?.value);
+    if (amount < 5) {
+        errors.push('La cantidad mínima de apadrinamiento es 5€');
+    }
+
+    return errors;
+}
+
 async function handleSponsorSubmit(e) {
     e.preventDefault();
 
-    if (!document.getElementById('sponsorDataConsent').checked) {
-        showToast('Debes aceptar la política de protección de datos', 'error');
+    // Validar formulario
+    const validationErrors = validateSponsorForm();
+    if (validationErrors.length > 0) {
+        showVolunteerValidationErrors(validationErrors);
         return;
     }
 
     const data = {
-        type: 'sponsorship',
+        formType: 'sponsorship',
         animalId: document.getElementById('sponsorAnimalId').value,
         animalName: document.getElementById('sponsorAnimalName').value,
         name: document.getElementById('sponsorName').value,
@@ -482,22 +607,39 @@ async function handleSponsorSubmit(e) {
     };
 
     try {
+        console.log('Enviando apadrinamiento:', data);
+        console.log('URL:', FORMS_API_URL);
+
         const response = await fetch(FORMS_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
+        const responseData = await response.json().catch(() => ({}));
+
         if (!response.ok) {
-            throw new Error('Error al enviar el formulario');
+            console.error('Error del servidor:', response.status, responseData);
+            showDetailedErrorPopup({
+                url: FORMS_API_URL,
+                method: 'POST',
+                status: response.status,
+                statusText: response.statusText,
+                responseMessage: responseData.message || JSON.stringify(responseData)
+            });
+            return;
         }
 
         showToast('¡Solicitud de apadrinamiento enviada! Te contactaremos pronto.', 'success');
         closeHelpModal();
     } catch (error) {
-        console.error('Error:', error);
-        showToast('Solicitud de apadrinamiento enviada. Te contactaremos pronto.', 'success');
-        closeHelpModal();
+        console.error('Error guardando formulario de apadrinamiento:', error);
+        showDetailedErrorPopup({
+            url: FORMS_API_URL,
+            method: 'POST',
+            status: 0,
+            networkError: error.message
+        });
     }
 }
 
@@ -547,17 +689,13 @@ function openVolunteerForm(type) {
 
     const calendarSection = volunteerInfo.showCalendar ? `
         <div class="form-group">
-            <label class="form-label">Fechas disponibles para transporte</label>
-            <p class="form-hint">Indica las fechas aproximadas en las que harás viajes y podrías transportar animales.</p>
+            <label class="form-label">Trayectos disponibles para transporte</label>
+            <p class="form-hint">Indica las fechas y rutas en las que podrías transportar animales.</p>
             <div class="transport-dates-container">
                 <div class="transport-date-row">
                     <div class="form-group">
-                        <label class="form-label">Fecha inicio</label>
-                        <input type="date" class="form-input" id="transportDateStart1">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Fecha fin</label>
-                        <input type="date" class="form-input" id="transportDateEnd1">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-input" id="transportDate1">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Origen</label>
@@ -659,6 +797,9 @@ function openVolunteerForm(type) {
     document.getElementById('helpContent').innerHTML = modalContent;
     document.getElementById('helpModalTitle').innerHTML = `🤝 Voluntariado - ${volunteerInfo.title}`;
 
+    // Resetear contador de filas de transporte
+    transportDateRowCount = 1;
+
     document.getElementById('volunteerForm').addEventListener('submit', handleVolunteerSubmit);
 }
 
@@ -671,12 +812,8 @@ function addTransportDateRow() {
     newRow.className = 'transport-date-row';
     newRow.innerHTML = `
         <div class="form-group">
-            <label class="form-label">Fecha inicio</label>
-            <input type="date" class="form-input" id="transportDateStart${transportDateRowCount}">
-        </div>
-        <div class="form-group">
-            <label class="form-label">Fecha fin</label>
-            <input type="date" class="form-input" id="transportDateEnd${transportDateRowCount}">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="transportDate${transportDateRowCount}">
         </div>
         <div class="form-group">
             <label class="form-label">Origen</label>
@@ -691,11 +828,120 @@ function addTransportDateRow() {
     container.insertBefore(newRow, container.lastElementChild);
 }
 
+// Validación de formularios de voluntariado
+function validateVolunteerForm() {
+    const errors = [];
+    const fieldLabels = {
+        'volunteerName': 'Nombre completo',
+        'volunteerEmail': 'Correo electrónico',
+        'volunteerPhone': 'Teléfono',
+        'volunteerCity': 'Ciudad',
+        'volunteerContactConsent': 'Consentimiento de contacto',
+        'volunteerDataConsent': 'Política de protección de datos'
+    };
+
+    const requiredFields = ['volunteerName', 'volunteerEmail', 'volunteerPhone', 'volunteerCity'];
+    const requiredCheckboxes = ['volunteerContactConsent', 'volunteerDataConsent'];
+
+    // Validar campos de texto
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && (!field.value || field.value.trim() === '')) {
+            errors.push(fieldLabels[fieldId] || fieldId);
+        }
+    });
+
+    // Validar checkboxes
+    requiredCheckboxes.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && !field.checked) {
+            errors.push(fieldLabels[fieldId] || fieldId);
+        }
+    });
+
+    // Validar email
+    const email = document.getElementById('volunteerEmail')?.value;
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push('El correo electrónico no tiene un formato válido');
+    }
+
+    return errors;
+}
+
+function showVolunteerValidationErrors(errors, title = 'Campos incompletos', intro = 'Por favor, completa los siguientes campos obligatorios:') {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.id = 'volunteerValidationModal';
+    modal.innerHTML = `
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title">${title}</h2>
+                <button class="modal-close" onclick="closeVolunteerValidationModal()">&times;</button>
+            </div>
+            <div class="validation-error-content">
+                <p>${intro}</p>
+                <ul>${errors.map(error => `<li>${error}</li>`).join('')}</ul>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" onclick="closeVolunteerValidationModal()">Entendido</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function showErrorPopup(errorMessage) {
+    showVolunteerValidationErrors([errorMessage], 'Error al enviar', 'Ha ocurrido un error:');
+}
+
+function showDetailedErrorPopup(details) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.id = 'volunteerValidationModal';
+    modal.innerHTML = `
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2 class="modal-title">Error al enviar formulario</h2>
+                <button class="modal-close" onclick="closeVolunteerValidationModal()">&times;</button>
+            </div>
+            <div class="validation-error-content">
+                <div class="error-details">
+                    <p><strong>URL:</strong> <code>${details.url}</code></p>
+                    <p><strong>Método:</strong> ${details.method}</p>
+                    <p><strong>Estado:</strong> ${details.status} ${details.statusText || ''}</p>
+                    ${details.responseMessage ? `<p><strong>Mensaje:</strong> ${details.responseMessage}</p>` : ''}
+                    ${details.networkError ? `<p><strong>Error de red:</strong> ${details.networkError}</p>` : ''}
+                </div>
+                <div class="error-help">
+                    <p><strong>Posibles causas:</strong></p>
+                    <ul>
+                        ${details.status === 404 ? '<li>La ruta /api/forms no existe en el servidor</li><li>El servidor backend no está ejecutándose</li><li>El Lambda no ha sido desplegado con esta ruta</li>' : ''}
+                        ${details.status === 500 ? '<li>Error interno del servidor</li><li>Problema con la base de datos</li>' : ''}
+                        ${details.status === 400 ? '<li>Datos del formulario inválidos</li><li>Campo requerido faltante</li>' : ''}
+                        ${details.networkError ? '<li>No hay conexión a internet</li><li>El servidor no responde</li><li>CORS bloqueando la petición</li>' : ''}
+                    </ul>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" onclick="closeVolunteerValidationModal()">Entendido</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
+
+function closeVolunteerValidationModal() {
+    const modal = document.getElementById('volunteerValidationModal');
+    if (modal) modal.remove();
+}
+
 async function handleVolunteerSubmit(e) {
     e.preventDefault();
 
-    if (!document.getElementById('volunteerContactConsent').checked || !document.getElementById('volunteerDataConsent').checked) {
-        showToast('Debes aceptar los consentimientos requeridos', 'error');
+    // Validar formulario
+    const validationErrors = validateVolunteerForm();
+    if (validationErrors.length > 0) {
+        showVolunteerValidationErrors(validationErrors);
         return;
     }
 
@@ -707,13 +953,12 @@ async function handleVolunteerSubmit(e) {
     // Recoger fechas de transporte si existen
     const transportDates = [];
     for (let i = 1; i <= transportDateRowCount; i++) {
-        const start = document.getElementById(`transportDateStart${i}`)?.value;
-        const end = document.getElementById(`transportDateEnd${i}`)?.value;
+        const date = document.getElementById(`transportDate${i}`)?.value;
         const origin = document.getElementById(`transportOrigin${i}`)?.value;
         const destination = document.getElementById(`transportDestination${i}`)?.value;
 
-        if (start && origin && destination) {
-            transportDates.push({ start, end, origin, destination });
+        if (date && origin && destination) {
+            transportDates.push({ date, origin, destination });
         }
     }
 
@@ -736,22 +981,39 @@ async function handleVolunteerSubmit(e) {
     };
 
     try {
+        console.log('Enviando formulario de voluntariado:', data);
+        console.log('URL:', FORMS_API_URL);
+
         const response = await fetch(FORMS_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
+        const responseData = await response.json().catch(() => ({}));
+
         if (!response.ok) {
-            throw new Error('Error al enviar el formulario');
+            console.error('Error del servidor:', response.status, responseData);
+            showDetailedErrorPopup({
+                url: FORMS_API_URL,
+                method: 'POST',
+                status: response.status,
+                statusText: response.statusText,
+                responseMessage: responseData.message || JSON.stringify(responseData)
+            });
+            return;
         }
 
         showToast('¡Solicitud de voluntariado enviada! Te contactaremos pronto.', 'success');
         closeHelpModal();
     } catch (error) {
-        console.error('Error:', error);
-        showToast('Solicitud de voluntariado enviada. Te contactaremos pronto.', 'success');
-        closeHelpModal();
+        console.error('Error guardando formulario de voluntariado:', error);
+        showDetailedErrorPopup({
+            url: FORMS_API_URL,
+            method: 'POST',
+            status: 0,
+            networkError: error.message
+        });
     }
 }
 
@@ -893,11 +1155,59 @@ function openFosterForm() {
     document.getElementById('fosterForm').addEventListener('submit', handleFosterSubmit);
 }
 
+// Validación de formulario de casa de acogida
+function validateFosterForm() {
+    const errors = [];
+    const fieldLabels = {
+        'fosterName': 'Nombre completo',
+        'fosterEmail': 'Correo electrónico',
+        'fosterPhone': 'Teléfono',
+        'fosterCity': 'Ciudad',
+        'fosterHousingType': 'Tipo de vivienda',
+        'fosterOutdoor': 'Jardín o terraza',
+        'fosterDataConsent': 'Política de protección de datos',
+        'fosterFollowUpConsent': 'Consentimiento de seguimiento'
+    };
+
+    const requiredFields = ['fosterName', 'fosterEmail', 'fosterPhone', 'fosterCity', 'fosterHousingType', 'fosterOutdoor'];
+    const requiredCheckboxes = ['fosterDataConsent', 'fosterFollowUpConsent'];
+
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && (!field.value || field.value.trim() === '')) {
+            errors.push(fieldLabels[fieldId] || fieldId);
+        }
+    });
+
+    requiredCheckboxes.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && !field.checked) {
+            errors.push(fieldLabels[fieldId] || fieldId);
+        }
+    });
+
+    // Validar email
+    const email = document.getElementById('fosterEmail')?.value;
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push('El correo electrónico no tiene un formato válido');
+    }
+
+    // Validar que al menos un tipo de animal esté seleccionado
+    const animalTypesSelected = document.querySelectorAll('input[name="fosterAnimalType"]:checked');
+    if (animalTypesSelected.length === 0) {
+        errors.push('Selecciona al menos un tipo de animal que podrías acoger');
+    }
+
+    return errors;
+}
+
 async function handleFosterSubmit(e) {
     e.preventDefault();
 
-    if (!document.getElementById('fosterDataConsent').checked || !document.getElementById('fosterFollowUpConsent').checked) {
-        showToast('Debes aceptar los consentimientos requeridos', 'error');
+    // Validar formulario
+    const validationErrors = validateFosterForm();
+    if (validationErrors.length > 0) {
+        showVolunteerValidationErrors(validationErrors);
         return;
     }
 
@@ -925,22 +1235,39 @@ async function handleFosterSubmit(e) {
     };
 
     try {
+        console.log('Enviando formulario de casa de acogida:', data);
+        console.log('URL:', FORMS_API_URL);
+
         const response = await fetch(FORMS_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
+        const responseData = await response.json().catch(() => ({}));
+
         if (!response.ok) {
-            throw new Error('Error al enviar el formulario');
+            console.error('Error del servidor:', response.status, responseData);
+            showDetailedErrorPopup({
+                url: FORMS_API_URL,
+                method: 'POST',
+                status: response.status,
+                statusText: response.statusText,
+                responseMessage: responseData.message || JSON.stringify(responseData)
+            });
+            return;
         }
 
         showToast('¡Solicitud de casa de acogida enviada! Te contactaremos pronto.', 'success');
         closeHelpModal();
     } catch (error) {
-        console.error('Error:', error);
-        showToast('Solicitud de casa de acogida enviada. Te contactaremos pronto.', 'success');
-        closeHelpModal();
+        console.error('Error guardando formulario de casa de acogida:', error);
+        showDetailedErrorPopup({
+            url: FORMS_API_URL,
+            method: 'POST',
+            status: 0,
+            networkError: error.message
+        });
     }
 }
 
@@ -1014,22 +1341,123 @@ async function handleContributeSubmit(e) {
     };
 
     try {
+        console.log('Enviando contribución:', data);
+        console.log('URL:', FORMS_API_URL);
+
         const response = await fetch(FORMS_API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
 
+        const responseData = await response.json().catch(() => ({}));
+
         if (!response.ok) {
-            throw new Error('Error al enviar el formulario');
+            console.error('Error del servidor:', response.status, responseData);
+            showDetailedErrorPopup({
+                url: FORMS_API_URL,
+                method: 'POST',
+                status: response.status,
+                statusText: response.statusText,
+                responseMessage: responseData.message || JSON.stringify(responseData)
+            });
+            return;
         }
 
         showToast('¡Gracias por tu aportación! Te enviaremos confirmación.', 'success');
         closeHelpModal();
     } catch (error) {
-        console.error('Error:', error);
-        showToast('Gracias por tu aportación. Te enviaremos confirmación.', 'success');
+        console.error('Error guardando contribución:', error);
+        showDetailedErrorPopup({
+            url: FORMS_API_URL,
+            method: 'POST',
+            status: 0,
+            networkError: error.message
+        });
+    }
+}
+
+// Funciones para el formulario de feedback
+let currentRating = 0;
+
+function setRating(rating) {
+    currentRating = rating;
+    document.getElementById('feedbackRating').value = rating;
+    document.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.rating) <= rating);
+    });
+}
+
+function validateFeedbackForm() {
+    const errors = [];
+    const rating = document.getElementById('feedbackRating')?.value;
+
+    if (!rating || rating === '') {
+        errors.push('Por favor, selecciona una valoración');
+    }
+
+    // Validar email si se proporciona
+    const email = document.getElementById('feedbackEmail')?.value;
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push('El correo electrónico no tiene un formato válido');
+    }
+
+    return errors;
+}
+
+async function handleFeedbackSubmit(e) {
+    e.preventDefault();
+
+    const validationErrors = validateFeedbackForm();
+    if (validationErrors.length > 0) {
+        showVolunteerValidationErrors(validationErrors);
+        return;
+    }
+
+    const data = {
+        formType: 'feedback',
+        rating: parseInt(document.getElementById('feedbackRating').value),
+        likes: document.getElementById('feedbackLikes').value || '',
+        improvements: document.getElementById('feedbackImprovements').value || '',
+        comments: document.getElementById('feedbackComments').value || '',
+        name: document.getElementById('feedbackName').value || '',
+        email: document.getElementById('feedbackEmail').value || ''
+    };
+
+    try {
+        console.log('Enviando feedback:', data);
+        console.log('URL:', FORMS_API_URL);
+
+        const response = await fetch(FORMS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const responseData = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+            console.error('Error del servidor:', response.status, responseData);
+            showDetailedErrorPopup({
+                url: FORMS_API_URL,
+                method: 'POST',
+                status: response.status,
+                statusText: response.statusText,
+                responseMessage: responseData.message || JSON.stringify(responseData)
+            });
+            return;
+        }
+
+        showToast('¡Gracias por tu opinión! Nos ayuda mucho a mejorar.', 'success');
         closeHelpModal();
+    } catch (error) {
+        console.error('Error guardando feedback:', error);
+        showDetailedErrorPopup({
+            url: FORMS_API_URL,
+            method: 'POST',
+            status: 0,
+            networkError: error.message
+        });
     }
 }
 
@@ -1057,3 +1485,5 @@ window.setAmount = setAmount;
 window.setContributeAmount = setContributeAmount;
 window.addTransportDateRow = addTransportDateRow;
 window.backToSponsorList = backToSponsorList;
+window.closeVolunteerValidationModal = closeVolunteerValidationModal;
+window.setRating = setRating;

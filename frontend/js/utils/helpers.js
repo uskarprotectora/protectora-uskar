@@ -62,8 +62,21 @@ function formatAge(birthDate) {
     return text;
 }
 
+// Resuelve URLs de medios (fotos/videos) añadiendo la URL base del API si es necesario
+function getMediaUrl(url) {
+    if (!url) return null;
+    // Si ya es una URL completa (http/https o S3), devolverla tal cual
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    // Si es una ruta relativa, añadir la URL base del API
+    const baseUrl = window.API_BASE_URL || '';
+    return baseUrl + url;
+}
+
 // Exponer globalmente
 window.debounce = debounce;
 window.showToast = showToast;
 window.exportData = exportData;
 window.formatAge = formatAge;
+window.getMediaUrl = getMediaUrl;

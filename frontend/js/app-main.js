@@ -79,11 +79,20 @@ function setupMainEventListeners() {
         btn.addEventListener('click', () => handleViewChange(btn));
     });
 
-    // Boton Ver Solicitudes (admin)
+    // Boton Ver Solicitudes de Adopción (admin)
     document.getElementById('viewAdoptionRequestsBtn').addEventListener('click', () => {
         document.querySelectorAll('[data-filter="view"]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.help-btn').forEach(b => b.classList.remove('active'));
         AppState.currentView = 'requests';
         renderAdoptionRequestsView();
+    });
+
+    // Boton Ver Otros Formularios (admin)
+    document.getElementById('viewFormsBtn').addEventListener('click', () => {
+        document.querySelectorAll('[data-filter="view"]').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.help-btn').forEach(b => b.classList.remove('active'));
+        AppState.currentView = 'forms';
+        renderFormsView();
     });
 
     // Cerrar modal de perfil

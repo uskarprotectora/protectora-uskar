@@ -20,8 +20,9 @@ function renderProfile(pet) {
         ? pet.photos.find(p => p.isMain) || pet.photos[0]
         : null;
 
-    const profileImage = mainPhoto
-        ? `<img src="${mainPhoto.url}" alt="${pet.name}" class="profile-image-img">`
+    const mainPhotoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
+    const profileImage = mainPhotoUrl
+        ? `<img src="${mainPhotoUrl}" alt="${pet.name}" class="profile-image-img" onerror="this.outerHTML='<div class=\\'profile-image\\'>${emoji}</div>'">`
         : `<div class="profile-image">${emoji}</div>`;
 
     return `
@@ -48,11 +49,13 @@ function renderProfile(pet) {
         <div class="profile-section">
             <h3 class="profile-section-title">Galeria de Fotos</h3>
             <div class="profile-gallery">
-                ${pet.photos.map((photo, index) => `
-                    <div class="profile-gallery-item ${photo.isMain ? 'is-main' : ''}" onclick="openGalleryPhoto('${photo.url}')">
-                        <img src="${photo.url}" alt="Foto ${index + 1}">
+                ${pet.photos.map((photo, index) => {
+                    const photoUrl = getMediaUrl(photo.url);
+                    return `
+                    <div class="profile-gallery-item ${photo.isMain ? 'is-main' : ''}" onclick="openGalleryPhoto('${photoUrl}')">
+                        <img src="${photoUrl}" alt="Foto ${index + 1}">
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         </div>
         ` : ''}
@@ -61,11 +64,13 @@ function renderProfile(pet) {
         <div class="profile-section">
             <h3 class="profile-section-title">Videos</h3>
             <div class="profile-videos">
-                ${pet.videos.map((video, index) => `
+                ${pet.videos.map((video, index) => {
+                    const videoUrl = getMediaUrl(video.url);
+                    return `
                     <div class="profile-video-item">
-                        <video src="${video.url}" controls></video>
+                        <video src="${videoUrl}" controls></video>
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         </div>
         ` : ''}

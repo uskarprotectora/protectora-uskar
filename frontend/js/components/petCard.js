@@ -24,8 +24,9 @@ function createPetCard(pet) {
         ? pet.photos.find(p => p.isMain) || pet.photos[0]
         : null;
 
-    const imageContent = mainPhoto
-        ? `<img src="${mainPhoto.url}" alt="${pet.name}" class="pet-image">`
+    const photoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
+    const imageContent = photoUrl
+        ? `<img src="${photoUrl}" alt="${pet.name}" class="pet-image" onerror="this.parentElement.innerHTML='<div class=\\'pet-image placeholder-img\\' style=\\'background: ${randomGradient};\\'>${emoji}</div>'">`
         : `<div class="pet-image placeholder-img" style="background: ${randomGradient};">${emoji}</div>`;
 
     return `

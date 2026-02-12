@@ -3,9 +3,12 @@
 const AppState = {
     pets: [],
     adoptionRequests: [],
-    currentView: 'adoption', // 'adoption', 'happy', 'about', 'contact', 'requests'
+    formSubmissions: [],
+    currentView: 'adoption', // 'adoption', 'happy', 'about', 'contact', 'requests', 'forms'
+    currentHelpAction: null, // Para marcar qué botón de ayuda está activo
     searchQuery: '',
     requestsFilter: 'all', // 'all', 'pending', 'reviewing', 'approved', 'rejected'
+    formsFilter: 'all', // 'all', 'volunteer', 'foster', 'sponsorship', 'invoice_contribution'
     isLoggedIn: false,
     selectedPhotos: [],
     selectedVideos: [],

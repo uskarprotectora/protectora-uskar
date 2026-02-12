@@ -30,7 +30,8 @@ function renderFormsTable() {
         volunteer: 'Voluntariado',
         foster: 'Casa de Acogida',
         sponsorship: 'Apadrinamiento',
-        invoice_contribution: 'Contribución Factura'
+        invoice_contribution: 'Contribución Factura',
+        feedback: 'Opinión Web'
     };
 
     const volunteerTypeLabels = {
@@ -85,6 +86,10 @@ function renderFormsTable() {
             <div class="stat-chip ${AppState.formsFilter === 'invoice_contribution' ? 'active' : ''}" onclick="filterForms('invoice_contribution')">
                 <span>Contribuciones</span>
                 <span class="stat-count">${(AppState.formSubmissions || []).filter(f => f.formType === 'invoice_contribution').length}</span>
+            </div>
+            <div class="stat-chip ${AppState.formsFilter === 'feedback' ? 'active' : ''}" onclick="filterForms('feedback')">
+                <span>Opiniones</span>
+                <span class="stat-count">${(AppState.formSubmissions || []).filter(f => f.formType === 'feedback').length}</span>
             </div>
         </div>
     `;
@@ -223,7 +228,8 @@ async function viewFormDetails(formId) {
             volunteer: 'Voluntariado',
             foster: 'Casa de Acogida',
             sponsorship: 'Apadrinamiento',
-            invoice_contribution: 'Contribución Factura'
+            invoice_contribution: 'Contribución Factura',
+            feedback: 'Opinión Web'
         };
 
         const volunteerTypeLabels = {
@@ -288,7 +294,7 @@ async function viewFormDetails(formId) {
                         ${form.transportDates.map(t => `
                             <div class="transport-item">
                                 <span>${t.origin} → ${t.destination}</span>
-                                <span>${new Date(t.start).toLocaleDateString('es-ES')}${t.end ? ' - ' + new Date(t.end).toLocaleDateString('es-ES') : ''}</span>
+                                <span>${t.date ? new Date(t.date).toLocaleDateString('es-ES') : (t.start ? new Date(t.start).toLocaleDateString('es-ES') : '-')}</span>
                             </div>
                         `).join('')}
                     </div>
@@ -350,6 +356,27 @@ async function viewFormDetails(formId) {
                     <h4>💰 Cantidad Aportada</h4>
                     <p><strong>${form.amount || 0}€</strong></p>
                 </div>
+            `;
+        } else if (form.formType === 'feedback') {
+            const ratingEmojis = ['', '😞', '😕', '😐', '🙂', '😍'];
+            const ratingLabel = form.rating ? `${ratingEmojis[form.rating]} (${form.rating}/5)` : 'No valorado';
+            specificDetails = `
+                <div class="detail-section">
+                    <h4>⭐ Valoración</h4>
+                    <p class="feedback-rating-display">${ratingLabel}</p>
+                </div>
+                ${form.likes ? `
+                <div class="detail-section">
+                    <h4>👍 Lo que más le gustó</h4>
+                    <p>${form.likes}</p>
+                </div>
+                ` : ''}
+                ${form.improvements ? `
+                <div class="detail-section">
+                    <h4>💡 Sugerencias de mejora</h4>
+                    <p>${form.improvements}</p>
+                </div>
+                ` : ''}
             `;
         }
 

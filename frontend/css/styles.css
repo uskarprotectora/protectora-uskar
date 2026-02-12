@@ -251,6 +251,17 @@ a.adoption-form-btn {
     font-size: 1.25rem;
 }
 
+/* Feedback button special style */
+.feedback-btn {
+    background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+    border-color: #ffc107;
+}
+
+.feedback-btn:hover {
+    background: linear-gradient(135deg, #ffecb3 0%, #ffd54f 100%);
+    border-color: #ffa000;
+}
+
 .stats-section {
     margin-top: 1.5rem;
     padding: 1rem;
@@ -919,6 +930,50 @@ a.adoption-form-btn {
     margin-top: 1.5rem;
 }
 
+/* Rating Selector for Feedback Form */
+.rating-selector {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.rating-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    border: 2px solid #e0d6d0;
+    border-radius: 50%;
+    background: white;
+    font-size: 1.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rating-btn:hover {
+    border-color: #a1635c;
+    transform: scale(1.1);
+}
+
+.rating-btn.active {
+    border-color: #a1635c;
+    background: linear-gradient(135deg, #fff5f3 0%, #fee2e2 100%);
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(161, 99, 92, 0.2);
+}
+
+/* Feedback form styles */
+.feedback-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.feedback-rating-display {
+    font-size: 2rem;
+    text-align: center;
+}
+
 /* Profile Modal */
 .profile-content {
     padding: 2rem;
@@ -1113,11 +1168,11 @@ a.adoption-form-btn {
 
 /* Help Modal Styles */
 .help-content {
-    padding: 1rem;
+    padding: 1.5rem;
 }
 
 .help-section {
-    max-width: 43.75rem;
+    max-width: 50rem;
     margin: 0 auto;
 }
 
@@ -1131,16 +1186,16 @@ a.adoption-form-btn {
 
 .help-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 .help-card {
     background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
     border: 0.125rem solid rgba(188, 170, 164, 0.3);
-    border-radius: 1rem;
-    padding: 1.5rem;
+    border-radius: 1.25rem;
+    padding: 2rem 1.75rem;
     text-align: center;
     transition: all 0.3s ease;
 }
@@ -1157,22 +1212,22 @@ a.adoption-form-btn {
 }
 
 .help-card-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .help-card h4 {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: #3e1f1f;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.875rem;
 }
 
 .help-card p {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     color: #5d4037;
-    line-height: 1.6;
-    margin-bottom: 0.5rem;
+    line-height: 1.7;
+    margin-bottom: 0.625rem;
 }
 
 .help-card p:last-child {
@@ -2350,7 +2405,24 @@ a.adoption-form-btn {
 
     /* Help cards mobile */
     .help-cards {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        gap: 1rem;
+    }
+
+    .help-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .help-card-icon {
+        font-size: 2.5rem;
+    }
+
+    .help-card h4 {
+        font-size: 1rem;
+    }
+
+    .help-card p {
+        font-size: 0.875rem;
     }
 
     /* Detail grid mobile */
@@ -2439,11 +2511,11 @@ a.adoption-form-btn {
 
 .card-action-hint {
     display: block;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     color: #a1635c;
     font-weight: 600;
-    margin-top: 0.5rem;
-    opacity: 0.8;
+    margin-top: 0.75rem;
+    opacity: 0.9;
 }
 
 /* Amount Selector */
@@ -2617,7 +2689,7 @@ a.adoption-form-btn {
 
 .transport-date-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr auto;
+    grid-template-columns: 1fr 1fr 1fr auto;
     gap: 0.75rem;
     align-items: end;
     margin-bottom: 0.75rem;
@@ -2726,6 +2798,59 @@ a.adoption-form-btn {
     opacity: 0.6;
 }
 
+/* Coming Soon Banner */
+.coming-soon-banner {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 0.125rem solid #f59e0b;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.coming-soon-banner .coming-soon-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.coming-soon-banner span:not(.coming-soon-icon) {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #92400e;
+    letter-spacing: 0.1rem;
+}
+
+.coming-soon-banner p {
+    font-size: 0.875rem;
+    color: #78350f;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
+
+/* Sponsor Contact Info */
+.sponsor-contact-info {
+    background: linear-gradient(135deg, #efebe9 0%, #fff5f5 100%);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-top: 1.5rem;
+    text-align: center;
+    border: 0.125rem solid rgba(188, 170, 164, 0.3);
+}
+
+.sponsor-contact-info h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3e1f1f;
+    margin-bottom: 0.5rem;
+}
+
+.sponsor-contact-info p {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin: 0;
+}
+
 /* Captcha mejorado */
 .captcha-instructions {
     font-size: 0.875rem;
@@ -2785,6 +2910,61 @@ a.adoption-form-btn {
     border-radius: 0.375rem;
     font-size: 0.875rem;
     border-left: 0.25rem solid #dc2626;
+}
+
+/* Detailed Error Popup */
+.error-details {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.error-details p {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #92400e;
+}
+
+.error-details p:last-child {
+    margin-bottom: 0;
+}
+
+.error-details code {
+    background: #fde68a;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    word-break: break-all;
+}
+
+.error-help {
+    background: #f3f4f6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.error-help p {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.error-help ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.error-help ul li {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 0.25rem;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
 /* Privacy Policy Modal */

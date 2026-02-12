@@ -36,6 +36,7 @@ function updateUIForLogin() {
     const loginBtn = document.getElementById('loginBtn');
     const addPetBtn = document.getElementById('addPetBtn');
     const viewRequestsBtn = document.getElementById('viewAdoptionRequestsBtn');
+    const viewFormsBtn = document.getElementById('viewFormsBtn');
     const apadrinaBtn = document.getElementById('apadrinaBtn');
 
     if (AppState.isLoggedIn) {
@@ -43,15 +44,17 @@ function updateUIForLogin() {
         loginBtn.classList.add('logged-in');
         addPetBtn.classList.add('visible');
         viewRequestsBtn.classList.add('visible');
+        if (viewFormsBtn) viewFormsBtn.classList.add('visible');
         if (apadrinaBtn) apadrinaBtn.classList.add('visible');
     } else {
         loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesión</span>';
         loginBtn.classList.remove('logged-in');
         addPetBtn.classList.remove('visible');
         viewRequestsBtn.classList.remove('visible');
+        if (viewFormsBtn) viewFormsBtn.classList.remove('visible');
         if (apadrinaBtn) apadrinaBtn.classList.remove('visible');
 
-        if (AppState.currentView === 'requests') {
+        if (AppState.currentView === 'requests' || AppState.currentView === 'forms') {
             AppState.currentView = 'adoption';
             document.querySelector('[data-value="adoption"]').classList.add('active');
             loadPets();

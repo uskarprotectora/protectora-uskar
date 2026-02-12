@@ -32,11 +32,14 @@ function openAdoptionFormModal(pet = null) {
             ? pet.photos.find(p => p.isMain) || pet.photos[0]
             : null;
 
-        const photoHtml = mainPhoto
-            ? `<img src="${mainPhoto.url}" alt="${pet.name}" class="pet-thumb">`
+        const photoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
+        const photoHtml = photoUrl
+            ? `<img src="${photoUrl}" alt="${pet.name}" class="pet-thumb" onerror="this.outerHTML='<div class=\\'pet-thumb\\'>${emoji}</div>'">`
             : `<div class="pet-thumb">${emoji}</div>`;
 
-        document.getElementById('petInterestDisplay').innerHTML = `
+        const petInterestDisplay = document.getElementById('petInterestDisplay');
+        petInterestDisplay.style.display = 'block';
+        petInterestDisplay.innerHTML = `
             <div class="pet-info-row">
                 ${photoHtml}
                 <div class="pet-details">
@@ -49,7 +52,7 @@ function openAdoptionFormModal(pet = null) {
         document.getElementById('adoptionPetId').value = '';
         document.getElementById('adoptionPetName').value = '';
         document.getElementById('adoptPetNameInput').value = '';
-        document.getElementById('petInterestDisplay').innerHTML = '<span>Indica el nombre del animal que te interesa en el campo siguiente</span>';
+        document.getElementById('petInterestDisplay').style.display = 'none';
     }
 
     document.getElementById('adoptionFormModal').classList.add('active');

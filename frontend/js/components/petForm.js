@@ -223,16 +223,18 @@ function renderExistingMedia(pet) {
             photosContainer.innerHTML = `
                 <h5>Fotos actuales</h5>
                 <div class="photo-preview-grid">
-                    ${pet.photos.map((photo, index) => `
+                    ${pet.photos.map((photo, index) => {
+                        const photoUrl = getMediaUrl(photo.url);
+                        return `
                         <div class="photo-preview-item ${photo.isMain ? 'is-main' : ''}" data-index="${index}">
-                            <img src="${photo.url}" alt="Foto ${index + 1}">
+                            <img src="${photoUrl}" alt="Foto ${index + 1}">
                             ${photo.isMain ? '<span class="photo-main-badge">Principal</span>' : ''}
                             <div class="photo-preview-overlay">
                                 ${!photo.isMain ? `<button class="photo-preview-btn" onclick="setExistingMainPhoto('${pet._id}', ${index})">Hacer principal</button>` : ''}
                                 <button class="photo-preview-btn delete-btn" onclick="deleteExistingPhoto('${pet._id}', ${index})">Eliminar</button>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             `;
         } else {
@@ -243,15 +245,17 @@ function renderExistingMedia(pet) {
             videosContainer.innerHTML = `
                 <h5>Videos actuales</h5>
                 <div class="video-preview-list">
-                    ${pet.videos.map((video, index) => `
+                    ${pet.videos.map((video, index) => {
+                        const videoUrl = getMediaUrl(video.url);
+                        return `
                         <div class="video-preview-item" data-index="${index}">
-                            <video src="${video.url}" controls></video>
+                            <video src="${videoUrl}" controls></video>
                             <div class="video-preview-info">
                                 <div class="video-preview-name">Video ${index + 1}</div>
                             </div>
                             <button class="video-delete-btn" onclick="deleteExistingVideo('${pet._id}', ${index})">Eliminar</button>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             `;
         } else {

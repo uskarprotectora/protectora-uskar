@@ -5,7 +5,7 @@ const formSubmissionSchema = new mongoose.Schema({
     formType: {
         type: String,
         required: [true, 'El tipo de formulario es requerido'],
-        enum: ['volunteer', 'foster', 'sponsorship', 'invoice_contribution']
+        enum: ['volunteer', 'foster', 'sponsorship', 'invoice_contribution', 'feedback']
     },
 
     // Datos comunes
@@ -40,8 +40,9 @@ const formSubmissionSchema = new mongoose.Schema({
         type: String
     }],
     transportDates: [{
-        start: Date,
-        end: Date,
+        date: Date,
+        start: Date, // Mantener para compatibilidad con datos antiguos
+        end: Date,   // Mantener para compatibilidad con datos antiguos
         origin: String,
         destination: String
     }],
@@ -100,6 +101,21 @@ const formSubmissionSchema = new mongoose.Schema({
     // Datos específicos de contribución a factura
     invoiceId: {
         type: String
+    },
+
+    // Datos específicos de feedback/opinión
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5
+    },
+    likes: {
+        type: String,
+        trim: true
+    },
+    improvements: {
+        type: String,
+        trim: true
     },
 
     // Consentimientos
