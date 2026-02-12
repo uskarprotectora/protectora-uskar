@@ -59,7 +59,7 @@ function createPetCard(pet) {
                         <div class="detail-value">${pet.weight} kg</div>
                     </div>` : ''}
                     <div class="detail-item">
-                        <div class="detail-label">Genero</div>
+                        <div class="detail-label">Género</div>
                         <div class="detail-value">${genderText}</div>
                     </div>
                     <div class="detail-item">
@@ -86,8 +86,8 @@ function renderPets() {
 
     if (AppState.pets.length === 0) {
         const emptyMessage = AppState.currentView === 'adoption'
-            ? { title: 'No hay animales en adopcion', text: 'Actualmente no tenemos animales disponibles' }
-            : { title: 'No hay finales felices aun', text: 'Pronto compartiremos historias de adopcion' };
+            ? { title: 'No hay animales en adopción', text: 'Actualmente no tenemos animales disponibles' }
+            : { title: 'No hay finales felices aún', text: 'Pronto compartiremos historias de adopción' };
 
         petsGrid.innerHTML = `
             <div class="empty-state">

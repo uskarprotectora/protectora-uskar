@@ -37,9 +37,17 @@ router.get('/', async (req, res) => {
 // Get stats
 router.get('/stats', async (req, res) => {
     try {
-        const total = await Pet.countDocuments();
-        const dogs = await Pet.countDocuments({ type: 'dog' });
-        const cats = await Pet.countDocuments({ type: 'cat' });
+        const { status } = req.query;
+        let query = {};
+
+        // Si se especifica un estado, filtrar por él
+        if (status) {
+            query.status = status;
+        }
+
+        const total = await Pet.countDocuments(query);
+        const dogs = await Pet.countDocuments({ ...query, type: 'dog' });
+        const cats = await Pet.countDocuments({ ...query, type: 'cat' });
 
         res.json({ total, dogs, cats });
     } catch (error) {
@@ -60,29 +68,82 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Create new pet with file uploads
+// Generate presigned URLs for local development (simulates S3 presign)
+// In local mode, we return local URLs that will work with the upload endpoint
+router.post('/presign', async (req, res) => {
+    try {
+        const { files } = req.body;
+        const urls = files.map((file) => {
+            const folder = file.type.startsWith('image/') ? 'photos' : 'videos';
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const ext = path.extname(file.name);
+            const filename = `${uniqueSuffix}${ext}`;
+
+            // For local development, the upload URL is the local server
+            // and the public URL is the local path
+            return {
+                uploadUrl: `/uploads/${folder}/${filename}`,
+                publicUrl: `/uploads/${folder}/${filename}`,
+                key: filename
+            };
+        });
+
+        res.json(urls);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Create new pet with file uploads or JSON data
 router.post('/', upload.fields([
     { name: 'photos', maxCount: 10 },
     { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
     try {
-        const petData = JSON.parse(req.body.data || '{}');
+        // Support both multipart form data and JSON body
+        let petData;
+        if (req.body.data) {
+            petData = JSON.parse(req.body.data);
+        } else if (typeof req.body === 'object' && !req.files) {
+            petData = req.body;
+        } else {
+            petData = {};
+        }
 
-        // Process uploaded photos
+        // Process uploaded photos (multipart)
         if (req.files && req.files.photos) {
             petData.photos = req.files.photos.map((file, index) => ({
                 filename: file.filename,
                 url: `/uploads/photos/${file.filename}`,
-                isMain: index === 0 // First photo is main by default
+                isMain: index === 0
             }));
         }
 
-        // Process uploaded videos
+        // Process photos from presigned S3 upload (JSON)
+        if (petData.newPhotos && petData.newPhotos.length > 0) {
+            petData.photos = petData.newPhotos.map((photo, index) => ({
+                filename: photo.filename,
+                url: photo.url,
+                isMain: index === 0
+            }));
+            delete petData.newPhotos;
+        }
+
+        // Process uploaded videos (multipart)
         if (req.files && req.files.videos) {
             petData.videos = req.files.videos.map(file => ({
                 filename: file.filename,
                 url: `/uploads/videos/${file.filename}`
             }));
+        }
+
+        // Process videos from presigned S3 upload (JSON)
+        if (petData.newVideos && petData.newVideos.length > 0) {
+            petData.videos = petData.newVideos.map(video => ({
+                filename: video.filename,
+                url: video.url
+            }));
+            delete petData.newVideos;
         }
 
         const pet = new Pet(petData);
@@ -99,36 +160,67 @@ router.put('/:id', upload.fields([
     { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
     try {
-        const petData = JSON.parse(req.body.data || '{}');
+        // Support both multipart form data and JSON body
+        let petData;
+        if (req.body.data) {
+            petData = JSON.parse(req.body.data);
+        } else if (typeof req.body === 'object' && !req.files) {
+            petData = req.body;
+        } else {
+            petData = {};
+        }
+
         const existingPet = await Pet.findById(req.params.id);
 
         if (!existingPet) {
             return res.status(404).json({ message: 'Pet not found' });
         }
 
-        // Keep existing photos unless new ones are uploaded
+        // Keep existing photos unless new ones are uploaded (multipart)
         if (req.files && req.files.photos && req.files.photos.length > 0) {
             const newPhotos = req.files.photos.map((file, index) => ({
                 filename: file.filename,
                 url: `/uploads/photos/${file.filename}`,
                 isMain: false
             }));
-
-            // Merge with existing photos
             petData.photos = [...(existingPet.photos || []), ...newPhotos];
-        } else if (!petData.photos) {
+        }
+
+        // Process new photos from presigned S3 upload (JSON)
+        if (petData.newPhotos && petData.newPhotos.length > 0) {
+            const newPhotos = petData.newPhotos.map(photo => ({
+                filename: photo.filename,
+                url: photo.url,
+                isMain: false
+            }));
+            petData.photos = [...(existingPet.photos || []), ...newPhotos];
+            delete petData.newPhotos;
+        }
+
+        if (!petData.photos) {
             petData.photos = existingPet.photos;
         }
 
-        // Keep existing videos unless new ones are uploaded
+        // Keep existing videos unless new ones are uploaded (multipart)
         if (req.files && req.files.videos && req.files.videos.length > 0) {
             const newVideos = req.files.videos.map(file => ({
                 filename: file.filename,
                 url: `/uploads/videos/${file.filename}`
             }));
-
             petData.videos = [...(existingPet.videos || []), ...newVideos];
-        } else if (!petData.videos) {
+        }
+
+        // Process new videos from presigned S3 upload (JSON)
+        if (petData.newVideos && petData.newVideos.length > 0) {
+            const newVideos = petData.newVideos.map(video => ({
+                filename: video.filename,
+                url: video.url
+            }));
+            petData.videos = [...(existingPet.videos || []), ...newVideos];
+            delete petData.newVideos;
+        }
+
+        if (!petData.videos) {
             petData.videos = existingPet.videos;
         }
 

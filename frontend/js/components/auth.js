@@ -18,17 +18,17 @@ function handleLogin(e) {
         AppState.isLoggedIn = true;
         updateUIForLogin();
         closeLoginModal();
-        showToast('Sesion iniciada correctamente', 'success');
+        showToast('Sesión iniciada correctamente', 'success');
         loadPets();
     } else {
-        showToast('Usuario o contrasena incorrectos', 'error');
+        showToast('Usuario o contraseña incorrectos', 'error');
     }
 }
 
 function logout() {
     AppState.isLoggedIn = false;
     updateUIForLogin();
-    showToast('Sesion cerrada', 'success');
+    showToast('Sesión cerrada', 'success');
     loadPets();
 }
 
@@ -39,13 +39,13 @@ function updateUIForLogin() {
     const apadrinaBtn = document.getElementById('apadrinaBtn');
 
     if (AppState.isLoggedIn) {
-        loginBtn.innerHTML = '<span>🔓</span><span>Cerrar Sesion</span>';
+        loginBtn.innerHTML = '<span>🔓</span><span>Cerrar Sesión</span>';
         loginBtn.classList.add('logged-in');
         addPetBtn.classList.add('visible');
         viewRequestsBtn.classList.add('visible');
         if (apadrinaBtn) apadrinaBtn.classList.add('visible');
     } else {
-        loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesion</span>';
+        loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesión</span>';
         loginBtn.classList.remove('logged-in');
         addPetBtn.classList.remove('visible');
         viewRequestsBtn.classList.remove('visible');

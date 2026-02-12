@@ -6,6 +6,7 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const petsRouter = require('./routes/pets');
 const adoptionsRouter = require('./routes/adoptions');
+const formsRouter = require('./routes/forms');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // API Routes
 app.use('/api/pets', petsRouter);
 app.use('/api/adoptions', adoptionsRouter);
+app.use('/api/forms', formsRouter);
 
 // Serve frontend for all other routes
 app.get('*', (req, res) => {

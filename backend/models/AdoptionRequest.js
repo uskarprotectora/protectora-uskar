@@ -12,7 +12,7 @@ const adoptionRequestSchema = new mongoose.Schema({
         trim: true
     },
 
-    // Video de presentacion
+    // Video de presentación
     presentationVideo: {
         filename: String,
         url: String
@@ -32,17 +32,21 @@ const adoptionRequestSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: [true, 'El telefono es requerido'],
+        required: [true, 'El teléfono es requerido'],
         trim: true
     },
-    age: {
-        type: Number,
-        required: [true, 'La edad es requerida'],
-        min: 18
+    birthDate: {
+        type: Date,
+        required: [true, 'La fecha de nacimiento es requerida']
+    },
+    profession: {
+        type: String,
+        required: [true, 'La profesión es requerida'],
+        trim: true
     },
     address: {
         type: String,
-        required: [true, 'La direccion es requerida'],
+        required: [true, 'La dirección es requerida'],
         trim: true
     },
     city: {
@@ -51,7 +55,7 @@ const adoptionRequestSchema = new mongoose.Schema({
         trim: true
     },
 
-    // Situacion vivienda
+    // Situación vivienda
     housingType: {
         type: String,
         enum: ['piso', 'casa', 'chalet', 'otro'],
@@ -71,18 +75,10 @@ const adoptionRequestSchema = new mongoose.Schema({
         default: true
     },
 
-    // Situacion familiar
+    // Situación familiar (ahora es texto descriptivo)
     familyMembers: {
-        type: Number,
-        required: true,
-        min: 1
-    },
-    hasChildren: {
-        type: Boolean,
-        default: false
-    },
-    childrenAges: {
         type: String,
+        required: [true, 'Indica los miembros de la familia'],
         trim: true
     },
     allAgree: {
@@ -104,10 +100,10 @@ const adoptionRequestSchema = new mongoose.Schema({
         trim: true
     },
 
-    // Sobre la adopcion
+    // Sobre la adopción
     whyAdopt: {
         type: String,
-        required: [true, 'Por favor indica por que quieres adoptar'],
+        required: [true, 'Por favor indica por qué quieres adoptar'],
         trim: true
     },
     hoursAlone: {
@@ -116,13 +112,21 @@ const adoptionRequestSchema = new mongoose.Schema({
         min: 0,
         max: 24
     },
-    vacationPlan: {
-        type: String,
-        trim: true
-    },
     commitmentAware: {
         type: Boolean,
         required: true
+    },
+
+    // Consentimientos legales
+    dataProtectionConsent: {
+        type: Boolean,
+        required: [true, 'Debes aceptar la política de protección de datos'],
+        default: false
+    },
+    followUpConsent: {
+        type: Boolean,
+        required: [true, 'Debes dar consentimiento para el seguimiento'],
+        default: false
     },
 
     // Estado de la solicitud

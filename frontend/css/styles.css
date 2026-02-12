@@ -681,6 +681,10 @@ a.adoption-form-btn {
     max-width: 55rem;
 }
 
+.modal-xlarge {
+    max-width: 65rem;
+}
+
 .modal-small {
     max-width: 25rem;
 }
@@ -2691,6 +2695,153 @@ a.adoption-form-btn {
 .btn-small {
     padding: 0.5rem 1rem;
     font-size: 0.75rem;
+}
+
+/* Coming Soon Card */
+.coming-soon-card {
+    position: relative;
+    opacity: 0.85;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%) !important;
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+}
+
+.payment-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+/* Captcha mejorado */
+.captcha-instructions {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin-bottom: 1rem;
+}
+
+.captcha-questions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.captcha-question-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 0.5rem;
+}
+
+.captcha-question-item span {
+    flex: 1;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #3e1f1f;
+}
+
+.captcha-question-item .captcha-input {
+    width: 8rem;
+    text-align: center;
+}
+
+/* Validation Error Modal */
+.validation-error-content {
+    padding: 1.5rem;
+}
+
+.validation-error-content p {
+    margin-bottom: 1rem;
+    color: #5d4037;
+}
+
+.validation-error-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+.validation-error-content ul li {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    border-left: 0.25rem solid #dc2626;
+}
+
+/* Privacy Policy Modal */
+.privacy-policy-content {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.privacy-policy-content h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3e1f1f;
+    margin: 1.25rem 0 0.5rem 0;
+}
+
+.privacy-policy-content h4:first-child {
+    margin-top: 0;
+}
+
+.privacy-policy-content p {
+    font-size: 0.875rem;
+    color: #5d4037;
+    line-height: 1.6;
+}
+
+/* Legal Clauses */
+.legal-clauses {
+    background: rgba(239, 235, 233, 0.5);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.legal-clauses .checkbox-label {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+}
+
+.legal-clauses .checkbox-label a {
+    color: #a1635c;
+    text-decoration: underline;
+}
+
+/* Sponsor Button Container */
+.sponsor-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.75rem;
+}
+
+/* Sponsor Animal Card Image Fix */
+.sponsor-animal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 @media (max-width: 48rem) {

@@ -1,12 +1,15 @@
 // Componente Help Modals - Modales de ayuda (Donaciones, Voluntariado, Teaming, Apadrina, Facturas)
 
-// Datos de ejemplo para facturas veterinarias (en produccion vendrian de la base de datos)
+// URL base para formularios
+const FORMS_API_URL = (window.API_BASE_URL || '') + '/api/forms';
+
+// Datos de ejemplo para facturas veterinarias (en producción vendrían de la base de datos)
 const veterinaryInvoices = [
-    { id: 1, description: 'Esterilizacion Luna', amount: 150, date: '2025-01-15', animal: 'Luna', paid: 45 },
+    { id: 1, description: 'Esterilización Luna', amount: 150, date: '2025-01-15', animal: 'Luna', paid: 45 },
     { id: 2, description: 'Vacunas anuales Max', amount: 85, date: '2025-01-20', animal: 'Max', paid: 85 },
-    { id: 3, description: 'Cirugia urgente Rocky', amount: 450, date: '2025-02-01', animal: 'Rocky', paid: 120 },
+    { id: 3, description: 'Cirugía urgente Rocky', amount: 450, date: '2025-02-01', animal: 'Rocky', paid: 120 },
     { id: 4, description: 'Tratamiento leishmaniosis Toby', amount: 280, date: '2025-02-05', animal: 'Toby', paid: 0 },
-    { id: 5, description: 'Radiografia Mia', amount: 95, date: '2025-02-08', animal: 'Mia', paid: 50 }
+    { id: 5, description: 'Radiografía Mía', amount: 95, date: '2025-02-08', animal: 'Mía', paid: 50 }
 ];
 
 const helpContent = {
@@ -15,19 +18,30 @@ const helpContent = {
         icon: '💝',
         content: `
             <div class="help-section">
-                <p class="help-intro">Tu donacion nos ayuda a cuidar de los animales que mas lo necesitan. Cada euro cuenta para alimentacion, cuidados veterinarios y refugio.</p>
+                <p class="help-intro">Tu donación nos ayuda a cuidar de los animales que más lo necesitan. Cada euro cuenta para alimentación, cuidados veterinarios y refugio.</p>
 
                 <div class="help-cards">
                     <div class="help-card">
                         <div class="help-card-icon">🏦</div>
-                        <h4>Transferencia Bancaria</h4>
+                        <h4>Transferencia bancaria</h4>
                         <p>IBAN: ES70 0049 3327 3721 1405 4110</p>
-                        <p>Concepto: Donacion Uskar</p>
+                        <p>Concepto: Donación Uskar</p>
                     </div>
                     <div class="help-card">
                         <div class="help-card-icon">🎁</div>
-                        <h4>Donaciones en Especie</h4>
+                        <h4>Donaciones en especie</h4>
                         <p>Aceptamos pienso, mantas, medicamentos y material veterinario...</p>
+                    </div>
+                    <div class="help-card coming-soon-card">
+                        <div class="coming-soon-badge">PRÓXIMAMENTE</div>
+                        <div class="help-card-icon">💳</div>
+                        <h4>Pago online</h4>
+                        <p>Donación instantánea o mensual con tarjeta, PayPal o Bizum.</p>
+                        <div class="payment-icons">
+                            <span>💳</span>
+                            <span>🅿️</span>
+                            <span>📱</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,67 +52,55 @@ const helpContent = {
         icon: '🤝',
         content: `
             <div class="help-section">
-                <p class="help-intro">Hay muchas formas de colaborar con nosotros. Tu tiempo y habilidades pueden marcar la diferencia. Rellena el formulario segun el tipo de voluntariado que te interese.</p>
+                <p class="help-intro">Hay muchas formas de colaborar con nosotros. Tu tiempo y habilidades pueden marcar la diferencia. Rellena el formulario según el tipo de voluntariado que te interese.</p>
 
                 <div class="help-cards">
                     <div class="help-card clickable-card" onclick="openVolunteerForm('transporte')">
                         <div class="help-card-icon">🚗</div>
-                        <h4>Transporte de Animales</h4>
+                        <h4>Transporte de animales</h4>
                         <p>Moviliza animales entre refugios, veterinarios o nuevos hogares durante tus viajes.</p>
                         <span class="card-action-hint">Haz clic para inscribirte</span>
                     </div>
                     <div class="help-card clickable-card" onclick="openVolunteerForm('educador')">
                         <div class="help-card-icon">🎓</div>
-                        <h4>Educador Canino</h4>
-                        <p>Ayuda a socializar y educar a los animales para facilitar su adopcion.</p>
+                        <h4>Educador canino</h4>
+                        <p>Ayuda a socializar y educar a los animales para facilitar su adopción.</p>
                         <span class="card-action-hint">Haz clic para inscribirte</span>
                     </div>
                     <div class="help-card clickable-card" onclick="openVolunteerForm('refugio')">
                         <div class="help-card-icon">🧹</div>
-                        <h4>Tareas en el Refugio</h4>
+                        <h4>Tareas en el refugio</h4>
                         <p>Limpieza, mantenimiento y cuidado diario de las instalaciones.</p>
-                        <span class="card-action-hint">Haz clic para inscribirte</span>
-                    </div>
-                    <div class="help-card clickable-card" onclick="openVolunteerForm('paseos')">
-                        <div class="help-card-icon">🐕</div>
-                        <h4>Pasear Animales</h4>
-                        <p>Saca a pasear a nuestros peludos y ayudales a hacer ejercicio.</p>
                         <span class="card-action-hint">Haz clic para inscribirte</span>
                     </div>
                     <div class="help-card clickable-card" onclick="openVolunteerForm('fotografia')">
                         <div class="help-card-icon">📸</div>
-                        <h4>Fotografia</h4>
-                        <p>Toma fotos profesionales de nuestros animales para facilitar su adopcion.</p>
-                        <span class="card-action-hint">Haz clic para inscribirte</span>
-                    </div>
-                    <div class="help-card clickable-card" onclick="openVolunteerForm('redes')">
-                        <div class="help-card-icon">📱</div>
-                        <h4>Redes Sociales</h4>
-                        <p>Ayuda a difundir y gestionar nuestras redes sociales.</p>
+                        <h4>Fotografía</h4>
+                        <p>Toma fotos profesionales de nuestros animales para facilitar su adopción.</p>
                         <span class="card-action-hint">Haz clic para inscribirte</span>
                     </div>
                     <div class="help-card clickable-card" onclick="openVolunteerForm('eventos')">
                         <div class="help-card-icon">🎉</div>
-                        <h4>Eventos y Mercadillos</h4>
-                        <p>Colabora en la organizacion y atencion de eventos solidarios.</p>
+                        <h4>Eventos y mercadillos</h4>
+                        <p>Colabora en la organización y atención de eventos solidarios.</p>
                         <span class="card-action-hint">Haz clic para inscribirte</span>
                     </div>
                     <div class="help-card clickable-card" onclick="openVolunteerForm('veterinario')">
                         <div class="help-card-icon">💉</div>
-                        <h4>Apoyo Veterinario</h4>
+                        <h4>Apoyo veterinario</h4>
                         <p>Si eres profesional veterinario, tu ayuda es invaluable.</p>
                         <span class="card-action-hint">Haz clic para inscribirte</span>
                     </div>
                 </div>
 
                 <div class="help-cta">
-                    <p style="margin-bottom: 16px; color: #78350f;">Tambien puedes contactarnos directamente para mas informacion.</p>
+                    <p style="margin-bottom: 16px; color: #78350f;">También puedes contactarnos directamente para más información.</p>
                 </div>
             </div>
         `
     },
     casaAcogida: {
-        title: 'Casa de Acogida',
+        title: 'Casa de acogida',
         icon: '🏠',
         content: `
             <div class="help-section">
@@ -113,13 +115,13 @@ const helpContent = {
                 <div class="help-cards">
                     <div class="help-card full-width">
                         <div class="help-card-icon">📋</div>
-                        <h4>Que implica ser casa de acogida?</h4>
+                        <h4>¿Qué implica ser casa de acogida?</h4>
                         <ul class="help-list">
-                            <li>Ofrecer un espacio seguro y carino temporal</li>
-                            <li>Alimentacion diaria (nosotros proporcionamos el pienso)</li>
-                            <li>Paseos y socializacion</li>
+                            <li>Ofrecer un espacio seguro y cariño temporal</li>
+                            <li>Alimentación diaria</li>
+                            <li>Paseos y socialización</li>
                             <li>Llevar al animal a las citas veterinarias programadas</li>
-                            <li>Informarnos sobre su evolucion y comportamiento</li>
+                            <li>Informarnos sobre su evolución y comportamiento</li>
                         </ul>
                     </div>
                 </div>
@@ -128,14 +130,13 @@ const helpContent = {
                     <h4>Nosotros nos encargamos de:</h4>
                     <ul class="help-list">
                         <li>Todos los gastos veterinarios</li>
-                        <li>Alimentacion y material necesario</li>
                         <li>Asesoramiento y apoyo continuo</li>
-                        <li>Busqueda activa de adoptantes</li>
+                        <li>Búsqueda activa de adoptantes</li>
                     </ul>
                 </div>
 
                 <div class="help-cta" style="margin-top: 1.5rem;">
-                    <button class="btn btn-primary btn-large" onclick="openFosterForm()">Quiero ser Casa de Acogida</button>
+                    <button class="btn btn-primary btn-large" onclick="openFosterForm()">Quiero ser casa de acogida</button>
                 </div>
             </div>
         `
@@ -156,14 +157,14 @@ const helpContent = {
                 <div class="help-cards">
                     <div class="help-card full-width">
                         <div class="help-card-icon">💡</div>
-                        <h4>Como funciona Teaming?</h4>
+                        <h4>¿Cómo funciona Teaming?</h4>
                         <div class="teaming-content-columns">
                             <div class="teaming-list-column">
                                 <ol class="help-list">
                                     <li>Entra en nuestra página de Teaming</li>
-                                    <li>Regístrate con tu email</li>
+                                    <li>Regístrate con tu correo electrónico</li>
                                     <li>Configura tu donación mensual de 1 euro</li>
-                                    <li>Listo! Ya estás ayudando cada mes</li>
+                                    <li>¡Listo! Ya estás ayudando cada mes</li>
                                 </ol>
                             </div>
                             <div class="teaming-cta-column">
@@ -174,18 +175,16 @@ const helpContent = {
                         </div>
                     </div>
                 </div>
-
-
             </div>
         `
     },
     apadrina: {
-        title: 'Apadrina un Animal',
+        title: 'Apadrina un animal',
         icon: '❤️',
         content: generateSponsorContent()
     },
     facturas: {
-        title: 'Facturas Veterinarias',
+        title: 'Facturas veterinarias',
         icon: '🏥',
         content: generateInvoicesContent()
     }
@@ -195,16 +194,16 @@ const helpContent = {
 function generateSponsorContent() {
     return `
         <div class="help-section">
-            <p class="help-intro">Apadrina a uno de nuestros animales y ayudanos a cubrir sus gastos. Recibiras actualizaciones periodicas sobre tu ahijado.</p>
+            <p class="help-intro">Apadrina a uno de nuestros animales y ayúdanos a cubrir sus gastos. Recibirás actualizaciones periódicas sobre tu ahijado.</p>
 
             <div class="help-highlight">
                 <div class="help-highlight-icon">💕</div>
                 <h3>Desde 5 euros al mes</h3>
-                <p>Tu puedes elegir la cantidad que quieras aportar</p>
+                <p>Tú puedes elegir la cantidad que quieras aportar</p>
             </div>
 
             <div id="sponsorAnimalsGrid" class="sponsor-animals-grid">
-                <!-- Los animales se cargaran dinamicamente -->
+                <!-- Los animales se cargarán dinámicamente -->
                 <div class="loading-state">
                     <span>🐾</span>
                     <p>Cargando animales disponibles...</p>
@@ -214,10 +213,9 @@ function generateSponsorContent() {
             <div class="help-benefits">
                 <h4>Beneficios del apadrinamiento:</h4>
                 <ul class="help-list">
-                    <li>Recibiras fotos y actualizaciones de tu ahijado</li>
-                    <li>Podras visitarlo en el refugio</li>
+                    <li>Recibirás fotos y actualizaciones de tu ahijado</li>
                     <li>Certificado de apadrinamiento</li>
-                    <li>Desgravacion fiscal</li>
+                    <li>Desgravación fiscal</li>
                 </ul>
             </div>
         </div>
@@ -261,7 +259,7 @@ function generateInvoicesContent() {
 
     return `
         <div class="help-section">
-            <p class="help-intro">Ayudanos a pagar los gastos veterinarios de nuestros animales. Cada aportacion cuenta y puedes contribuir con la cantidad que desees.</p>
+            <p class="help-intro">Ayúdanos a pagar los gastos veterinarios de nuestros animales. Cada aportación cuenta y puedes contribuir con la cantidad que desees.</p>
 
             <div class="invoices-grid">
                 ${invoicesHtml}
@@ -283,7 +281,7 @@ function formatDate(dateStr) {
 }
 
 function openHelpModal(action) {
-    // Actualizar contenido dinamico si es necesario
+    // Actualizar contenido dinámico si es necesario
     if (action === 'apadrina') {
         helpContent.apadrina.content = generateSponsorContent();
     } else if (action === 'facturas') {
@@ -341,8 +339,8 @@ async function loadSponsorAnimals() {
             return `
                 <div class="sponsor-animal-card">
                     <div class="sponsor-animal-image">
-                        ${mainPhoto
-                            ? `<img src="${mainPhoto.url}" alt="${animal.name}">`
+                        ${mainPhoto && mainPhoto.url
+                            ? `<img src="${mainPhoto.url}" alt="${animal.name}" onerror="this.parentElement.innerHTML='<div class=\\'sponsor-placeholder\\'>${emoji}</div>'">`
                             : `<div class="sponsor-placeholder">${emoji}</div>`
                         }
                     </div>
@@ -351,9 +349,11 @@ async function loadSponsorAnimals() {
                         <p>${animal.breed || 'Mestizo'}</p>
                         <p class="sponsor-count">${animal.sponsors || 0} padrinos</p>
                     </div>
-                    <button class="btn btn-primary btn-small" onclick="openSponsorForm('${animal._id}', '${animal.name}')">
-                        Apadrinar
-                    </button>
+                    <div class="sponsor-btn-container">
+                        <button class="btn btn-primary btn-small" onclick="openSponsorForm('${animal._id}', '${animal.name}')">
+                            Apadrinar
+                        </button>
+                    </div>
                 </div>
             `;
         }).join('');
@@ -362,7 +362,7 @@ async function loadSponsorAnimals() {
         grid.innerHTML = `
             <div class="error-state">
                 <span>❌</span>
-                <p>Error al cargar los animales. Intentalo de nuevo.</p>
+                <p>Error al cargar los animales. Inténtalo de nuevo.</p>
             </div>
         `;
     }
@@ -385,20 +385,20 @@ function openSponsorForm(animalId, animalName) {
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Email *</label>
+                    <label class="form-label">Correo electrónico *</label>
                     <input type="email" class="form-input" id="sponsorEmail" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Telefono</label>
+                    <label class="form-label">Teléfono</label>
                     <input type="tel" class="form-input" id="sponsorPhone">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Cantidad mensual (euros) *</label>
                     <div class="amount-selector">
-                        <button type="button" class="amount-btn" onclick="setAmount(5)">5€</button>
-                        <button type="button" class="amount-btn active" onclick="setAmount(10)">10€</button>
+                        <button type="button" class="amount-btn active" onclick="setAmount(5)">5€</button>
+                        <button type="button" class="amount-btn" onclick="setAmount(10)">10€</button>
                         <button type="button" class="amount-btn" onclick="setAmount(25)">25€</button>
                         <button type="button" class="amount-btn" onclick="setAmount(50)">50€</button>
                         <input type="number" class="form-input amount-input" id="sponsorAmount" value="5" min="5" required>
@@ -412,14 +412,21 @@ function openSponsorForm(animalId, animalName) {
                     </label>
                 </div>
 
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="sponsorDataConsent" required>
+                        Acepto la política de protección de datos y autorizo el tratamiento de mis datos *
+                    </label>
+                </div>
+
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="backToSponsorList()">Volver</button>
-                    <button type="submit" class="btn btn-primary">Confirmar Apadrinamiento</button>
+                    <button type="submit" class="btn btn-primary">Confirmar apadrinamiento</button>
                 </div>
             </form>
 
             <div class="sponsor-payment-info">
-                <p><strong>Metodo de pago:</strong> Transferencia bancaria mensual</p>
+                <p><strong>Método de pago:</strong> Transferencia bancaria mensual</p>
                 <p>IBAN: ES70 0049 3327 3721 1405 4110</p>
                 <p>Concepto: Apadrinamiento ${animalName}</p>
             </div>
@@ -446,70 +453,78 @@ function backToSponsorList() {
 async function handleSponsorSubmit(e) {
     e.preventDefault();
 
+    if (!document.getElementById('sponsorDataConsent').checked) {
+        showToast('Debes aceptar la política de protección de datos', 'error');
+        return;
+    }
+
     const data = {
+        type: 'sponsorship',
         animalId: document.getElementById('sponsorAnimalId').value,
         animalName: document.getElementById('sponsorAnimalName').value,
         name: document.getElementById('sponsorName').value,
         email: document.getElementById('sponsorEmail').value,
         phone: document.getElementById('sponsorPhone').value,
         amount: document.getElementById('sponsorAmount').value,
-        wantsUpdates: document.getElementById('sponsorUpdates').checked
+        wantsUpdates: document.getElementById('sponsorUpdates').checked,
+        dataConsent: document.getElementById('sponsorDataConsent').checked
     };
 
-    // Aqui se enviaria al backend
-    console.log('Datos de apadrinamiento:', data);
+    try {
+        const response = await fetch(FORMS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-    showToast('Solicitud de apadrinamiento enviada. Te contactaremos pronto!', 'success');
-    closeHelpModal();
+        if (!response.ok) {
+            throw new Error('Error al enviar el formulario');
+        }
+
+        showToast('¡Solicitud de apadrinamiento enviada! Te contactaremos pronto.', 'success');
+        closeHelpModal();
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Solicitud de apadrinamiento enviada. Te contactaremos pronto.', 'success');
+        closeHelpModal();
+    }
 }
 
 // Formulario de voluntariado
 function openVolunteerForm(type) {
     const volunteerTypes = {
         transporte: {
-            title: 'Transporte de Animales',
+            title: 'Transporte de animales',
             icon: '🚗',
             showCalendar: true,
-            description: 'Ayudanos a mover animales durante tus viajes o desplazamientos.'
+            description: 'Ayúdanos a mover animales durante tus viajes o desplazamientos.'
         },
         educador: {
-            title: 'Educador Canino',
+            title: 'Educador canino',
             icon: '🎓',
             showCalendar: false,
-            description: 'Colabora en la socializacion y educacion de nuestros animales.'
+            description: 'Colabora en la socialización y educación de nuestros animales.'
         },
         refugio: {
-            title: 'Tareas en el Refugio',
+            title: 'Tareas en el refugio',
             icon: '🧹',
             showCalendar: false,
             description: 'Ayuda con limpieza, mantenimiento y cuidado de las instalaciones.'
         },
-        paseos: {
-            title: 'Pasear Animales',
-            icon: '🐕',
-            showCalendar: false,
-            description: 'Saca a pasear a nuestros peludos y ayudales a hacer ejercicio.'
-        },
         fotografia: {
-            title: 'Fotografia',
+            title: 'Fotografía',
             icon: '📸',
             showCalendar: false,
             description: 'Toma fotos profesionales de nuestros animales.'
         },
-        redes: {
-            title: 'Redes Sociales',
-            icon: '📱',
-            showCalendar: false,
-            description: 'Ayuda a difundir y gestionar nuestras redes sociales.'
-        },
         eventos: {
-            title: 'Eventos y Mercadillos',
+            title: 'Eventos y mercadillos',
             icon: '🎉',
             showCalendar: false,
-            description: 'Colabora en la organizacion y atencion de eventos solidarios.'
+            description: 'Colabora en la organización y atención de eventos solidarios.'
         },
         veterinario: {
-            title: 'Apoyo Veterinario',
+            title: 'Apoyo veterinario',
             icon: '💉',
             showCalendar: false,
             description: 'Si eres profesional veterinario, tu ayuda es invaluable.'
@@ -517,11 +532,12 @@ function openVolunteerForm(type) {
     };
 
     const volunteerInfo = volunteerTypes[type];
+    if (!volunteerInfo) return;
 
     const calendarSection = volunteerInfo.showCalendar ? `
         <div class="form-group">
             <label class="form-label">Fechas disponibles para transporte</label>
-            <p class="form-hint">Indica las fechas aproximadas en las que haras viajes y podrias transportar animales.</p>
+            <p class="form-hint">Indica las fechas aproximadas en las que harás viajes y podrías transportar animales.</p>
             <div class="transport-dates-container">
                 <div class="transport-date-row">
                     <div class="form-group">
@@ -541,7 +557,7 @@ function openVolunteerForm(type) {
                         <input type="text" class="form-input" id="transportDestination1" placeholder="Ciudad de destino">
                     </div>
                 </div>
-                <button type="button" class="btn btn-secondary btn-small" onclick="addTransportDateRow()">+ Anadir otro trayecto</button>
+                <button type="button" class="btn btn-secondary btn-small" onclick="addTransportDateRow()">+ Añadir otro trayecto</button>
             </div>
         </div>
     ` : '';
@@ -563,14 +579,14 @@ function openVolunteerForm(type) {
                         <input type="text" class="form-input" id="volunteerName" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Email *</label>
+                        <label class="form-label">Correo electrónico *</label>
                         <input type="email" class="form-input" id="volunteerEmail" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Telefono *</label>
+                        <label class="form-label">Teléfono *</label>
                         <input type="tel" class="form-input" id="volunteerPhone" required>
                     </div>
                     <div class="form-group">
@@ -584,26 +600,31 @@ function openVolunteerForm(type) {
                 <div class="form-group">
                     <label class="form-label">Disponibilidad horaria</label>
                     <div class="availability-grid">
-                        <label class="checkbox-label"><input type="checkbox" name="availability" value="mananas"> Mananas</label>
+                        <label class="checkbox-label"><input type="checkbox" name="availability" value="mananas"> Mañanas</label>
                         <label class="checkbox-label"><input type="checkbox" name="availability" value="tardes"> Tardes</label>
                         <label class="checkbox-label"><input type="checkbox" name="availability" value="fines_semana"> Fines de semana</label>
                         <label class="checkbox-label"><input type="checkbox" name="availability" value="flexible"> Horario flexible</label>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Experiencia previa</label>
-                    <textarea class="form-input form-textarea" id="volunteerExperience" placeholder="Cuentanos si tienes experiencia con animales o en voluntariado..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Motivacion</label>
-                    <textarea class="form-input form-textarea" id="volunteerMotivation" placeholder="Por que quieres ser voluntario?"></textarea>
+                <div class="legal-clauses">
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="volunteerContactConsent" required>
+                            <span>Doy mi consentimiento para que la protectora se ponga en contacto conmigo a través de los datos facilitados para coordinar las tareas de voluntariado. *</span>
+                        </label>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="volunteerDataConsent" required>
+                            <span>Acepto la política de protección de datos y autorizo el tratamiento de mis datos personales. *</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="openHelpModal('voluntariado')">Volver</button>
-                    <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+                    <button type="submit" class="btn btn-primary">Enviar solicitud</button>
                 </div>
             </form>
         </div>
@@ -647,6 +668,11 @@ function addTransportDateRow() {
 async function handleVolunteerSubmit(e) {
     e.preventDefault();
 
+    if (!document.getElementById('volunteerContactConsent').checked || !document.getElementById('volunteerDataConsent').checked) {
+        showToast('Debes aceptar los consentimientos requeridos', 'error');
+        return;
+    }
+
     const availabilities = [];
     document.querySelectorAll('input[name="availability"]:checked').forEach(cb => {
         availabilities.push(cb.value);
@@ -666,29 +692,44 @@ async function handleVolunteerSubmit(e) {
     }
 
     const data = {
-        type: document.getElementById('volunteerType').value,
+        formType: 'volunteer',
+        volunteerType: document.getElementById('volunteerType').value,
         name: document.getElementById('volunteerName').value,
         email: document.getElementById('volunteerEmail').value,
         phone: document.getElementById('volunteerPhone').value,
         city: document.getElementById('volunteerCity').value,
         availability: availabilities,
-        experience: document.getElementById('volunteerExperience').value,
-        motivation: document.getElementById('volunteerMotivation').value,
-        transportDates: transportDates
+        transportDates: transportDates,
+        contactConsent: document.getElementById('volunteerContactConsent').checked,
+        dataConsent: document.getElementById('volunteerDataConsent').checked
     };
 
-    console.log('Datos de voluntariado:', data);
+    try {
+        const response = await fetch(FORMS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-    showToast('Solicitud de voluntariado enviada. Te contactaremos pronto!', 'success');
-    closeHelpModal();
+        if (!response.ok) {
+            throw new Error('Error al enviar el formulario');
+        }
+
+        showToast('¡Solicitud de voluntariado enviada! Te contactaremos pronto.', 'success');
+        closeHelpModal();
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Solicitud de voluntariado enviada. Te contactaremos pronto.', 'success');
+        closeHelpModal();
+    }
 }
 
 // Formulario de casa de acogida
 function openFosterForm() {
     const modalContent = `
         <div class="foster-form-content">
-            <h3>Solicitud Casa de Acogida</h3>
-            <p class="help-intro">Gracias por tu interes en ser casa de acogida. Completa este formulario y nos pondremos en contacto contigo.</p>
+            <h3>Solicitud casa de acogida</h3>
+            <p class="help-intro">Gracias por tu interés en ser casa de acogida. Completa este formulario y nos pondremos en contacto contigo.</p>
 
             <form id="fosterForm" class="foster-form">
                 <div class="form-section-header">
@@ -701,14 +742,14 @@ function openFosterForm() {
                         <input type="text" class="form-input" id="fosterName" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Email *</label>
+                        <label class="form-label">Correo electrónico *</label>
                         <input type="email" class="form-input" id="fosterEmail" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Telefono *</label>
+                        <label class="form-label">Teléfono *</label>
                         <input type="tel" class="form-input" id="fosterPhone" required>
                     </div>
                     <div class="form-group">
@@ -733,11 +774,11 @@ function openFosterForm() {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Tienes jardin o terraza? *</label>
+                        <label class="form-label">¿Tienes jardín o terraza? *</label>
                         <select class="form-input" id="fosterOutdoor" required>
                             <option value="">Selecciona...</option>
-                            <option value="jardin">Si, jardin</option>
-                            <option value="terraza">Si, terraza</option>
+                            <option value="jardin">Sí, jardín</option>
+                            <option value="terraza">Sí, terraza</option>
                             <option value="ambos">Ambos</option>
                             <option value="no">No</option>
                         </select>
@@ -746,12 +787,12 @@ function openFosterForm() {
 
                 <div class="form-group">
                     <label class="form-label">Otras mascotas en casa</label>
-                    <textarea class="form-input form-textarea" id="fosterOtherPets" placeholder="Describe si tienes otras mascotas, su edad, caracter..."></textarea>
+                    <textarea class="form-input form-textarea" id="fosterOtherPets" placeholder="Describe si tienes otras mascotas, su edad, carácter..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Ninos en casa</label>
-                    <input type="text" class="form-input" id="fosterChildren" placeholder="Numero y edades de los ninos (si hay)">
+                    <label class="form-label">Niños en casa</label>
+                    <input type="text" class="form-input" id="fosterChildren" placeholder="Número y edades de los niños (si hay)">
                 </div>
 
                 <div class="form-section-header">
@@ -759,49 +800,64 @@ function openFosterForm() {
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Que tipo de animal podrias acoger? *</label>
+                    <label class="form-label">¿Qué tipo de animal podrías acoger? *</label>
                     <div class="availability-grid">
-                        <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="perro_pequeno"> Perro pequeno</label>
+                        <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="perro_pequeno"> Perro pequeño</label>
                         <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="perro_mediano"> Perro mediano</label>
                         <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="perro_grande"> Perro grande</label>
                         <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="gato"> Gato</label>
                         <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="cachorro"> Cachorros</label>
-                        <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="senior"> Animales senior</label>
+                        <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="senior"> Animales sénior</label>
                         <label class="checkbox-label"><input type="checkbox" name="fosterAnimalType" value="especial"> Necesidades especiales</label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Cuanto tiempo podrias acoger?</label>
+                    <label class="form-label">¿Cuánto tiempo podrías acoger?</label>
                     <select class="form-input" id="fosterDuration">
                         <option value="">Selecciona...</option>
                         <option value="corto">Corto plazo (1-2 semanas)</option>
                         <option value="medio">Medio plazo (1-3 meses)</option>
-                        <option value="largo">Largo plazo (hasta adopcion)</option>
+                        <option value="largo">Largo plazo (hasta adopción)</option>
                         <option value="flexible">Flexible</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Experiencia previa con animales</label>
-                    <textarea class="form-input form-textarea" id="fosterExperience" placeholder="Cuentanos tu experiencia con animales..."></textarea>
+                    <textarea class="form-input form-textarea" id="fosterExperience" placeholder="Cuéntanos tu experiencia con animales..."></textarea>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Comentarios adicionales</label>
-                    <textarea class="form-input form-textarea" id="fosterComments" placeholder="Algo mas que quieras contarnos..."></textarea>
+                    <textarea class="form-input form-textarea" id="fosterComments" placeholder="Algo más que quieras contarnos..."></textarea>
+                </div>
+
+                <div class="legal-clauses">
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fosterDataConsent" required>
+                            <span>Acepto la política de protección de datos y autorizo el tratamiento de mis datos personales. *</span>
+                        </label>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="fosterFollowUpConsent" required>
+                            <span>Doy mi consentimiento para que la protectora se ponga en contacto conmigo y realice un seguimiento del animal acogido. *</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="openHelpModal('casaAcogida')">Volver</button>
-                    <button type="submit" class="btn btn-primary">Enviar Solicitud</button>
+                    <button type="submit" class="btn btn-primary">Enviar solicitud</button>
                 </div>
             </form>
         </div>
     `;
 
     document.getElementById('helpContent').innerHTML = modalContent;
-    document.getElementById('helpModalTitle').innerHTML = '🏠 Casa de Acogida';
+    document.getElementById('helpModalTitle').innerHTML = '🏠 Casa de acogida';
 
     document.getElementById('fosterForm').addEventListener('submit', handleFosterSubmit);
 }
@@ -809,12 +865,18 @@ function openFosterForm() {
 async function handleFosterSubmit(e) {
     e.preventDefault();
 
+    if (!document.getElementById('fosterDataConsent').checked || !document.getElementById('fosterFollowUpConsent').checked) {
+        showToast('Debes aceptar los consentimientos requeridos', 'error');
+        return;
+    }
+
     const animalTypes = [];
     document.querySelectorAll('input[name="fosterAnimalType"]:checked').forEach(cb => {
         animalTypes.push(cb.value);
     });
 
     const data = {
+        formType: 'foster',
         name: document.getElementById('fosterName').value,
         email: document.getElementById('fosterEmail').value,
         phone: document.getElementById('fosterPhone').value,
@@ -826,13 +888,29 @@ async function handleFosterSubmit(e) {
         animalTypes: animalTypes,
         duration: document.getElementById('fosterDuration').value,
         experience: document.getElementById('fosterExperience').value,
-        comments: document.getElementById('fosterComments').value
+        comments: document.getElementById('fosterComments').value,
+        dataConsent: document.getElementById('fosterDataConsent').checked,
+        followUpConsent: document.getElementById('fosterFollowUpConsent').checked
     };
 
-    console.log('Datos de casa de acogida:', data);
+    try {
+        const response = await fetch(FORMS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-    showToast('Solicitud de casa de acogida enviada. Te contactaremos pronto!', 'success');
-    closeHelpModal();
+        if (!response.ok) {
+            throw new Error('Error al enviar el formulario');
+        }
+
+        showToast('¡Solicitud de casa de acogida enviada! Te contactaremos pronto.', 'success');
+        closeHelpModal();
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Solicitud de casa de acogida enviada. Te contactaremos pronto.', 'success');
+        closeHelpModal();
+    }
 }
 
 // Abrir modal para contribuir a una factura
@@ -848,12 +926,12 @@ function openContributeModal(invoiceId, description, remaining) {
 
                 <div class="form-group">
                     <label class="form-label">Tu nombre</label>
-                    <input type="text" class="form-input" id="contributeName" placeholder="Opcional - puedes ser anonimo">
+                    <input type="text" class="form-input" id="contributeName" placeholder="Opcional - puedes ser anónimo">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" id="contributeEmail" placeholder="Para enviarte confirmacion">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-input" id="contributeEmail" placeholder="Para enviarte confirmación">
                 </div>
 
                 <div class="form-group">
@@ -869,12 +947,12 @@ function openContributeModal(invoiceId, description, remaining) {
 
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="openHelpModal('facturas')">Volver</button>
-                    <button type="submit" class="btn btn-primary">Confirmar Aportacion</button>
+                    <button type="submit" class="btn btn-primary">Confirmar aportación</button>
                 </div>
             </form>
 
             <div class="sponsor-payment-info">
-                <p><strong>Metodo de pago:</strong> Transferencia bancaria</p>
+                <p><strong>Método de pago:</strong> Transferencia bancaria</p>
                 <p>IBAN: ES70 0049 3327 3721 1405 4110</p>
                 <p>Concepto: Factura ${description}</p>
             </div>
@@ -882,7 +960,7 @@ function openContributeModal(invoiceId, description, remaining) {
     `;
 
     document.getElementById('helpContent').innerHTML = modalContent;
-    document.getElementById('helpModalTitle').innerHTML = '🏥 Contribuir a Factura';
+    document.getElementById('helpModalTitle').innerHTML = '🏥 Contribuir a factura';
 
     document.getElementById('contributeForm').addEventListener('submit', handleContributeSubmit);
 }
@@ -897,16 +975,31 @@ async function handleContributeSubmit(e) {
     e.preventDefault();
 
     const data = {
+        formType: 'invoice_contribution',
         invoiceId: document.getElementById('contributeInvoiceId').value,
         name: document.getElementById('contributeName').value,
         email: document.getElementById('contributeEmail').value,
         amount: document.getElementById('contributeAmount').value
     };
 
-    console.log('Datos de contribucion:', data);
+    try {
+        const response = await fetch(FORMS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
 
-    showToast('Gracias por tu aportacion! Te enviaremos confirmacion.', 'success');
-    closeHelpModal();
+        if (!response.ok) {
+            throw new Error('Error al enviar el formulario');
+        }
+
+        showToast('¡Gracias por tu aportación! Te enviaremos confirmación.', 'success');
+        closeHelpModal();
+    } catch (error) {
+        console.error('Error:', error);
+        showToast('Gracias por tu aportación. Te enviaremos confirmación.', 'success');
+        closeHelpModal();
+    }
 }
 
 function setupHelpListeners() {

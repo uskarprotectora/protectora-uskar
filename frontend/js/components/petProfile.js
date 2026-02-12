@@ -40,7 +40,7 @@ function renderProfile(pet) {
         </div>
 
         <div class="profile-section">
-            <h3 class="profile-section-title">Sobre mi</h3>
+            <h3 class="profile-section-title">Sobre mí</h3>
             <p class="profile-description">${pet.description || 'Este adorable animal busca un hogar lleno de amor. Ven a conocerlo!'}</p>
         </div>
 
@@ -86,7 +86,7 @@ function renderProfile(pet) {
                     <div class="profile-detail-value">${pet.weight} kg</div>
                 </div>` : ''}
                 <div class="profile-detail-item">
-                    <div class="profile-detail-label">Genero</div>
+                    <div class="profile-detail-label">Género</div>
                     <div class="profile-detail-value">${genderText}</div>
                 </div>
                 <div class="profile-detail-item">
@@ -111,16 +111,16 @@ function renderProfile(pet) {
         ${pet.status === 'inactive' ? `
         <div class="profile-section">
             <h3 class="profile-section-title">🏠 Final Feliz</h3>
-            <p class="profile-description">Este animal ya encontro su familia para siempre. Gracias a personas como tu, cada dia mas animales encuentran un hogar.</p>
+            <p class="profile-description">Este animal ya encontró su familia para siempre. Gracias a personas como tú, cada día más animales encuentran un hogar.</p>
             <div class="profile-cta">
                 <button class="btn btn-secondary" onclick="openHelpModal('donaciones')">
-                    💝 Hacer una donacion
+                    💝 Hacer una donación
                 </button>
             </div>
         </div>
         ` : `
         <div class="profile-section">
-            <h3 class="profile-section-title">Quieres adoptarme?</h3>
+            <h3 class="profile-section-title">¿Quieres adoptarme?</h3>
             <p class="profile-description">Si estas interesado en darme un hogar, contacta con la protectora. Estaremos encantados de conocerte y contarte mas sobre mi.</p>
             <div class="profile-cta">
                 <button class="btn btn-primary btn-large" onclick="openAdoptionFormModalFromProfile('${pet._id}')">
@@ -135,7 +135,7 @@ function renderProfile(pet) {
 
         ${AppState.isLoggedIn ? `
         <div class="profile-section profile-admin">
-            <h3 class="profile-section-title">Administracion</h3>
+            <h3 class="profile-section-title">Administración</h3>
             <div class="profile-cta">
                 <button class="btn btn-secondary" onclick="closeProfileModal(); openEditModal('${pet._id}')">
                     ✏️ Editar

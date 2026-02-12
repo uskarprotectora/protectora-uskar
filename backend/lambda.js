@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const petsRouter = require('./routes/petsLambda');
 const adoptionsRouter = require('./routes/adoptionsLambda');
+const formsRouter = require('./routes/forms');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use(async (req, res, next) => {
 // API Routes
 app.use('/api/pets', petsRouter);
 app.use('/api/adoptions', adoptionsRouter);
+app.use('/api/forms', formsRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {

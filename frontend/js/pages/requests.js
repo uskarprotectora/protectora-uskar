@@ -1,4 +1,4 @@
-// Pagina Requests - Solicitudes de Adopcion (Admin)
+// Pagina Requests - Solicitudes de Adopción (Admin)
 
 async function renderAdoptionRequestsView() {
     const contentHeader = document.querySelector('.content-header');
@@ -25,7 +25,7 @@ function renderRequestsTable() {
     const petsGrid = document.getElementById('petsGrid');
     const statusLabels = {
         pending: 'Pendiente',
-        reviewing: 'En revision',
+        reviewing: 'En revisión',
         approved: 'Aprobada',
         rejected: 'Rechazada'
     };
@@ -54,7 +54,7 @@ function renderRequestsTable() {
                 <span class="stat-count">${AppState.adoptionRequests.filter(r => r.status === 'pending').length}</span>
             </div>
             <div class="stat-chip ${AppState.requestsFilter === 'reviewing' ? 'active' : ''}" onclick="filterRequests('reviewing')">
-                <span>En revision</span>
+                <span>En revisión</span>
                 <span class="stat-count">${AppState.adoptionRequests.filter(r => r.status === 'reviewing').length}</span>
             </div>
             <div class="stat-chip ${AppState.requestsFilter === 'approved' ? 'active' : ''}" onclick="filterRequests('approved')">
@@ -72,14 +72,14 @@ function renderRequestsTable() {
         petsGrid.innerHTML = `
             <div class="requests-view">
                 <div class="requests-header">
-                    <h1>📊 Solicitudes de Adopcion</h1>
+                    <h1>📊 Solicitudes de Adopción</h1>
                     <p>Gestiona las solicitudes recibidas</p>
                 </div>
                 ${statsHtml}
                 <div class="empty-state">
                     <div class="empty-icon">📭</div>
                     <h3 class="empty-title">No hay solicitudes</h3>
-                    <p class="empty-text">${AppState.requestsFilter === 'all' ? 'Aun no se han recibido solicitudes de adopcion' : 'No hay solicitudes con este estado'}</p>
+                    <p class="empty-text">${AppState.requestsFilter === 'all' ? 'Aún no se han recibido solicitudes de adopción' : 'No hay solicitudes con este estado'}</p>
                 </div>
             </div>
         `;
@@ -106,7 +106,7 @@ function renderRequestsTable() {
                     </span>
                 </td>
                 <td class="request-actions">
-                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'reviewing')" title="En revision">📝</button>
+                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'reviewing')" title="En revisión">📝</button>
                     <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'approved')" title="Aprobar">✅</button>
                     <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'rejected')" title="Rechazar">❌</button>
                     <button class="action-icon-btn delete" onclick="event.stopPropagation(); deleteRequest('${request._id}')" title="Eliminar">🗑️</button>
@@ -118,7 +118,7 @@ function renderRequestsTable() {
     petsGrid.innerHTML = `
         <div class="requests-view">
             <div class="requests-header">
-                <h1>📊 Solicitudes de Adopcion</h1>
+                <h1>📊 Solicitudes de Adopción</h1>
                 <p>Gestiona las solicitudes recibidas</p>
             </div>
             ${statsHtml}
@@ -129,7 +129,7 @@ function renderRequestsTable() {
                             <th>Fecha</th>
                             <th>Nombre</th>
                             <th>Email</th>
-                            <th>Telefono</th>
+                            <th>Teléfono</th>
                             <th>Animal</th>
                             <th>Estado</th>
                             <th>Acciones</th>
@@ -196,7 +196,7 @@ async function viewRequestDetails(requestId) {
 
         const statusLabels = {
             pending: 'Pendiente',
-            reviewing: 'En revision',
+            reviewing: 'En revisión',
             approved: 'Aprobada',
             rejected: 'Rechazada'
         };
@@ -219,14 +219,14 @@ async function viewRequestDetails(requestId) {
 
                 ${request.petName ? `
                 <div class="detail-section">
-                    <h4>🐾 Animal de interes</h4>
+                    <h4>🐾 Animal de interés</h4>
                     <p><strong>${request.petName}</strong></p>
                 </div>
                 ` : ''}
 
                 ${request.presentationVideo && request.presentationVideo.url ? `
                 <div class="detail-section">
-                    <h4>🎥 Video de Presentacion</h4>
+                    <h4>🎥 Vídeo de Presentación</h4>
                     <div class="request-video-container">
                         <video src="${request.presentationVideo.url}" controls></video>
                     </div>
@@ -239,8 +239,8 @@ async function viewRequestDetails(requestId) {
                         <div><span>Nombre:</span> ${request.fullName}</div>
                         <div><span>Edad:</span> ${request.age} años</div>
                         <div><span>Email:</span> ${request.email}</div>
-                        <div><span>Telefono:</span> ${request.phone}</div>
-                        <div><span>Direccion:</span> ${request.address}</div>
+                        <div><span>Teléfono:</span> ${request.phone}</div>
+                        <div><span>Dirección:</span> ${request.address}</div>
                         <div><span>Ciudad:</span> ${request.city}</div>
                     </div>
                 </div>
@@ -268,22 +268,22 @@ async function viewRequestDetails(requestId) {
                     <h4>🐕 Experiencia</h4>
                     <div class="detail-grid">
                         <div><span>Otras mascotas:</span> ${request.hasOtherPets ? 'Si' : 'No'}</div>
-                        ${request.otherPetsDescription ? `<div class="full-width"><span>Descripcion:</span> ${request.otherPetsDescription}</div>` : ''}
+                        ${request.otherPetsDescription ? `<div class="full-width"><span>Descripción:</span> ${request.otherPetsDescription}</div>` : ''}
                         ${request.previousPetExperience ? `<div class="full-width"><span>Experiencia previa:</span> ${request.previousPetExperience}</div>` : ''}
                     </div>
                 </div>
 
                 <div class="detail-section">
-                    <h4>❤️ Motivacion</h4>
+                    <h4>❤️ Motivación</h4>
                     <div class="detail-grid">
-                        <div class="full-width"><span>Por que quiere adoptar:</span><br>${request.whyAdopt}</div>
-                        <div><span>Horas solo:</span> ${request.hoursAlone}h/dia</div>
+                        <div class="full-width"><span>Por qué quiere adoptar:</span><br>${request.whyAdopt}</div>
+                        <div><span>Horas solo:</span> ${request.hoursAlone}h/día</div>
                         ${request.vacationPlan ? `<div><span>Plan vacaciones:</span> ${request.vacationPlan}</div>` : ''}
                     </div>
                 </div>
 
                 <div class="request-details-actions">
-                    <button class="btn btn-secondary" onclick="changeRequestStatus('${request._id}', 'reviewing'); closeProfileModal();">📝 En Revision</button>
+                    <button class="btn btn-secondary" onclick="changeRequestStatus('${request._id}', 'reviewing'); closeProfileModal();">📝 En Revisión</button>
                     <button class="btn btn-primary" onclick="changeRequestStatus('${request._id}', 'approved'); closeProfileModal();">✅ Aprobar</button>
                     <button class="btn btn-secondary" style="background: #ef4444; border-color: #ef4444; color: white;" onclick="changeRequestStatus('${request._id}', 'rejected'); closeProfileModal();">❌ Rechazar</button>
                 </div>

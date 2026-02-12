@@ -28,16 +28,16 @@ async function loadPets() {
     }
 }
 
-// Cargar estadisticas
+// Cargar estadísticas (solo animales en adopción)
 async function loadStats() {
     try {
-        const response = await fetch(`${API_URL}/stats`);
+        const response = await fetch(`${API_URL}/stats?status=active`);
         const stats = await response.json();
         document.getElementById('totalPets').textContent = stats.total;
         document.getElementById('totalDogs').textContent = stats.dogs;
         document.getElementById('totalCats').textContent = stats.cats;
     } catch (error) {
-        console.error('Error cargando estadisticas:', error);
+        console.error('Error cargando estadísticas:', error);
     }
 }
 

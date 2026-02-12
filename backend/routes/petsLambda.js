@@ -42,9 +42,17 @@ router.get('/', async (req, res) => {
 // Get stats
 router.get('/stats', async (req, res) => {
     try {
-        const total = await Pet.countDocuments();
-        const dogs = await Pet.countDocuments({ type: 'dog' });
-        const cats = await Pet.countDocuments({ type: 'cat' });
+        const { status } = req.query;
+        let query = {};
+
+        // Si se especifica un estado, filtrar por él
+        if (status) {
+            query.status = status;
+        }
+
+        const total = await Pet.countDocuments(query);
+        const dogs = await Pet.countDocuments({ ...query, type: 'dog' });
+        const cats = await Pet.countDocuments({ ...query, type: 'cat' });
 
         res.json({ total, dogs, cats });
     } catch (error) {
