@@ -291,6 +291,14 @@ function openHelpModal(action) {
     const content = helpContent[action];
     if (!content) return;
 
+    // Marcar el botón como activo
+    document.querySelectorAll('.help-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.querySelector(`.help-btn[data-action="${action}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    // Guardar la acción actual
+    AppState.currentHelpAction = action;
+
     document.getElementById('helpModalTitle').innerHTML = `${content.icon} ${content.title}`;
     document.getElementById('helpContent').innerHTML = content.content;
     document.getElementById('helpModal').classList.add('active');
@@ -303,6 +311,9 @@ function openHelpModal(action) {
 
 function closeHelpModal() {
     document.getElementById('helpModal').classList.remove('active');
+    // Quitar la selección del botón
+    document.querySelectorAll('.help-btn').forEach(btn => btn.classList.remove('active'));
+    AppState.currentHelpAction = null;
 }
 
 // Cargar animales para apadrinamiento
@@ -562,6 +573,14 @@ function openVolunteerForm(type) {
         </div>
     ` : '';
 
+    // Experiencia previa solo para tipos que no son transporte
+    const experienceSection = !volunteerInfo.showCalendar ? `
+        <div class="form-group">
+            <label class="form-label">Experiencia previa (si tienes)</label>
+            <textarea class="form-input form-textarea" id="volunteerExperience" rows="3" placeholder="Cuéntanos si tienes experiencia previa relacionada con este tipo de voluntariado..."></textarea>
+        </div>
+    ` : '';
+
     const modalContent = `
         <div class="volunteer-form-content">
             <div class="volunteer-form-header">
@@ -595,7 +614,14 @@ function openVolunteerForm(type) {
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label class="form-label">Link a tu red social (si tienes)</label>
+                    <input type="url" class="form-input" id="volunteerSocialLink" placeholder="https://instagram.com/tu_usuario o similar">
+                </div>
+
                 ${calendarSection}
+
+                ${experienceSection}
 
                 <div class="form-group">
                     <label class="form-label">Disponibilidad horaria</label>
@@ -691,13 +717,18 @@ async function handleVolunteerSubmit(e) {
         }
     }
 
+    const volunteerType = document.getElementById('volunteerType').value;
+    const experienceField = document.getElementById('volunteerExperience');
+
     const data = {
         formType: 'volunteer',
-        volunteerType: document.getElementById('volunteerType').value,
+        volunteerType: volunteerType,
         name: document.getElementById('volunteerName').value,
         email: document.getElementById('volunteerEmail').value,
         phone: document.getElementById('volunteerPhone').value,
         city: document.getElementById('volunteerCity').value,
+        socialLink: document.getElementById('volunteerSocialLink').value || '',
+        experience: experienceField ? experienceField.value : '',
         availability: availabilities,
         transportDates: transportDates,
         contactConsent: document.getElementById('volunteerContactConsent').checked,

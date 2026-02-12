@@ -32,6 +32,10 @@ const formSubmissionSchema = new mongoose.Schema({
         type: String,
         enum: ['transporte', 'educador', 'refugio', 'fotografia', 'eventos', 'veterinario']
     },
+    socialLink: {
+        type: String,
+        trim: true
+    },
     availability: [{
         type: String
     }],
