@@ -1821,17 +1821,33 @@ a.adoption-form-btn {
 
 .requests-header {
     margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.requests-header h1 {
+.requests-header-text h1 {
     font-size: 1.75rem;
     color: #3e1f1f;
     margin-bottom: 0.5rem;
 }
 
-.requests-header p {
+.requests-header-text p {
     color: #5d4037;
     font-size: 0.9375rem;
+}
+
+.requests-header-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .requests-stats {
@@ -2849,6 +2865,73 @@ a.adoption-form-btn {
     font-size: 0.875rem;
     color: #5d4037;
     margin: 0;
+}
+
+/* Admin Invoice Section */
+.admin-invoice-section {
+    margin: 1rem 0 1.5rem 0;
+    text-align: center;
+}
+
+.invoice-form-content {
+    padding: 0.5rem;
+}
+
+.invoice-form-content h3 {
+    font-size: 1.25rem;
+    color: #3e1f1f;
+    margin-bottom: 0.5rem;
+}
+
+.file-upload-area {
+    border: 2px dashed #bcaaa4;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: rgba(239, 235, 233, 0.3);
+}
+
+.file-upload-area:hover {
+    border-color: #a1635c;
+    background: rgba(239, 235, 233, 0.6);
+}
+
+.upload-placeholder {
+    cursor: pointer;
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+    font-size: 0.75rem;
+    color: #8d6e63;
+    margin-top: 0.25rem;
+}
+
+.file-preview {
+    text-align: center;
+}
+
+.file-preview img {
+    margin-bottom: 0.5rem;
+}
+
+.file-preview p {
+    font-size: 0.875rem;
+    color: #5d4037;
+    margin: 0;
+}
+
+.pdf-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.5rem;
 }
 
 /* Captcha mejorado */

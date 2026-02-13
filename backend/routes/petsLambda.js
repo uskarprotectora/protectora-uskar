@@ -21,7 +21,12 @@ router.get('/', async (req, res) => {
         }
 
         if (status) {
-            query.status = status;
+            // Soportar múltiples estados separados por coma (ej: "active,scheduled")
+            if (status.includes(',')) {
+                query.status = { $in: status.split(',') };
+            } else {
+                query.status = status;
+            }
         }
 
         if (search) {

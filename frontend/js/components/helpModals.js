@@ -326,9 +326,26 @@ function generateInvoicesContent() {
         `;
     }).join('');
 
+    // Botón de añadir factura (solo para admin)
+    const addInvoiceBtn = AppState.isLoggedIn ? `
+        <div class="admin-invoice-section">
+            <button class="btn btn-primary" onclick="openAddInvoiceForm()">
+                <span>➕</span> Añadir nueva factura
+            </button>
+        </div>
+    ` : '';
+
     return `
         <div class="help-section">
+            <div class="coming-soon-banner">
+                <span class="coming-soon-icon">🚧</span>
+                <span>PRÓXIMAMENTE</span>
+                <p>Estamos trabajando para habilitar la gestión completa de facturas veterinarias online.</p>
+            </div>
+
             <p class="help-intro">Ayúdanos a pagar los gastos veterinarios de nuestros animales. Cada aportación cuenta y puedes contribuir con la cantidad que desees.</p>
+
+            ${addInvoiceBtn}
 
             <div class="invoices-grid">
                 ${invoicesHtml}
@@ -342,6 +359,99 @@ function generateInvoicesContent() {
             </div>
         </div>
     `;
+}
+
+// Formulario para añadir nueva factura (admin)
+function openAddInvoiceForm() {
+    const modalContent = `
+        <div class="invoice-form-content">
+            <h3>Añadir nueva factura veterinaria</h3>
+            <p class="help-intro">Sube una factura para que los colaboradores puedan contribuir.</p>
+
+            <form id="addInvoiceForm" class="invoice-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Nombre del animal *</label>
+                        <input type="text" class="form-input" id="invoiceAnimal" required placeholder="Ej: Luna">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fecha de la factura *</label>
+                        <input type="date" class="form-input" id="invoiceDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descripción *</label>
+                    <input type="text" class="form-input" id="invoiceDescription" required placeholder="Ej: Esterilización, vacunas, cirugía...">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Importe total (€) *</label>
+                        <input type="number" class="form-input" id="invoiceAmount" required min="1" placeholder="150">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ya pagado (€)</label>
+                        <input type="number" class="form-input" id="invoicePaid" value="0" min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Adjuntar factura (imagen o PDF)</label>
+                    <div class="file-upload-area" id="invoiceFileArea">
+                        <input type="file" id="invoiceFile" accept="image/*,.pdf" style="display:none;">
+                        <div class="upload-placeholder" onclick="document.getElementById('invoiceFile').click()">
+                            <span class="upload-icon">📄</span>
+                            <p>Haz clic para seleccionar archivo</p>
+                            <p class="upload-hint">Imagen (JPG, PNG) o PDF</p>
+                        </div>
+                        <div id="invoiceFilePreview" class="file-preview" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="openHelpModal('facturas')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar factura</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.getElementById('helpContent').innerHTML = modalContent;
+    document.getElementById('helpModalTitle').innerHTML = '🏥 Nueva Factura';
+
+    // Setup file input listener
+    document.getElementById('invoiceFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const preview = document.getElementById('invoiceFilePreview');
+            const placeholder = document.querySelector('.upload-placeholder');
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = '<img src="' + e.target.result + '" alt="Preview" style="max-width:200px;max-height:150px;border-radius:8px;"><p>' + file.name + '</p>';
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '<span class="pdf-icon">📄</span><p>' + file.name + '</p>';
+                preview.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+        }
+    });
+
+    document.getElementById('addInvoiceForm').addEventListener('submit', handleAddInvoiceSubmit);
+}
+
+async function handleAddInvoiceSubmit(e) {
+    e.preventDefault();
+
+    // Por ahora solo mostramos un mensaje ya que no está implementado el backend
+    showToast('Función próximamente disponible. La factura se guardará en el sistema.', 'info');
+    openHelpModal('facturas');
 }
 
 function formatDate(dateStr) {
@@ -570,13 +680,15 @@ function validateSponsorForm() {
     });
 
     // Validar email
-    const email = document.getElementById('sponsorEmail')?.value;
+    const emailEl = document.getElementById('sponsorEmail');
+    const email = emailEl ? emailEl.value : '';
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.push('El correo electrónico no tiene un formato válido');
     }
 
     // Validar cantidad mínima
-    const amount = parseInt(document.getElementById('sponsorAmount')?.value);
+    const amountEl = document.getElementById('sponsorAmount');
+    const amount = parseInt(amountEl ? amountEl.value : 0);
     if (amount < 5) {
         errors.push('La cantidad mínima de apadrinamiento es 5€');
     }
@@ -860,7 +972,8 @@ function validateVolunteerForm() {
     });
 
     // Validar email
-    const email = document.getElementById('volunteerEmail')?.value;
+    const emailEl = document.getElementById('volunteerEmail');
+    const email = emailEl ? emailEl.value : '';
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.push('El correo electrónico no tiene un formato válido');
     }
@@ -953,12 +1066,15 @@ async function handleVolunteerSubmit(e) {
     // Recoger fechas de transporte si existen
     const transportDates = [];
     for (let i = 1; i <= transportDateRowCount; i++) {
-        const date = document.getElementById(`transportDate${i}`)?.value;
-        const origin = document.getElementById(`transportOrigin${i}`)?.value;
-        const destination = document.getElementById(`transportDestination${i}`)?.value;
+        const dateEl = document.getElementById('transportDate' + i);
+        const originEl = document.getElementById('transportOrigin' + i);
+        const destinationEl = document.getElementById('transportDestination' + i);
+        const date = dateEl ? dateEl.value : '';
+        const origin = originEl ? originEl.value : '';
+        const destination = destinationEl ? destinationEl.value : '';
 
         if (date && origin && destination) {
-            transportDates.push({ date, origin, destination });
+            transportDates.push({ date: date, origin: origin, destination: destination });
         }
     }
 
@@ -1187,7 +1303,8 @@ function validateFosterForm() {
     });
 
     // Validar email
-    const email = document.getElementById('fosterEmail')?.value;
+    const fosterEmailEl = document.getElementById('fosterEmail');
+    const email = fosterEmailEl ? fosterEmailEl.value : '';
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.push('El correo electrónico no tiene un formato válido');
     }
@@ -1390,14 +1507,16 @@ function setRating(rating) {
 
 function validateFeedbackForm() {
     const errors = [];
-    const rating = document.getElementById('feedbackRating')?.value;
+    const ratingEl = document.getElementById('feedbackRating');
+    const rating = ratingEl ? ratingEl.value : '';
 
     if (!rating || rating === '') {
         errors.push('Por favor, selecciona una valoración');
     }
 
     // Validar email si se proporciona
-    const email = document.getElementById('feedbackEmail')?.value;
+    const feedbackEmailEl = document.getElementById('feedbackEmail');
+    const email = feedbackEmailEl ? feedbackEmailEl.value : '';
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errors.push('El correo electrónico no tiene un formato válido');
     }
@@ -1487,3 +1606,4 @@ window.addTransportDateRow = addTransportDateRow;
 window.backToSponsorList = backToSponsorList;
 window.closeVolunteerValidationModal = closeVolunteerValidationModal;
 window.setRating = setRating;
+window.openAddInvoiceForm = openAddInvoiceForm;

@@ -10,7 +10,8 @@ async function loadPets() {
         let url = API_URL + '?';
 
         if (AppState.currentView === 'adoption') {
-            url += `status=active&`;
+            // Incluir activos y reservados en la vista de adopción
+            url += `status=active,scheduled&`;
         } else if (AppState.currentView === 'happy') {
             url += `status=inactive&`;
         }
@@ -70,8 +71,8 @@ async function savePet(petData) {
                     const presignedUrls = await presignResponse.json();
 
                     // Verificar si son URLs de S3 (producción) o locales
-                    const isS3 = presignedUrls[0]?.uploadUrl?.includes('s3') ||
-                                 presignedUrls[0]?.uploadUrl?.includes('amazonaws');
+                    const firstUrl = presignedUrls[0] && presignedUrls[0].uploadUrl ? presignedUrls[0].uploadUrl : '';
+                    const isS3 = firstUrl.includes('s3') || firstUrl.includes('amazonaws');
 
                     if (isS3) {
                         // Upload each file directly to S3

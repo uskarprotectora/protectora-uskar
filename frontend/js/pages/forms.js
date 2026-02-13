@@ -147,8 +147,15 @@ function renderFormsTable() {
     petsGrid.innerHTML = `
         <div class="requests-view">
             <div class="requests-header">
-                <h1>📝 Formularios Recibidos</h1>
-                <p>Gestiona las solicitudes de voluntariado, acogida y apadrinamiento</p>
+                <div class="requests-header-text">
+                    <h1>📝 Formularios Recibidos</h1>
+                    <p>Gestiona las solicitudes de voluntariado, acogida y apadrinamiento</p>
+                </div>
+                <div class="requests-header-actions">
+                    <button class="btn btn-secondary export-btn" onclick="exportFormsToCSV()">
+                        <span>📥</span> Exportar CSV
+                    </button>
+                </div>
             </div>
             ${statsHtml}
             <div class="requests-table-container">
@@ -433,9 +440,117 @@ async function viewFormDetails(formId) {
     }
 }
 
+// Exportar formularios a CSV
+function exportFormsToCSV() {
+    const forms = AppState.formSubmissions || [];
+
+    if (forms.length === 0) {
+        showToast('No hay formularios para exportar', 'error');
+        return;
+    }
+
+    // Filtrar por el filtro activo si hay alguno
+    let dataToExport = forms;
+    if (AppState.formsFilter && AppState.formsFilter !== 'all') {
+        dataToExport = forms.filter(f => f.formType === AppState.formsFilter);
+    }
+
+    if (dataToExport.length === 0) {
+        showToast('No hay formularios de este tipo para exportar', 'error');
+        return;
+    }
+
+    const formTypeLabels = {
+        volunteer: 'Voluntariado',
+        foster: 'Casa de Acogida',
+        sponsorship: 'Apadrinamiento',
+        invoice_contribution: 'Contribución Factura',
+        feedback: 'Opinión Web'
+    };
+
+    const volunteerTypeLabels = {
+        transporte: 'Transporte',
+        educador: 'Educador canino',
+        refugio: 'Tareas refugio',
+        fotografia: 'Fotografía',
+        eventos: 'Eventos',
+        veterinario: 'Apoyo veterinario'
+    };
+
+    const statusLabels = {
+        pending: 'Pendiente',
+        reviewing: 'En revisión',
+        approved: 'Aprobado',
+        rejected: 'Rechazado',
+        completed: 'Completado'
+    };
+
+    // Cabeceras del CSV
+    const headers = [
+        'Fecha',
+        'Tipo',
+        'Subtipo',
+        'Estado',
+        'Nombre',
+        'Email',
+        'Teléfono',
+        'Ciudad',
+        'Valoración',
+        'Comentarios'
+    ];
+
+    // Convertir datos a filas CSV
+    const rows = dataToExport.map(form => {
+        const date = new Date(form.createdAt).toLocaleDateString('es-ES');
+        const type = formTypeLabels[form.formType] || form.formType;
+        const subtype = form.volunteerType ? (volunteerTypeLabels[form.volunteerType] || form.volunteerType) : (form.animalName || '');
+        const status = statusLabels[form.status] || form.status;
+        const comments = form.comments || form.likes || form.improvements || form.experience || '';
+
+        return [
+            date,
+            type,
+            subtype,
+            status,
+            form.name || '',
+            form.email || '',
+            form.phone || '',
+            form.city || '',
+            form.rating || '',
+            comments.replace(/"/g, '""').replace(/\n/g, ' ')
+        ];
+    });
+
+    // Crear contenido CSV
+    let csvContent = headers.join(';') + '\n';
+    rows.forEach(row => {
+        csvContent += row.map(cell => '"' + cell + '"').join(';') + '\n';
+    });
+
+    // Añadir BOM para que Excel reconozca UTF-8
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Crear enlace de descarga
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const filterName = AppState.formsFilter && AppState.formsFilter !== 'all' ? '_' + AppState.formsFilter : '';
+    const filename = 'formularios' + filterName + '_' + new Date().toISOString().split('T')[0] + '.csv';
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('CSV exportado correctamente', 'success');
+}
+
 // Exponer globalmente
 window.renderFormsView = renderFormsView;
 window.filterForms = filterForms;
 window.changeFormStatus = changeFormStatus;
 window.deleteForm = deleteForm;
 window.viewFormDetails = viewFormDetails;
+window.exportFormsToCSV = exportFormsToCSV;

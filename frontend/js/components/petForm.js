@@ -30,7 +30,7 @@ function openEditModal(id) {
     document.getElementById('petType').value = pet.type;
     document.getElementById('petBreed').value = pet.breed;
     document.getElementById('petBirthDate').value = pet.birthDate ? pet.birthDate.substring(0, 7) : '';
-    document.getElementById('petWeight').value = pet.weight ?? '';
+    document.getElementById('petWeight').value = pet.weight !== null && pet.weight !== undefined ? pet.weight : '';
     document.getElementById('petSize').value = pet.size || '';
     document.getElementById('petGender').value = pet.gender;
     document.getElementById('petNeutered').checked = pet.neutered || false;
