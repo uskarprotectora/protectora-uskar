@@ -72,8 +72,15 @@ function renderRequestsTable() {
         petsGrid.innerHTML = `
             <div class="requests-view">
                 <div class="requests-header">
-                    <h1>📊 Solicitudes de Adopción</h1>
-                    <p>Gestiona las solicitudes recibidas</p>
+                    <div class="requests-header-text">
+                        <h1>📊 Solicitudes de Adopción</h1>
+                        <p>Gestiona las solicitudes recibidas</p>
+                    </div>
+                    <div class="requests-header-actions">
+                        <button class="btn btn-secondary export-btn" onclick="exportAdoptionsToCSV()">
+                            <span>📥</span> Exportar CSV
+                        </button>
+                    </div>
                 </div>
                 ${statsHtml}
                 <div class="empty-state">
@@ -118,8 +125,15 @@ function renderRequestsTable() {
     petsGrid.innerHTML = `
         <div class="requests-view">
             <div class="requests-header">
-                <h1>📊 Solicitudes de Adopción</h1>
-                <p>Gestiona las solicitudes recibidas</p>
+                <div class="requests-header-text">
+                    <h1>📊 Solicitudes de Adopción</h1>
+                    <p>Gestiona las solicitudes recibidas</p>
+                </div>
+                <div class="requests-header-actions">
+                    <button class="btn btn-secondary export-btn" onclick="exportAdoptionsToCSV()">
+                        <span>📥</span> Exportar CSV
+                    </button>
+                </div>
             </div>
             ${statsHtml}
             <div class="requests-table-container">
@@ -299,6 +313,107 @@ async function viewRequestDetails(requestId) {
     }
 }
 
+// Exportar solicitudes de adopción a CSV
+function exportAdoptionsToCSV() {
+    const requests = AppState.adoptionRequests || [];
+
+    if (requests.length === 0) {
+        showToast('No hay solicitudes para exportar', 'error');
+        return;
+    }
+
+    // Filtrar por el filtro activo si hay alguno
+    let dataToExport = requests;
+    if (AppState.requestsFilter && AppState.requestsFilter !== 'all') {
+        dataToExport = requests.filter(r => r.status === AppState.requestsFilter);
+    }
+
+    if (dataToExport.length === 0) {
+        showToast('No hay solicitudes con este estado para exportar', 'error');
+        return;
+    }
+
+    const statusLabels = {
+        pending: 'Pendiente',
+        reviewing: 'En revisión',
+        approved: 'Aprobada',
+        rejected: 'Rechazada'
+    };
+
+    // Cabeceras del CSV
+    const headers = [
+        'Fecha',
+        'Estado',
+        'Animal',
+        'Nombre',
+        'Email',
+        'Teléfono',
+        'Edad',
+        'Ciudad',
+        'Dirección',
+        'Tipo Vivienda',
+        'Propietario/Alquiler',
+        'Jardín',
+        'Miembros Familia',
+        'Niños',
+        'Otras Mascotas',
+        'Horas Solo',
+        'Por qué adoptar'
+    ];
+
+    // Convertir datos a filas CSV
+    const rows = dataToExport.map(r => {
+        const date = new Date(r.createdAt).toLocaleDateString('es-ES');
+        const status = statusLabels[r.status] || r.status;
+        const whyAdopt = r.whyAdopt ? r.whyAdopt.replace(/"/g, '""').replace(/\n/g, ' ') : '';
+
+        return [
+            date,
+            status,
+            r.petName || 'General',
+            r.fullName || '',
+            r.email || '',
+            r.phone || '',
+            r.age || '',
+            r.city || '',
+            r.address || '',
+            r.housingType || '',
+            r.ownerOrRenter || '',
+            r.hasGarden ? 'Sí' : 'No',
+            r.familyMembers || '',
+            r.hasChildren ? 'Sí' : 'No',
+            r.hasOtherPets ? 'Sí' : 'No',
+            r.hoursAlone || '',
+            whyAdopt
+        ];
+    });
+
+    // Crear contenido CSV
+    let csvContent = headers.join(';') + '\n';
+    rows.forEach(row => {
+        csvContent += row.map(cell => '"' + cell + '"').join(';') + '\n';
+    });
+
+    // Añadir BOM para que Excel reconozca UTF-8
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Crear enlace de descarga
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    const filterName = AppState.requestsFilter && AppState.requestsFilter !== 'all' ? '_' + AppState.requestsFilter : '';
+    const filename = 'solicitudes_adopcion' + filterName + '_' + new Date().toISOString().split('T')[0] + '.csv';
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    showToast('CSV exportado correctamente', 'success');
+}
+
 // Exponer globalmente
 window.renderAdoptionRequestsView = renderAdoptionRequestsView;
 window.renderRequestsTable = renderRequestsTable;
@@ -306,3 +421,4 @@ window.filterRequests = filterRequests;
 window.changeRequestStatus = changeRequestStatus;
 window.deleteRequest = deleteRequest;
 window.viewRequestDetails = viewRequestDetails;
+window.exportAdoptionsToCSV = exportAdoptionsToCSV;
