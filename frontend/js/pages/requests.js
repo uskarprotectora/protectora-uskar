@@ -13,7 +13,19 @@ async function renderAdoptionRequestsView() {
     petsGrid.innerHTML = '<div class="loading-state"><span>⏳</span><p>Cargando solicitudes...</p></div>';
 
     try {
-        const response = await fetch(ADOPTIONS_API_URL);
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(ADOPTIONS_API_URL, {
+            headers: authHeaders
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
         AppState.adoptionRequests = await response.json();
         renderRequestsTable();
     } catch (error) {
@@ -165,11 +177,20 @@ function filterRequests(status) {
 
 async function changeRequestStatus(requestId, newStatus) {
     try {
+        var authHeaders = getAuthHeaders();
         const response = await fetch(`${ADOPTIONS_API_URL}/${requestId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
             body: JSON.stringify({ status: newStatus })
         });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
 
         if (response.ok) {
             const statusLabels = {
@@ -190,9 +211,19 @@ async function deleteRequest(requestId) {
     if (!confirm('¿Eliminar esta solicitud permanentemente?')) return;
 
     try {
+        var authHeaders = getAuthHeaders();
         const response = await fetch(`${ADOPTIONS_API_URL}/${requestId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: authHeaders
         });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
 
         if (response.ok) {
             showToast('Solicitud eliminada', 'success');
@@ -205,7 +236,19 @@ async function deleteRequest(requestId) {
 
 async function viewRequestDetails(requestId) {
     try {
-        const response = await fetch(`${ADOPTIONS_API_URL}/${requestId}`);
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(`${ADOPTIONS_API_URL}/${requestId}`, {
+            headers: authHeaders
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
         const request = await response.json();
 
         const statusLabels = {

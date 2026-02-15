@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Pet = require('../models/Pet');
 const upload = require('../config/upload');
+const { requireAuth } = require('../middleware/auth');
 const fs = require('fs');
 const path = require('path');
 
@@ -75,7 +76,7 @@ router.get('/:id', async (req, res) => {
 
 // Generate presigned URLs for local development (simulates S3 presign)
 // In local mode, we return local URLs that will work with the upload endpoint
-router.post('/presign', async (req, res) => {
+router.post('/presign', requireAuth, async (req, res) => {
     try {
         const { files } = req.body;
         const urls = files.map((file) => {
@@ -100,7 +101,7 @@ router.post('/presign', async (req, res) => {
 });
 
 // Create new pet with file uploads or JSON data
-router.post('/', upload.fields([
+router.post('/', requireAuth, upload.fields([
     { name: 'photos', maxCount: 10 },
     { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
@@ -160,7 +161,7 @@ router.post('/', upload.fields([
 });
 
 // Update pet
-router.put('/:id', upload.fields([
+router.put('/:id', requireAuth, upload.fields([
     { name: 'photos', maxCount: 10 },
     { name: 'videos', maxCount: 5 }
 ]), async (req, res) => {
@@ -242,7 +243,7 @@ router.put('/:id', upload.fields([
 });
 
 // Set main photo
-router.put('/:id/main-photo/:photoIndex', async (req, res) => {
+router.put('/:id/main-photo/:photoIndex', requireAuth, async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -264,7 +265,7 @@ router.put('/:id/main-photo/:photoIndex', async (req, res) => {
 });
 
 // Delete photo
-router.delete('/:id/photo/:photoIndex', async (req, res) => {
+router.delete('/:id/photo/:photoIndex', requireAuth, async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -299,7 +300,7 @@ router.delete('/:id/photo/:photoIndex', async (req, res) => {
 });
 
 // Delete video
-router.delete('/:id/video/:videoIndex', async (req, res) => {
+router.delete('/:id/video/:videoIndex', requireAuth, async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -327,7 +328,7 @@ router.delete('/:id/video/:videoIndex', async (req, res) => {
 });
 
 // Delete pet
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {

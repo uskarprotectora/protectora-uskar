@@ -59,13 +59,22 @@ async function savePet(petData) {
         if (allFiles.length > 0) {
             // Intentar obtener presigned URLs (funciona en producción con S3)
             try {
+                var authHeaders = getAuthHeaders();
                 const presignResponse = await fetch(`${API_URL}/presign`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
                     body: JSON.stringify({
                         files: allFiles.map(f => ({ name: f.file.name, type: f.file.type }))
                     })
                 });
+
+                if (presignResponse.status === 401) {
+                    clearAuthData();
+                    AppState.isLoggedIn = false;
+                    updateUIForLogin();
+                    showToast('Sesion expirada. Por favor, inicie sesion nuevamente.', 'error');
+                    return;
+                }
 
                 if (presignResponse.ok) {
                     const presignedUrls = await presignResponse.json();
@@ -119,6 +128,8 @@ async function savePet(petData) {
 
         let response;
 
+        var authHeaders = getAuthHeaders();
+
         if (useFormData && allFiles.length > 0) {
             // Usar FormData para subir archivos (desarrollo local)
             const formData = new FormData();
@@ -132,6 +143,7 @@ async function savePet(petData) {
                 isEdit ? `${API_URL}/${petId}` : API_URL,
                 {
                     method: isEdit ? 'PUT' : 'POST',
+                    headers: authHeaders,
                     body: formData
                 }
             );
@@ -141,10 +153,18 @@ async function savePet(petData) {
                 isEdit ? `${API_URL}/${petId}` : API_URL,
                 {
                     method: isEdit ? 'PUT' : 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
                     body: JSON.stringify(petData)
                 }
             );
+        }
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada. Por favor, inicie sesion nuevamente.', 'error');
+            return;
         }
 
         if (!response.ok) {
@@ -166,7 +186,20 @@ async function deletePet(id) {
     if (!confirm('Estas seguro de que quieres eliminar este animal?')) return;
 
     try {
-        const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE',
+            headers: authHeaders
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
         if (!response.ok) throw new Error('Error al eliminar');
 
         showToast('Animal eliminado correctamente', 'success');

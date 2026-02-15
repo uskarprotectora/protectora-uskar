@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const AdoptionRequest = require('../models/AdoptionRequest');
+const { requireAuth } = require('../middleware/auth');
 const upload = require('../config/upload');
 const fs = require('fs');
 const path = require('path');
 
 // Get all adoption requests (admin)
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
     try {
         const { status } = req.query;
         let query = {};
@@ -24,8 +25,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Get single adoption request
-router.get('/:id', async (req, res) => {
+// Get single adoption request (admin)
+router.get('/:id', requireAuth, async (req, res) => {
     try {
         const request = await AdoptionRequest.findById(req.params.id)
             .populate('petId', 'name type breed photos');
@@ -67,7 +68,7 @@ router.post('/', upload.single('presentationVideo'), async (req, res) => {
 });
 
 // Update adoption request status (admin)
-router.put('/:id', async (req, res) => {
+router.put('/:id', requireAuth, async (req, res) => {
     try {
         const request = await AdoptionRequest.findByIdAndUpdate(
             req.params.id,
@@ -83,8 +84,8 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Delete adoption request
-router.delete('/:id', async (req, res) => {
+// Delete adoption request (admin)
+router.delete('/:id', requireAuth, async (req, res) => {
     try {
         const request = await AdoptionRequest.findByIdAndDelete(req.params.id);
         if (!request) {
@@ -96,8 +97,8 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-// Get stats
-router.get('/stats/summary', async (req, res) => {
+// Get stats (admin)
+router.get('/stats/summary', requireAuth, async (req, res) => {
     try {
         const total = await AdoptionRequest.countDocuments();
         const pending = await AdoptionRequest.countDocuments({ status: 'pending' });

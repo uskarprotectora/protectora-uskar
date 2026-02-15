@@ -10,6 +10,9 @@ async function initializeApp() {
     // Cargar los modales HTML antes de configurar los listeners
     await loadModals();
 
+    // Inicializar autenticacion (restaurar sesion si existe token valido)
+    await initAuth();
+
     loadPets();
     loadStats();
     setupMainEventListeners();

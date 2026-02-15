@@ -15,7 +15,19 @@ async function renderFormsView() {
     petsGrid.innerHTML = '<div class="loading-state"><span>⏳</span><p>Cargando formularios...</p></div>';
 
     try {
-        const response = await fetch(FORMS_API);
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(FORMS_API, {
+            headers: authHeaders
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
         AppState.formSubmissions = await response.json();
         renderFormsTable();
     } catch (error) {
@@ -187,11 +199,20 @@ function filterForms(type) {
 
 async function changeFormStatus(formId, newStatus) {
     try {
+        var authHeaders = getAuthHeaders();
         const response = await fetch(`${FORMS_API}/${formId}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
             body: JSON.stringify({ status: newStatus })
         });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
 
         if (response.ok) {
             const statusLabels = {
@@ -213,9 +234,19 @@ async function deleteForm(formId) {
     if (!confirm('¿Eliminar este formulario permanentemente?')) return;
 
     try {
+        var authHeaders = getAuthHeaders();
         const response = await fetch(`${FORMS_API}/${formId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: authHeaders
         });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
 
         if (response.ok) {
             showToast('Formulario eliminado', 'success');
@@ -228,7 +259,19 @@ async function deleteForm(formId) {
 
 async function viewFormDetails(formId) {
     try {
-        const response = await fetch(`${FORMS_API}/${formId}`);
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(`${FORMS_API}/${formId}`, {
+            headers: authHeaders
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
         const form = await response.json();
 
         const formTypeLabels = {

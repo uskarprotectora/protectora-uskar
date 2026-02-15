@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+const authRouter = require('./routes/auth');
 const petsRouter = require('./routes/petsLambda');
 const adoptionsRouter = require('./routes/adoptionsLambda');
 const formsRouter = require('./routes/forms');
@@ -37,6 +38,7 @@ app.use(async (req, res, next) => {
 });
 
 // API Routes
+app.use('/api/auth', authRouter);
 app.use('/api/pets', petsRouter);
 app.use('/api/adoptions', adoptionsRouter);
 app.use('/api/forms', formsRouter);

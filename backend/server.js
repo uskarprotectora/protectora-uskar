@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const connectDB = require('./config/db');
+const authRouter = require('./routes/auth');
 const petsRouter = require('./routes/pets');
 const adoptionsRouter = require('./routes/adoptions');
 const formsRouter = require('./routes/forms');
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
+app.use('/api/auth', authRouter);
 app.use('/api/pets', petsRouter);
 app.use('/api/adoptions', adoptionsRouter);
 app.use('/api/forms', formsRouter);
