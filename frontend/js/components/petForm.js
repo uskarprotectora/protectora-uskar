@@ -17,6 +17,9 @@ function openAddModal() {
     document.getElementById('petPhotos').value = '';
     document.getElementById('petVideos').value = '';
 
+    var urgentCheckbox = document.getElementById('petUrgent');
+    if (urgentCheckbox) urgentCheckbox.checked = false;
+
     document.getElementById('petModal').classList.add('active');
 }
 
@@ -39,6 +42,9 @@ function openEditModal(id) {
     document.getElementById('petDescription').value = pet.description || '';
     document.getElementById('petStatus').value = pet.status;
     document.getElementById('petSponsors').value = pet.sponsors || 0;
+
+    var urgentCheckbox = document.getElementById('petUrgent');
+    if (urgentCheckbox) urgentCheckbox.checked = pet.urgent || false;
 
     AppState.selectedPhotos = [];
     AppState.selectedVideos = [];
@@ -74,6 +80,9 @@ function handleFormSubmit(e) {
     const weightVal = document.getElementById('petWeight').value;
     const sizeVal = document.getElementById('petSize').value;
 
+    var urgentCheckbox = document.getElementById('petUrgent');
+    var urgentValue = urgentCheckbox ? urgentCheckbox.checked : false;
+
     const petData = {
         name: document.getElementById('petName').value,
         type: document.getElementById('petType').value,
@@ -85,6 +94,7 @@ function handleFormSubmit(e) {
         description: document.getElementById('petDescription').value,
         status: document.getElementById('petStatus').value,
         sponsors: parseInt(document.getElementById('petSponsors').value) || 0,
+        urgent: urgentValue,
         owner: {
             name: 'Protectora Uskar',
             email: 'info@protectorauskar.org',

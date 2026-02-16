@@ -38,6 +38,8 @@ function createPetCard(pet) {
                     <span>${typeText}</span>
                 </div>
                 <div class="status-badge status-${pet.status}">${statusText[pet.status] || 'Disponible'}</div>
+                ${pet.urgent ? '<div class="urgent-badge">URGENTE</div>' : ''}
+                ${AppState.isLoggedIn && AppState.currentView === 'adoption' ? '<div class="reorder-buttons"><button class="reorder-btn reorder-up" title="Mover arriba">▲</button><button class="reorder-btn reorder-down" title="Mover abajo">▼</button></div>' : ''}
             </div>
             <div class="pet-info">
                 <div class="pet-header">
@@ -135,6 +137,23 @@ function attachPetCardListeners() {
                 e.stopPropagation();
                 const pet = AppState.pets.find(p => p._id === petId);
                 openAdoptionFormModal(pet);
+            });
+        }
+
+        const reorderUpBtn = card.querySelector('.reorder-up');
+        const reorderDownBtn = card.querySelector('.reorder-down');
+
+        if (reorderUpBtn) {
+            reorderUpBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                reorderPet(petId, 'up');
+            });
+        }
+
+        if (reorderDownBtn) {
+            reorderDownBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                reorderPet(petId, 'down');
             });
         }
     });

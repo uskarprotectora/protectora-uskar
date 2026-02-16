@@ -2,6 +2,9 @@
 
 const FORMS_API = (window.API_BASE_URL || '') + '/api/forms';
 
+// Estado de selección de formularios
+var selectedFormIds = [];
+
 async function renderFormsView() {
     const contentHeader = document.querySelector('.content-header');
     const addPetBtn = document.getElementById('addPetBtn');
@@ -133,9 +136,13 @@ function renderFormsTable() {
 
         const typeLabel = formTypeLabels[form.formType] || form.formType;
         const subType = form.volunteerType ? ` (${volunteerTypeLabels[form.volunteerType] || form.volunteerType})` : '';
+        const isSelected = selectedFormIds.includes(form._id);
 
         return `
-            <tr class="request-row" onclick="viewFormDetails('${form._id}')">
+            <tr class="request-row ${isSelected ? 'selected' : ''}" onclick="viewFormDetails('${form._id}')">
+                <td class="request-checkbox" onclick="event.stopPropagation();">
+                    <input type="checkbox" class="form-select-checkbox" data-id="${form._id}" ${isSelected ? 'checked' : ''} onchange="toggleFormSelection('${form._id}')">
+                </td>
                 <td class="request-date">${date}</td>
                 <td class="request-name">${form.name || 'Sin nombre'}</td>
                 <td class="request-email">${form.email || '-'}</td>
@@ -156,6 +163,9 @@ function renderFormsTable() {
         `;
     }).join('');
 
+    const allChecked = filteredForms.length > 0 && filteredForms.every(f => selectedFormIds.includes(f._id));
+    const someChecked = selectedFormIds.length > 0;
+
     petsGrid.innerHTML = `
         <div class="requests-view">
             <div class="requests-header">
@@ -164,6 +174,9 @@ function renderFormsTable() {
                     <p>Gestiona las solicitudes de voluntariado, acogida y apadrinamiento</p>
                 </div>
                 <div class="requests-header-actions">
+                    ${someChecked ? `<button class="btn btn-danger delete-selected-btn" onclick="deleteSelectedForms()">
+                        <span>🗑️</span> Eliminar (${selectedFormIds.length})
+                    </button>` : ''}
                     <button class="btn btn-secondary export-btn" onclick="exportFormsToCSV()">
                         <span>📥</span> Exportar CSV
                     </button>
@@ -174,6 +187,9 @@ function renderFormsTable() {
                 <table class="requests-table">
                     <thead>
                         <tr>
+                            <th class="checkbox-header">
+                                <input type="checkbox" id="selectAllForms" ${allChecked ? 'checked' : ''} onchange="toggleSelectAllForms(this.checked)">
+                            </th>
                             <th>Fecha</th>
                             <th>Nombre</th>
                             <th>Email</th>
@@ -194,7 +210,67 @@ function renderFormsTable() {
 
 function filterForms(type) {
     AppState.formsFilter = type;
+    selectedFormIds = []; // Limpiar selección al cambiar filtro
     renderFormsTable();
+}
+
+function toggleFormSelection(formId) {
+    const index = selectedFormIds.indexOf(formId);
+    if (index === -1) {
+        selectedFormIds.push(formId);
+    } else {
+        selectedFormIds.splice(index, 1);
+    }
+    renderFormsTable();
+}
+
+function toggleSelectAllForms(checked) {
+    let filteredForms = AppState.formSubmissions || [];
+    if (AppState.formsFilter && AppState.formsFilter !== 'all') {
+        filteredForms = filteredForms.filter(f => f.formType === AppState.formsFilter);
+    }
+
+    if (checked) {
+        selectedFormIds = filteredForms.map(f => f._id);
+    } else {
+        selectedFormIds = [];
+    }
+    renderFormsTable();
+}
+
+async function deleteSelectedForms() {
+    if (selectedFormIds.length === 0) return;
+
+    if (!confirm(`¿Eliminar ${selectedFormIds.length} formulario(s) seleccionado(s) permanentemente?`)) return;
+
+    try {
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(`${FORMS_API}/bulk-delete`, {
+            method: 'POST',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
+            body: JSON.stringify({ ids: selectedFormIds })
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
+        if (response.ok) {
+            const result = await response.json();
+            showToast(result.message, 'success');
+            selectedFormIds = [];
+            renderFormsView();
+        } else {
+            const error = await response.json();
+            showToast(error.message || 'Error al eliminar', 'error');
+        }
+    } catch (error) {
+        showToast('Error al eliminar formularios', 'error');
+    }
 }
 
 async function changeFormStatus(formId, newStatus) {
@@ -597,3 +673,6 @@ window.changeFormStatus = changeFormStatus;
 window.deleteForm = deleteForm;
 window.viewFormDetails = viewFormDetails;
 window.exportFormsToCSV = exportFormsToCSV;
+window.toggleFormSelection = toggleFormSelection;
+window.toggleSelectAllForms = toggleSelectAllForms;
+window.deleteSelectedForms = deleteSelectedForms;

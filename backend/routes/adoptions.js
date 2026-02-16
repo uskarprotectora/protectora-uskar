@@ -97,6 +97,24 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
 });
 
+// Delete multiple adoption requests (admin)
+router.post('/bulk-delete', requireAuth, async (req, res) => {
+    try {
+        const { ids } = req.body;
+        if (!ids || !Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ message: 'Se requiere un array de IDs' });
+        }
+
+        const result = await AdoptionRequest.deleteMany({ _id: { $in: ids } });
+        res.json({
+            message: `${result.deletedCount} solicitud(es) eliminada(s) correctamente`,
+            deletedCount: result.deletedCount
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 // Get stats (admin)
 router.get('/stats/summary', requireAuth, async (req, res) => {
     try {

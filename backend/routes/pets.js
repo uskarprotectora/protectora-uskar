@@ -9,7 +9,7 @@ const path = require('path');
 // Get all pets with optional filters
 router.get('/', async (req, res) => {
     try {
-        const { type, status, search } = req.query;
+        const { type, status, search, ageRange } = req.query;
         let query = {};
 
         if (type && type !== 'all') {
@@ -33,7 +33,37 @@ router.get('/', async (req, res) => {
             ];
         }
 
-        const pets = await Pet.find(query).sort({ createdAt: -1 });
+        // Filtro por rango de edad
+        if (ageRange && ageRange !== 'all') {
+            const now = new Date();
+            let minDate, maxDate;
+
+            switch (ageRange) {
+                case 'puppy': // 0-1 año
+                    minDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                    maxDate = now;
+                    break;
+                case 'young': // 1-3 años
+                    minDate = new Date(now.getFullYear() - 3, now.getMonth(), now.getDate());
+                    maxDate = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+                    break;
+                case 'adult': // 3-7 años
+                    minDate = new Date(now.getFullYear() - 7, now.getMonth(), now.getDate());
+                    maxDate = new Date(now.getFullYear() - 3, now.getMonth(), now.getDate());
+                    break;
+                case 'senior': // 7+ años
+                    maxDate = new Date(now.getFullYear() - 7, now.getMonth(), now.getDate());
+                    break;
+            }
+
+            if (minDate && maxDate) {
+                query.birthDate = { $gte: minDate, $lt: maxDate };
+            } else if (maxDate && !minDate) {
+                query.birthDate = { $lt: maxDate };
+            }
+        }
+
+        const pets = await Pet.find(query).sort({ urgent: -1, displayOrder: 1, createdAt: -1 });
         res.json(pets);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -95,6 +125,51 @@ router.post('/presign', requireAuth, async (req, res) => {
         });
 
         res.json(urls);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Reorder pets
+router.put('/reorder', requireAuth, async (req, res) => {
+    try {
+        const { petId, direction } = req.body;
+
+        const pet = await Pet.findById(petId);
+        if (!pet) {
+            return res.status(404).json({ message: 'Pet not found' });
+        }
+
+        // Obtener todos los pets con el mismo status ordenados
+        const allPets = await Pet.find({ status: pet.status }).sort({ urgent: -1, displayOrder: 1, createdAt: -1 });
+        const currentIndex = allPets.findIndex(p => p._id.toString() === petId);
+
+        if (currentIndex === -1) {
+            return res.status(404).json({ message: 'Pet not found in list' });
+        }
+
+        const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+
+        if (targetIndex < 0 || targetIndex >= allPets.length) {
+            return res.status(400).json({ message: 'Cannot move further in that direction' });
+        }
+
+        // Intercambiar displayOrder con el vecino
+        const targetPet = allPets[targetIndex];
+        const tempOrder = pet.displayOrder;
+
+        // Si ambos tienen el mismo displayOrder, asignar valores únicos
+        if (pet.displayOrder === targetPet.displayOrder) {
+            pet.displayOrder = direction === 'up' ? targetPet.displayOrder - 1 : targetPet.displayOrder + 1;
+        } else {
+            pet.displayOrder = targetPet.displayOrder;
+            targetPet.displayOrder = tempOrder;
+        }
+
+        await pet.save();
+        await targetPet.save();
+
+        res.json({ message: 'Order updated successfully' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

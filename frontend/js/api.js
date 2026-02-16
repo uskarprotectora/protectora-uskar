@@ -17,7 +17,11 @@ async function loadPets() {
         }
 
         if (AppState.searchQuery) {
-            url += `search=${encodeURIComponent(AppState.searchQuery)}`;
+            url += `search=${encodeURIComponent(AppState.searchQuery)}&`;
+        }
+
+        if (AppState.ageRange && AppState.ageRange !== 'all') {
+            url += `ageRange=${AppState.ageRange}&`;
         }
 
         const response = await fetch(url);
@@ -26,6 +30,35 @@ async function loadPets() {
     } catch (error) {
         console.error('Error cargando animales:', error);
         showToast('Error al cargar animales', 'error');
+    }
+}
+
+// Reordenar mascota
+async function reorderPet(petId, direction) {
+    try {
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(`${API_URL}/reorder`, {
+            method: 'PUT',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
+            body: JSON.stringify({ petId, direction })
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message);
+        }
+
+        loadPets();
+    } catch (error) {
+        showToast(error.message || 'Error al reordenar', 'error');
     }
 }
 
@@ -217,3 +250,4 @@ window.loadPets = loadPets;
 window.loadStats = loadStats;
 window.savePet = savePet;
 window.deletePet = deletePet;
+window.reorderPet = reorderPet;

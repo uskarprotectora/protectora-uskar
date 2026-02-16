@@ -1,5 +1,8 @@
 // Pagina Requests - Solicitudes de Adopción (Admin)
 
+// Estado de selección de solicitudes
+var selectedRequestIds = [];
+
 async function renderAdoptionRequestsView() {
     const contentHeader = document.querySelector('.content-header');
     const addPetBtn = document.getElementById('addPetBtn');
@@ -111,9 +114,13 @@ function renderRequestsTable() {
             month: '2-digit',
             year: 'numeric'
         });
+        const isSelected = selectedRequestIds.includes(request._id);
 
         return `
-            <tr class="request-row" onclick="viewRequestDetails('${request._id}')">
+            <tr class="request-row ${isSelected ? 'selected' : ''}" onclick="viewRequestDetails('${request._id}')">
+                <td class="request-checkbox" onclick="event.stopPropagation();">
+                    <input type="checkbox" class="request-select-checkbox" data-id="${request._id}" ${isSelected ? 'checked' : ''} onchange="toggleRequestSelection('${request._id}')">
+                </td>
                 <td class="request-date">${date}</td>
                 <td class="request-name">${request.fullName}</td>
                 <td class="request-email">${request.email}</td>
@@ -134,6 +141,9 @@ function renderRequestsTable() {
         `;
     }).join('');
 
+    const allChecked = filteredRequests.length > 0 && filteredRequests.every(r => selectedRequestIds.includes(r._id));
+    const someChecked = selectedRequestIds.length > 0;
+
     petsGrid.innerHTML = `
         <div class="requests-view">
             <div class="requests-header">
@@ -142,6 +152,9 @@ function renderRequestsTable() {
                     <p>Gestiona las solicitudes recibidas</p>
                 </div>
                 <div class="requests-header-actions">
+                    ${someChecked ? `<button class="btn btn-danger delete-selected-btn" onclick="deleteSelectedRequests()">
+                        <span>🗑️</span> Eliminar (${selectedRequestIds.length})
+                    </button>` : ''}
                     <button class="btn btn-secondary export-btn" onclick="exportAdoptionsToCSV()">
                         <span>📥</span> Exportar CSV
                     </button>
@@ -152,6 +165,9 @@ function renderRequestsTable() {
                 <table class="requests-table">
                     <thead>
                         <tr>
+                            <th class="checkbox-header">
+                                <input type="checkbox" id="selectAllRequests" ${allChecked ? 'checked' : ''} onchange="toggleSelectAllRequests(this.checked)">
+                            </th>
                             <th>Fecha</th>
                             <th>Nombre</th>
                             <th>Email</th>
@@ -172,7 +188,67 @@ function renderRequestsTable() {
 
 function filterRequests(status) {
     AppState.requestsFilter = status;
+    selectedRequestIds = []; // Limpiar selección al cambiar filtro
     renderRequestsTable();
+}
+
+function toggleRequestSelection(requestId) {
+    const index = selectedRequestIds.indexOf(requestId);
+    if (index === -1) {
+        selectedRequestIds.push(requestId);
+    } else {
+        selectedRequestIds.splice(index, 1);
+    }
+    renderRequestsTable();
+}
+
+function toggleSelectAllRequests(checked) {
+    let filteredRequests = AppState.adoptionRequests;
+    if (AppState.requestsFilter !== 'all') {
+        filteredRequests = AppState.adoptionRequests.filter(r => r.status === AppState.requestsFilter);
+    }
+
+    if (checked) {
+        selectedRequestIds = filteredRequests.map(r => r._id);
+    } else {
+        selectedRequestIds = [];
+    }
+    renderRequestsTable();
+}
+
+async function deleteSelectedRequests() {
+    if (selectedRequestIds.length === 0) return;
+
+    if (!confirm(`¿Eliminar ${selectedRequestIds.length} solicitud(es) seleccionada(s) permanentemente?`)) return;
+
+    try {
+        var authHeaders = getAuthHeaders();
+        const response = await fetch(`${ADOPTIONS_API_URL}/bulk-delete`, {
+            method: 'POST',
+            headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
+            body: JSON.stringify({ ids: selectedRequestIds })
+        });
+
+        if (response.status === 401) {
+            clearAuthData();
+            AppState.isLoggedIn = false;
+            updateUIForLogin();
+            showToast('Sesion expirada.', 'error');
+            return;
+        }
+
+        if (response.ok) {
+            const result = await response.json();
+            showToast(result.message, 'success');
+            selectedRequestIds = [];
+            renderAdoptionRequestsView();
+        } else {
+            const error = await response.json();
+            showToast(error.message || 'Error al eliminar', 'error');
+        }
+    } catch (error) {
+        showToast('Error al eliminar solicitudes', 'error');
+    }
 }
 
 async function changeRequestStatus(requestId, newStatus) {
@@ -465,3 +541,6 @@ window.changeRequestStatus = changeRequestStatus;
 window.deleteRequest = deleteRequest;
 window.viewRequestDetails = viewRequestDetails;
 window.exportAdoptionsToCSV = exportAdoptionsToCSV;
+window.toggleRequestSelection = toggleRequestSelection;
+window.toggleSelectAllRequests = toggleSelectAllRequests;
+window.deleteSelectedRequests = deleteSelectedRequests;

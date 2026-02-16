@@ -77,6 +77,15 @@ function setupMainEventListeners() {
         loadPets();
     }, 300));
 
+    // Filtro de edad
+    const ageRangeFilter = document.getElementById('ageRangeFilter');
+    if (ageRangeFilter) {
+        ageRangeFilter.addEventListener('change', (e) => {
+            AppState.ageRange = e.target.value;
+            loadPets();
+        });
+    }
+
     // Botones de vista (Adopcion / Finales Felices / Quienes Somos / Contactanos)
     document.querySelectorAll('.filter-btn[data-filter="view"]').forEach(btn => {
         btn.addEventListener('click', () => handleViewChange(btn));
@@ -87,6 +96,8 @@ function setupMainEventListeners() {
         document.querySelectorAll('[data-filter="view"]').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.help-btn').forEach(b => b.classList.remove('active'));
         AppState.currentView = 'requests';
+        var filtersBar = document.getElementById('filtersBar');
+        if (filtersBar) filtersBar.style.display = 'none';
         renderAdoptionRequestsView();
     });
 
@@ -95,6 +106,8 @@ function setupMainEventListeners() {
         document.querySelectorAll('[data-filter="view"]').forEach(b => b.classList.remove('active'));
         document.querySelectorAll('.help-btn').forEach(b => b.classList.remove('active'));
         AppState.currentView = 'forms';
+        var filtersBar = document.getElementById('filtersBar');
+        if (filtersBar) filtersBar.style.display = 'none';
         renderFormsView();
     });
 
@@ -120,6 +133,7 @@ function handleViewChange(btn) {
     const contentSubtitle = document.querySelector('.content-subtitle');
     const contentHeader = document.querySelector('.content-header');
     const petsGrid = document.getElementById('petsGrid');
+    const filtersBar = document.getElementById('filtersBar');
 
     // Mostrar/ocultar boton de agregar animal
     const addPetBtn = document.getElementById('addPetBtn');
@@ -128,6 +142,7 @@ function handleViewChange(btn) {
         contentTitle.textContent = 'Nuestros Animales';
         contentSubtitle.textContent = 'Conoce a los animales que buscan un hogar';
         contentHeader.style.display = 'flex';
+        if (filtersBar) filtersBar.style.display = 'flex';
         petsGrid.classList.remove('full-width-view');
         if (AppState.isLoggedIn) addPetBtn.classList.add('visible');
         loadPets();
@@ -135,16 +150,19 @@ function handleViewChange(btn) {
         contentTitle.textContent = 'Finales Felices';
         contentSubtitle.textContent = 'Animales que ya encontraron su familia';
         contentHeader.style.display = 'flex';
+        if (filtersBar) filtersBar.style.display = 'flex';
         petsGrid.classList.remove('full-width-view');
         addPetBtn.classList.remove('visible');
         loadPets();
     } else if (AppState.currentView === 'about') {
         contentHeader.style.display = 'none';
+        if (filtersBar) filtersBar.style.display = 'none';
         petsGrid.classList.add('full-width-view');
         addPetBtn.classList.remove('visible');
         renderAboutPage();
     } else if (AppState.currentView === 'contact') {
         contentHeader.style.display = 'none';
+        if (filtersBar) filtersBar.style.display = 'none';
         petsGrid.classList.add('full-width-view');
         addPetBtn.classList.remove('visible');
         renderContactPage();

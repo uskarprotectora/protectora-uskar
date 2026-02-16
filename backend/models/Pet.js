@@ -72,6 +72,14 @@ const petSchema = new mongoose.Schema({
         enum: ['active', 'scheduled', 'inactive'],
         default: 'active'
     },
+    urgent: {
+        type: Boolean,
+        default: false
+    },
+    displayOrder: {
+        type: Number,
+        default: 0
+    },
     owner: {
         name: {
             type: String,
