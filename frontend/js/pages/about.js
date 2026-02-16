@@ -38,7 +38,7 @@ function renderAboutPage() {
 
             <div class="about-section-content">
                 <h2>Nuestra Historia</h2>
-                <p>La Protectora de Animales Uskar nació en ... </p>
+                <p>La Protectora de Animales Uskar nació en 2018 todo y que nuestra principal colaboradora lleva años rescatando a perretes y encontrándoles un hogar. </p>
             </div>
         </div>
     `;

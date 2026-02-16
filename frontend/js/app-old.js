@@ -794,7 +794,6 @@ function renderContactPage() {
                 <div class="contact-card">
                     <span class="contact-icon">📞</span>
                     <h3>Telefono</h3>
-                    <p>+34 600 000 000</p>
                     <p>Lunes a Domingo</p>
                 </div>
                 <div class="contact-card">
