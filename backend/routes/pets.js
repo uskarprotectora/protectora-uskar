@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Pet = require('../models/Pet');
 const upload = require('../config/upload');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireRole } = require('../middleware/auth');
 const fs = require('fs');
 const path = require('path');
 
@@ -339,8 +339,8 @@ router.put('/:id/main-photo/:photoIndex', requireAuth, async (req, res) => {
     }
 });
 
-// Delete photo
-router.delete('/:id/photo/:photoIndex', requireAuth, async (req, res) => {
+// Delete photo (solo admin)
+router.delete('/:id/photo/:photoIndex', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -374,8 +374,8 @@ router.delete('/:id/photo/:photoIndex', requireAuth, async (req, res) => {
     }
 });
 
-// Delete video
-router.delete('/:id/video/:videoIndex', requireAuth, async (req, res) => {
+// Delete video (solo admin)
+router.delete('/:id/video/:videoIndex', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -402,8 +402,8 @@ router.delete('/:id/video/:videoIndex', requireAuth, async (req, res) => {
     }
 });
 
-// Delete pet
-router.delete('/:id', requireAuth, async (req, res) => {
+// Delete pet (solo admin)
+router.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {

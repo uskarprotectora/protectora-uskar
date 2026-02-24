@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const FormSubmission = require('../models/FormSubmission');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireRole } = require('../middleware/auth');
 
-// Get all form submissions with optional filters (admin)
-router.get('/', requireAuth, async (req, res) => {
+// Get all form submissions with optional filters (solo admin)
+router.get('/', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const { formType, status } = req.query;
         let query = {};
@@ -26,8 +26,8 @@ router.get('/', requireAuth, async (req, res) => {
     }
 });
 
-// Get single form submission (admin)
-router.get('/:id', requireAuth, async (req, res) => {
+// Get single form submission (solo admin)
+router.get('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const form = await FormSubmission.findById(req.params.id)
             .populate('animalId', 'name type breed photos');
@@ -59,8 +59,8 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update form submission status (admin)
-router.put('/:id', requireAuth, async (req, res) => {
+// Update form submission status (solo admin)
+router.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const form = await FormSubmission.findByIdAndUpdate(
             req.params.id,
@@ -76,8 +76,8 @@ router.put('/:id', requireAuth, async (req, res) => {
     }
 });
 
-// Delete form submission (admin)
-router.delete('/:id', requireAuth, async (req, res) => {
+// Delete form submission (solo admin)
+router.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const form = await FormSubmission.findByIdAndDelete(req.params.id);
         if (!form) {
@@ -89,8 +89,8 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
 });
 
-// Delete multiple form submissions (admin)
-router.post('/bulk-delete', requireAuth, async (req, res) => {
+// Delete multiple form submissions (solo admin)
+router.post('/bulk-delete', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const { ids } = req.body;
         if (!ids || !Array.isArray(ids) || ids.length === 0) {
@@ -107,8 +107,8 @@ router.post('/bulk-delete', requireAuth, async (req, res) => {
     }
 });
 
-// Get stats by form type (admin)
-router.get('/stats/summary', requireAuth, async (req, res) => {
+// Get stats by form type (solo admin)
+router.get('/stats/summary', requireAuth, requireRole('admin'), async (req, res) => {
     try {
         const volunteer = await FormSubmission.countDocuments({ formType: 'volunteer' });
         const foster = await FormSubmission.countDocuments({ formType: 'foster' });

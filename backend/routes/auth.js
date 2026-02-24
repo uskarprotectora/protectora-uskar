@@ -54,7 +54,8 @@ router.post('/login', loginLimiter, async (req, res) => {
         const token = jwt.sign(
             {
                 adminId: admin._id,
-                username: admin.username
+                username: admin.username,
+                role: admin.role || 'admin'
             },
             JWT_SECRET,
             { expiresIn: JWT_EXPIRY }
@@ -75,7 +76,8 @@ router.post('/login', loginLimiter, async (req, res) => {
             expiresAt: Date.now() + expiresIn,
             admin: {
                 id: admin._id,
-                username: admin.username
+                username: admin.username,
+                role: admin.role || 'admin'
             }
         });
     } catch (error) {
@@ -99,7 +101,8 @@ router.get('/verify', requireAuth, async (req, res) => {
             valid: true,
             admin: {
                 id: admin._id,
-                username: admin.username
+                username: admin.username,
+                role: admin.role || 'admin'
             }
         });
     } catch (error) {

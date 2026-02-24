@@ -145,9 +145,11 @@ function renderProfile(pet) {
                 <button class="btn btn-secondary" onclick="closeProfileModal(); openEditModal('${sanitizeAttr(pet._id)}')">
                     ✏️ Editar
                 </button>
+                ${AppState.adminInfo && AppState.adminInfo.role === 'admin' ? `
                 <button class="btn btn-secondary" style="background: #991b1b; color: white; border-color: #991b1b;" onclick="closeProfileModal(); deletePet('${sanitizeAttr(pet._id)}')">
                     🗑️ Eliminar
                 </button>
+                ` : ''}
             </div>
         </div>
         ` : ''}

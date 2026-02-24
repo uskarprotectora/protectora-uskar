@@ -26,6 +26,7 @@ const requireAuth = async (req, res, next) => {
 
         req.adminId = decoded.adminId;
         req.adminUsername = decoded.username;
+        req.adminRole = decoded.role || 'admin'; // Por defecto admin para tokens antiguos
 
         next();
     } catch (error) {
@@ -43,6 +44,25 @@ const requireAuth = async (req, res, next) => {
             message: 'Error de autenticacion.'
         });
     }
+};
+
+// Middleware para requerir un rol específico (debe usarse después de requireAuth)
+const requireRole = (...allowedRoles) => {
+    return (req, res, next) => {
+        if (!req.adminRole) {
+            return res.status(401).json({
+                message: 'Acceso no autorizado.'
+            });
+        }
+
+        if (!allowedRoles.includes(req.adminRole)) {
+            return res.status(403).json({
+                message: 'No tienes permisos para realizar esta accion.'
+            });
+        }
+
+        next();
+    };
 };
 
 // Optional auth - attach admin info if token valid, but don't fail
@@ -65,4 +85,4 @@ const optionalAuth = async (req, res, next) => {
     next();
 };
 
-module.exports = { requireAuth, optionalAuth, JWT_SECRET, JWT_EXPIRY };
+module.exports = { requireAuth, requireRole, optionalAuth, JWT_SECRET, JWT_EXPIRY };

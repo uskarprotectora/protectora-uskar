@@ -77,7 +77,7 @@ function createPetCard(pet) {
                 <div class="pet-actions">
                     ${AppState.currentView === 'adoption' ? '<button class="action-btn adopt-btn">Adoptame</button>' : '<span class="adopted-badge">🏠 Adoptado</span>'}
                     ${AppState.isLoggedIn ? '<button class="action-btn edit-btn admin-only visible">Editar</button>' : ''}
-                    ${AppState.isLoggedIn ? '<button class="action-btn delete-btn admin-only visible">Eliminar</button>' : ''}
+                    ${AppState.isLoggedIn && AppState.adminInfo && AppState.adminInfo.role === 'admin' ? '<button class="action-btn delete-btn admin-only visible">Eliminar</button>' : ''}
                 </div>
             </div>
         </div>

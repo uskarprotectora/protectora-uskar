@@ -160,12 +160,23 @@ function updateUIForLogin() {
     var viewFormsBtn = document.getElementById('viewFormsBtn');
     var apadrinaBtn = document.getElementById('apadrinaBtn');
 
+    // Determinar si el usuario es admin (no colaborador)
+    var isAdmin = AppState.adminInfo && AppState.adminInfo.role === 'admin';
+
     if (AppState.isLoggedIn) {
         loginBtn.innerHTML = '<span>🔓</span><span>Cerrar Sesion</span>';
         loginBtn.classList.add('logged-in');
         addPetBtn.classList.add('visible');
+        // Solicitudes de adopción: visibles para admin y colaborador
         viewRequestsBtn.classList.add('visible');
-        if (viewFormsBtn) viewFormsBtn.classList.add('visible');
+        // Formularios: solo visibles para admin (no para colaborador)
+        if (viewFormsBtn) {
+            if (isAdmin) {
+                viewFormsBtn.classList.add('visible');
+            } else {
+                viewFormsBtn.classList.remove('visible');
+            }
+        }
         if (apadrinaBtn) apadrinaBtn.classList.add('visible');
     } else {
         loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesion</span>';
