@@ -2418,11 +2418,16 @@ a.adoption-form-btn {
         top: 0;
         left: -18.75rem;
         width: 17.5rem;
-        height: 100vh;
-        max-height: 100vh;
+        /* 100dvh = viewport dinàmic que respecta la toolbar de iOS */
+        height: 100dvh;
+        height: 100vh; /* Fallback per navegadors antics */
+        max-height: -webkit-fill-available; /* Safari iOS */
         z-index: 100;
         transition: left 0.3s ease;
         box-shadow: 0.25rem 0 1.25rem rgba(0, 0, 0, 0.2);
+        /* Padding per la safe area de iOS (notch i toolbar inferior) */
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        overflow-y: auto;
     }
 
     .sidebar.active {

@@ -1,5 +1,58 @@
 // Funciones de utilidad
 
+// ========================================
+// FUNCIONES DE SANITIZACIÓN (prevención XSS)
+// ========================================
+
+/**
+ * Sanitiza un string para usar de forma segura en HTML.
+ * Convierte caracteres especiales en entidades HTML.
+ * Usar cuando se interpole texto en innerHTML.
+ *
+ * @param {string} str - El string a sanitizar
+ * @returns {string} - El string con caracteres peligrosos escapados
+ *
+ * @example
+ * // Input malicioso: <script>alert('xss')</script>
+ * // Output seguro: &lt;script&gt;alert('xss')&lt;/script&gt;
+ */
+function sanitizeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
+}
+
+/**
+ * Sanitiza un string para usar de forma segura en atributos HTML,
+ * especialmente en atributos de eventos como onclick, onerror, etc.
+ * Escapa comillas y caracteres que podrían romper el contexto del atributo.
+ *
+ * IMPORTANTE: Aunque esta función añade seguridad, la mejor práctica
+ * es evitar onclick inline y usar addEventListener en su lugar.
+ *
+ * @param {string} str - El string a sanitizar
+ * @returns {string} - El string seguro para usar en atributos
+ *
+ * @example
+ * // Input malicioso: '); alert('xss'); ('
+ * // Output seguro: &#x27;); alert(&#x27;xss&#x27;); (&#x27;
+ */
+function sanitizeAttr(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\\/g, '&#x5c;')
+        .replace(/`/g, '&#x60;');
+}
+
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -80,3 +133,5 @@ window.showToast = showToast;
 window.exportData = exportData;
 window.formatAge = formatAge;
 window.getMediaUrl = getMediaUrl;
+window.sanitizeHtml = sanitizeHtml;
+window.sanitizeAttr = sanitizeAttr;

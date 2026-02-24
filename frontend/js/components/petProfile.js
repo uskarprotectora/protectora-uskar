@@ -22,15 +22,15 @@ function renderProfile(pet) {
 
     const mainPhotoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
     const profileImage = mainPhotoUrl
-        ? `<img src="${mainPhotoUrl}" alt="${pet.name}" class="profile-image-img" onerror="this.outerHTML='<div class=\\'profile-image\\'>${emoji}</div>'">`
+        ? `<img src="${sanitizeAttr(mainPhotoUrl)}" alt="${sanitizeAttr(pet.name)}" class="profile-image-img" onerror="this.outerHTML='<div class=\\'profile-image\\'>${emoji}</div>'">`
         : `<div class="profile-image">${emoji}</div>`;
 
     return `
         <div class="profile-header">
             ${profileImage}
             <div class="profile-info">
-                <h2 class="profile-name">${pet.name}</h2>
-                <p class="profile-breed">${pet.breed}</p>
+                <h2 class="profile-name">${sanitizeHtml(pet.name)}</h2>
+                <p class="profile-breed">${sanitizeHtml(pet.breed)}</p>
                 <div class="profile-badges">
                     <span class="profile-badge type">${typeText.toUpperCase()}</span>
                     <span class="profile-badge status" style="background: ${statusColor[pet.status]}20; color: ${statusColor[pet.status]}">
@@ -42,7 +42,7 @@ function renderProfile(pet) {
 
         <div class="profile-section">
             <h3 class="profile-section-title">Sobre mí</h3>
-            <p class="profile-description">${pet.description || 'Este adorable animal busca un hogar lleno de amor. Ven a conocerlo!'}</p>
+            <p class="profile-description">${sanitizeHtml(pet.description) || 'Este adorable animal busca un hogar lleno de amor. Ven a conocerlo!'}</p>
         </div>
 
         ${pet.photos && pet.photos.length > 1 ? `
@@ -52,8 +52,8 @@ function renderProfile(pet) {
                 ${pet.photos.map((photo, index) => {
                     const photoUrl = getMediaUrl(photo.url);
                     return `
-                    <div class="profile-gallery-item ${photo.isMain ? 'is-main' : ''}" onclick="openGalleryPhoto('${photoUrl}')">
-                        <img src="${photoUrl}" alt="Foto ${index + 1}">
+                    <div class="profile-gallery-item ${photo.isMain ? 'is-main' : ''}" onclick="openGalleryPhoto('${sanitizeAttr(photoUrl)}')">
+                        <img src="${sanitizeAttr(photoUrl)}" alt="Foto ${index + 1}">
                     </div>
                 `}).join('')}
             </div>
@@ -128,7 +128,7 @@ function renderProfile(pet) {
             <h3 class="profile-section-title">¿Quieres adoptarme?</h3>
             <p class="profile-description">Si estas interesado en darme un hogar, contacta con la protectora. Estaremos encantados de conocerte y contarte mas sobre mi.</p>
             <div class="profile-cta">
-                <button class="btn btn-primary btn-large" onclick="openAdoptionFormModalFromProfile('${pet._id}')">
+                <button class="btn btn-primary btn-large" onclick="openAdoptionFormModalFromProfile('${sanitizeAttr(pet._id)}')">
                     ❤️ Quiero Adoptar
                 </button>
                 <button class="btn btn-secondary" onclick="openHelpModal('apadrina')">
@@ -142,10 +142,10 @@ function renderProfile(pet) {
         <div class="profile-section profile-admin">
             <h3 class="profile-section-title">Administración</h3>
             <div class="profile-cta">
-                <button class="btn btn-secondary" onclick="closeProfileModal(); openEditModal('${pet._id}')">
+                <button class="btn btn-secondary" onclick="closeProfileModal(); openEditModal('${sanitizeAttr(pet._id)}')">
                     ✏️ Editar
                 </button>
-                <button class="btn btn-secondary" style="background: #991b1b; color: white; border-color: #991b1b;" onclick="closeProfileModal(); deletePet('${pet._id}')">
+                <button class="btn btn-secondary" style="background: #991b1b; color: white; border-color: #991b1b;" onclick="closeProfileModal(); deletePet('${sanitizeAttr(pet._id)}')">
                     🗑️ Eliminar
                 </button>
             </div>
@@ -171,7 +171,7 @@ function openGalleryPhoto(url) {
     lightbox.className = 'lightbox';
     lightbox.innerHTML = `
         <div class="lightbox-content">
-            <img src="${url}" alt="Foto">
+            <img src="${sanitizeAttr(url)}" alt="Foto">
             <button class="lightbox-close">&times;</button>
         </div>
     `;

@@ -26,11 +26,11 @@ function createPetCard(pet) {
 
     const photoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
     const imageContent = photoUrl
-        ? `<img src="${photoUrl}" alt="${pet.name}" class="pet-image" onerror="this.parentElement.innerHTML='<div class=\\'pet-image placeholder-img\\' style=\\'background: ${randomGradient};\\'>${emoji}</div>'">`
+        ? `<img src="${sanitizeAttr(photoUrl)}" alt="${sanitizeAttr(pet.name)}" class="pet-image" onerror="this.parentElement.innerHTML='<div class=\\'pet-image placeholder-img\\' style=\\'background: ${randomGradient};\\'>${emoji}</div>'">`
         : `<div class="pet-image placeholder-img" style="background: ${randomGradient};">${emoji}</div>`;
 
     return `
-        <div class="pet-card" data-id="${pet._id}">
+        <div class="pet-card" data-id="${sanitizeAttr(pet._id)}">
             <div class="pet-image-container">
                 ${imageContent}
                 <div class="pet-badge ${badgeClass}">
@@ -44,13 +44,13 @@ function createPetCard(pet) {
             <div class="pet-info">
                 <div class="pet-header">
                     <div>
-                        <h3 class="pet-name">${pet.name}</h3>
-                        <p class="pet-breed">${pet.breed}</p>
+                        <h3 class="pet-name">${sanitizeHtml(pet.name)}</h3>
+                        <p class="pet-breed">${sanitizeHtml(pet.breed)}</p>
                     </div>
                     ${pet.birthDate ? `<div class="pet-age">${formatAge(pet.birthDate)}</div>` : ''}
                 </div>
                 <p class="pet-description">
-                    ${pet.description || 'Este adorable animal busca un hogar lleno de amor.'}
+                    ${sanitizeHtml(pet.description) || 'Este adorable animal busca un hogar lleno de amor.'}
                 </p>
                 <div class="pet-details">
                     ${pet.size ? `<div class="detail-item">

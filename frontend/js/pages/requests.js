@@ -117,25 +117,25 @@ function renderRequestsTable() {
         const isSelected = selectedRequestIds.includes(request._id);
 
         return `
-            <tr class="request-row ${isSelected ? 'selected' : ''}" onclick="viewRequestDetails('${request._id}')">
+            <tr class="request-row ${isSelected ? 'selected' : ''}" onclick="viewRequestDetails('${sanitizeAttr(request._id)}')">
                 <td class="request-checkbox" onclick="event.stopPropagation();">
-                    <input type="checkbox" class="request-select-checkbox" data-id="${request._id}" ${isSelected ? 'checked' : ''} onchange="toggleRequestSelection('${request._id}')">
+                    <input type="checkbox" class="request-select-checkbox" data-id="${sanitizeAttr(request._id)}" ${isSelected ? 'checked' : ''} onchange="toggleRequestSelection('${sanitizeAttr(request._id)}')">
                 </td>
                 <td class="request-date">${date}</td>
-                <td class="request-name">${request.fullName}</td>
-                <td class="request-email">${request.email}</td>
-                <td class="request-phone">${request.phone}</td>
-                <td class="request-pet">${request.petName || 'General'}</td>
+                <td class="request-name">${sanitizeHtml(request.fullName)}</td>
+                <td class="request-email">${sanitizeHtml(request.email)}</td>
+                <td class="request-phone">${sanitizeHtml(request.phone)}</td>
+                <td class="request-pet">${sanitizeHtml(request.petName) || 'General'}</td>
                 <td>
                     <span class="request-status" style="background: ${statusColors[request.status]}20; color: ${statusColors[request.status]}">
                         ${statusLabels[request.status]}
                     </span>
                 </td>
                 <td class="request-actions">
-                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'reviewing')" title="En revisión">📝</button>
-                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'approved')" title="Aprobar">✅</button>
-                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${request._id}', 'rejected')" title="Rechazar">❌</button>
-                    <button class="action-icon-btn delete" onclick="event.stopPropagation(); deleteRequest('${request._id}')" title="Eliminar">🗑️</button>
+                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${sanitizeAttr(request._id)}', 'reviewing')" title="En revisión">📝</button>
+                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${sanitizeAttr(request._id)}', 'approved')" title="Aprobar">✅</button>
+                    <button class="action-icon-btn" onclick="event.stopPropagation(); changeRequestStatus('${sanitizeAttr(request._id)}', 'rejected')" title="Rechazar">❌</button>
+                    <button class="action-icon-btn delete" onclick="event.stopPropagation(); deleteRequest('${sanitizeAttr(request._id)}')" title="Eliminar">🗑️</button>
                 </td>
             </tr>
         `;
@@ -345,7 +345,7 @@ async function viewRequestDetails(requestId) {
         const detailsHtml = `
             <div class="request-details">
                 <div class="request-details-header">
-                    <h3>Solicitud de ${request.fullName}</h3>
+                    <h3>Solicitud de ${sanitizeHtml(request.fullName)}</h3>
                     <span class="request-status-large status-${request.status}">${statusLabels[request.status]}</span>
                 </div>
                 <p class="request-date-detail">Recibida el ${date}</p>
@@ -353,7 +353,7 @@ async function viewRequestDetails(requestId) {
                 ${request.petName ? `
                 <div class="detail-section">
                     <h4>🐾 Animal de interés</h4>
-                    <p><strong>${request.petName}</strong></p>
+                    <p><strong>${sanitizeHtml(request.petName)}</strong></p>
                 </div>
                 ` : ''}
 
@@ -361,7 +361,7 @@ async function viewRequestDetails(requestId) {
                 <div class="detail-section">
                     <h4>🎥 Vídeo de Presentación</h4>
                     <div class="request-video-container">
-                        <video src="${request.presentationVideo.url}" controls></video>
+                        <video src="${sanitizeAttr(request.presentationVideo.url)}" controls></video>
                     </div>
                 </div>
                 ` : ''}
@@ -369,19 +369,19 @@ async function viewRequestDetails(requestId) {
                 <div class="detail-section">
                     <h4>👤 Datos Personales</h4>
                     <div class="detail-grid">
-                        <div><span>Nombre:</span> ${request.fullName}</div>
-                        <div><span>Edad:</span> ${request.age} años</div>
-                        <div><span>Email:</span> ${request.email}</div>
-                        <div><span>Teléfono:</span> ${request.phone}</div>
-                        <div><span>Dirección:</span> ${request.address}</div>
-                        <div><span>Ciudad:</span> ${request.city}</div>
+                        <div><span>Nombre:</span> ${sanitizeHtml(request.fullName)}</div>
+                        <div><span>Edad:</span> ${sanitizeHtml(request.age)} años</div>
+                        <div><span>Email:</span> ${sanitizeHtml(request.email)}</div>
+                        <div><span>Teléfono:</span> ${sanitizeHtml(request.phone)}</div>
+                        <div><span>Dirección:</span> ${sanitizeHtml(request.address)}</div>
+                        <div><span>Ciudad:</span> ${sanitizeHtml(request.city)}</div>
                     </div>
                 </div>
 
                 <div class="detail-section">
                     <h4>🏠 Vivienda</h4>
                     <div class="detail-grid">
-                        <div><span>Tipo:</span> ${request.housingType}</div>
+                        <div><span>Tipo:</span> ${sanitizeHtml(request.housingType)}</div>
                         <div><span>Propiedad:</span> ${request.ownerOrRenter === 'propietario' ? 'Propietario' : 'Alquiler'}</div>
                         <div><span>Jardin/Terraza:</span> ${request.hasGarden ? 'Si' : 'No'}</div>
                         ${request.ownerOrRenter === 'alquiler' ? `<div><span>Propietario permite:</span> ${request.landlordAllowsPets ? 'Si' : 'No'}</div>` : ''}
@@ -391,8 +391,8 @@ async function viewRequestDetails(requestId) {
                 <div class="detail-section">
                     <h4>👨‍👩‍👧‍👦 Familia</h4>
                     <div class="detail-grid">
-                        <div><span>Miembros:</span> ${request.familyMembers}</div>
-                        <div><span>Niños:</span> ${request.hasChildren ? 'Si' + (request.childrenAges ? ' (' + request.childrenAges + ')' : '') : 'No'}</div>
+                        <div><span>Miembros:</span> ${sanitizeHtml(request.familyMembers)}</div>
+                        <div><span>Niños:</span> ${request.hasChildren ? 'Si' + (request.childrenAges ? ' (' + sanitizeHtml(request.childrenAges) + ')' : '') : 'No'}</div>
                         <div><span>Todos de acuerdo:</span> ${request.allAgree ? 'Si' : 'No'}</div>
                     </div>
                 </div>
@@ -401,24 +401,24 @@ async function viewRequestDetails(requestId) {
                     <h4>🐕 Experiencia</h4>
                     <div class="detail-grid">
                         <div><span>Otras mascotas:</span> ${request.hasOtherPets ? 'Si' : 'No'}</div>
-                        ${request.otherPetsDescription ? `<div class="full-width"><span>Descripción:</span> ${request.otherPetsDescription}</div>` : ''}
-                        ${request.previousPetExperience ? `<div class="full-width"><span>Experiencia previa:</span> ${request.previousPetExperience}</div>` : ''}
+                        ${request.otherPetsDescription ? `<div class="full-width"><span>Descripción:</span> ${sanitizeHtml(request.otherPetsDescription)}</div>` : ''}
+                        ${request.previousPetExperience ? `<div class="full-width"><span>Experiencia previa:</span> ${sanitizeHtml(request.previousPetExperience)}</div>` : ''}
                     </div>
                 </div>
 
                 <div class="detail-section">
                     <h4>❤️ Motivación</h4>
                     <div class="detail-grid">
-                        <div class="full-width"><span>Por qué quiere adoptar:</span><br>${request.whyAdopt}</div>
-                        <div><span>Horas solo:</span> ${request.hoursAlone}h/día</div>
-                        ${request.vacationPlan ? `<div><span>Plan vacaciones:</span> ${request.vacationPlan}</div>` : ''}
+                        <div class="full-width"><span>Por qué quiere adoptar:</span><br>${sanitizeHtml(request.whyAdopt)}</div>
+                        <div><span>Horas solo:</span> ${sanitizeHtml(request.hoursAlone)}h/día</div>
+                        ${request.vacationPlan ? `<div><span>Plan vacaciones:</span> ${sanitizeHtml(request.vacationPlan)}</div>` : ''}
                     </div>
                 </div>
 
                 <div class="request-details-actions">
-                    <button class="btn btn-secondary" onclick="changeRequestStatus('${request._id}', 'reviewing'); closeProfileModal();">📝 En Revisión</button>
-                    <button class="btn btn-primary" onclick="changeRequestStatus('${request._id}', 'approved'); closeProfileModal();">✅ Aprobar</button>
-                    <button class="btn btn-secondary" style="background: #ef4444; border-color: #ef4444; color: white;" onclick="changeRequestStatus('${request._id}', 'rejected'); closeProfileModal();">❌ Rechazar</button>
+                    <button class="btn btn-secondary" onclick="changeRequestStatus('${sanitizeAttr(request._id)}', 'reviewing'); closeProfileModal();">📝 En Revisión</button>
+                    <button class="btn btn-primary" onclick="changeRequestStatus('${sanitizeAttr(request._id)}', 'approved'); closeProfileModal();">✅ Aprobar</button>
+                    <button class="btn btn-secondary" style="background: #ef4444; border-color: #ef4444; color: white;" onclick="changeRequestStatus('${sanitizeAttr(request._id)}', 'rejected'); closeProfileModal();">❌ Rechazar</button>
                 </div>
             </div>
         `;
