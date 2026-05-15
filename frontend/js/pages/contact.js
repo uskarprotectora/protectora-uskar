@@ -21,10 +21,11 @@ function renderContactPage() {
                     <span class="contact-icon">✉️</span>
                     <h3>Email</h3>
                     <p>uskar.protectora@gmail.com</p>
+                    <p>protectoraanimalesuskar@gmail.com</p>
                 </div>
                 <div class="contact-card">
                     <span class="contact-icon">📞</span>
-                    <h3>Teléfono</h3>
+                    <h3>Teléfono: +34 602002943</h3>
                     <p>Lunes a Domingo</p>
                 </div>
             </div>
