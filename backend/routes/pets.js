@@ -63,7 +63,17 @@ router.get('/', async (req, res) => {
             }
         }
 
-        const pets = await Pet.find(query).sort({ urgent: -1, displayOrder: 1, createdAt: -1 });
+        // Ordenamiento diferente según el estado
+        let sortCriteria;
+        if (status === 'inactive') {
+            // Animales adoptados: más recientes primero (por fecha de actualización)
+            sortCriteria = { updatedAt: -1 };
+        } else {
+            // Animales en adopción: urgentes primero, luego por orden manual
+            sortCriteria = { urgent: -1, displayOrder: 1, createdAt: -1 };
+        }
+
+        const pets = await Pet.find(query).sort(sortCriteria);
         res.json(pets);
     } catch (error) {
         res.status(500).json({ message: error.message });
