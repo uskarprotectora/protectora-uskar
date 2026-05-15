@@ -164,7 +164,8 @@ function updateUIForLogin() {
     var isAdmin = AppState.adminInfo && AppState.adminInfo.role === 'admin';
 
     if (AppState.isLoggedIn) {
-        loginBtn.innerHTML = '<span>🔓</span><span>Cerrar Sesion</span>';
+        var logoutText = typeof t === 'function' ? t('logout') : 'Cerrar Sesion';
+        loginBtn.innerHTML = '<span>🔓</span><span>' + logoutText + '</span>';
         loginBtn.classList.add('logged-in');
         addPetBtn.classList.add('visible');
         // Solicitudes de adopción: visibles para admin y colaborador
@@ -179,7 +180,8 @@ function updateUIForLogin() {
         }
         if (apadrinaBtn) apadrinaBtn.classList.add('visible');
     } else {
-        loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesion</span>';
+        var loginText = typeof t === 'function' ? t('login') : 'Iniciar Sesion';
+        loginBtn.innerHTML = '<span>👤</span><span>' + loginText + '</span>';
         loginBtn.classList.remove('logged-in');
         addPetBtn.classList.remove('visible');
         viewRequestsBtn.classList.remove('visible');
