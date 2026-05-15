@@ -159,6 +159,7 @@ function updateUIForLogin() {
     var viewRequestsBtn = document.getElementById('viewAdoptionRequestsBtn');
     var viewFormsBtn = document.getElementById('viewFormsBtn');
     var apadrinaBtn = document.getElementById('apadrinaBtn');
+    var facturasVetBtn = document.getElementById('facturasVetBtn');
 
     // Determinar si el usuario es admin (no colaborador)
     var isAdmin = AppState.adminInfo && AppState.adminInfo.role === 'admin';
@@ -178,6 +179,7 @@ function updateUIForLogin() {
             }
         }
         if (apadrinaBtn) apadrinaBtn.classList.add('visible');
+        if (facturasVetBtn) facturasVetBtn.classList.add('visible');
     } else {
         loginBtn.innerHTML = '<span>👤</span><span>Iniciar Sesion</span>';
         loginBtn.classList.remove('logged-in');
@@ -185,6 +187,7 @@ function updateUIForLogin() {
         viewRequestsBtn.classList.remove('visible');
         if (viewFormsBtn) viewFormsBtn.classList.remove('visible');
         if (apadrinaBtn) apadrinaBtn.classList.remove('visible');
+        if (facturasVetBtn) facturasVetBtn.classList.remove('visible');
 
         if (AppState.currentView === 'requests' || AppState.currentView === 'forms') {
             AppState.currentView = 'adoption';
