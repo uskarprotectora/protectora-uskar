@@ -110,32 +110,6 @@ body {
     transform: translateY(-0.125rem);
 }
 
-/* Language Selector */
-.lang-select {
-    padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.2);
-    border: 0.125rem solid rgba(255, 255, 255, 0.3);
-    border-radius: 0.625rem;
-    color: white;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    outline: none;
-}
-
-.lang-select:hover,
-.lang-select:focus {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-.lang-select option {
-    background: #795548;
-    color: white;
-    padding: 0.5rem;
-}
-
 /* Main Container */
 .main-container {
     display: flex;

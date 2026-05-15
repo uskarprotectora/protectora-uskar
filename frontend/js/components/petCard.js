@@ -2,18 +2,14 @@
 
 function createPetCard(pet) {
     const emoji = pet.type === 'dog' ? '🐕' : '🐱';
-    const typeText = pet.type === 'dog' ? t('pet.dog').toUpperCase() : t('pet.cat').toUpperCase();
+    const typeText = pet.type === 'dog' ? 'PERRO' : 'GATO';
     const badgeClass = pet.type === 'dog' ? 'badge-dog' : 'badge-cat';
-    const genderText = pet.gender === 'male' ? t('pet.male') : t('pet.female');
-    const sizeText = {
-        small: t('pet.size.small'),
-        medium: t('pet.size.medium'),
-        large: t('pet.size.large')
-    };
+    const genderText = pet.gender === 'male' ? 'Macho' : 'Hembra';
+    const sizeText = { small: 'Pequeño', medium: 'Mediano', large: 'Grande' };
     const statusText = {
-        active: t('pet.scheduled') === 'RESERVED' ? 'Available' : 'Disponible',
-        scheduled: t('pet.scheduled'),
-        inactive: t('pet.adopted')
+        active: 'Disponible',
+        scheduled: 'Reservado',
+        inactive: 'Adoptado'
     };
     const gradients = [
         'linear-gradient(135deg, #efebe9 0%, #d7ccc8 100%)',
@@ -42,7 +38,7 @@ function createPetCard(pet) {
                     <span>${typeText}</span>
                 </div>
                 <div class="status-badge status-${pet.status}">${statusText[pet.status] || 'Disponible'}</div>
-                ${pet.urgent ? '<div class="urgent-badge">' + t('pet.urgent') + '</div>' : ''}
+                ${pet.urgent ? '<div class="urgent-badge">URGENTE</div>' : ''}
                 ${AppState.isLoggedIn && AppState.currentView === 'adoption' ? '<div class="reorder-buttons"><button class="reorder-btn reorder-up" title="Mover arriba">▲</button><button class="reorder-btn reorder-down" title="Mover abajo">▼</button></div>' : ''}
             </div>
             <div class="pet-info">
@@ -58,30 +54,30 @@ function createPetCard(pet) {
                 </p>
                 <div class="pet-details">
                     ${pet.size ? `<div class="detail-item">
-                        <div class="detail-label">${t('profile.size')}</div>
+                        <div class="detail-label">Tamaño</div>
                         <div class="detail-value">${sizeText[pet.size] || pet.size}</div>
                     </div>` : ''}
                     ${pet.weight != null ? `<div class="detail-item">
-                        <div class="detail-label">${t('profile.weight')}</div>
+                        <div class="detail-label">Peso</div>
                         <div class="detail-value">${pet.weight} kg</div>
                     </div>` : ''}
                     <div class="detail-item">
-                        <div class="detail-label">${I18n.getCurrentLang() === 'es' ? 'Género' : 'Gender'}</div>
+                        <div class="detail-label">Género</div>
                         <div class="detail-value">${genderText}</div>
                     </div>
                     <div class="detail-item">
-                        <div class="detail-label">${I18n.getCurrentLang() === 'es' ? 'Salud' : 'Health'}</div>
+                        <div class="detail-label">Salud</div>
                         <div class="detail-value">${pet.neutered ? '✂️' : ''}${pet.vaccinated ? '💉' : ''}${pet.chipped ? '📟' : ''}${!pet.neutered && !pet.vaccinated && !pet.chipped ? '-' : ''}</div>
                     </div>
                     <div class="detail-item">
-                        <div class="detail-label">${I18n.getCurrentLang() === 'es' ? 'Padrinos' : 'Sponsors'}</div>
+                        <div class="detail-label">Padrinos</div>
                         <div class="detail-value">${pet.sponsors || 0}</div>
                     </div>
                 </div>
                 <div class="pet-actions">
-                    ${AppState.currentView === 'adoption' ? '<button class="action-btn adopt-btn">' + t('profile.adopt') + '</button>' : '<span class="adopted-badge">🏠 ' + t('pet.adopted') + '</span>'}
-                    ${AppState.isLoggedIn ? '<button class="action-btn edit-btn admin-only visible">' + t('profile.edit') + '</button>' : ''}
-                    ${AppState.isLoggedIn && AppState.adminInfo && AppState.adminInfo.role === 'admin' ? '<button class="action-btn delete-btn admin-only visible">' + t('profile.delete') + '</button>' : ''}
+                    ${AppState.currentView === 'adoption' ? '<button class="action-btn adopt-btn">Adoptame</button>' : '<span class="adopted-badge">🏠 Adoptado</span>'}
+                    ${AppState.isLoggedIn ? '<button class="action-btn edit-btn admin-only visible">Editar</button>' : ''}
+                    ${AppState.isLoggedIn && AppState.adminInfo && AppState.adminInfo.role === 'admin' ? '<button class="action-btn delete-btn admin-only visible">Eliminar</button>' : ''}
                 </div>
             </div>
         </div>
@@ -92,16 +88,9 @@ function renderPets() {
     const petsGrid = document.getElementById('petsGrid');
 
     if (AppState.pets.length === 0) {
-        const isEnglish = I18n.getCurrentLang() === 'en';
         const emptyMessage = AppState.currentView === 'adoption'
-            ? {
-                title: isEnglish ? 'No animals for adoption' : 'No hay animales en adopción',
-                text: isEnglish ? 'Currently we have no animals available' : 'Actualmente no tenemos animales disponibles'
-              }
-            : {
-                title: isEnglish ? 'No happy endings yet' : 'No hay finales felices aún',
-                text: isEnglish ? 'We will share adoption stories soon' : 'Pronto compartiremos historias de adopción'
-              };
+            ? { title: 'No hay animales en adopción', text: 'Actualmente no tenemos animales disponibles' }
+            : { title: 'No hay finales felices aún', text: 'Pronto compartiremos historias de adopción' };
 
         petsGrid.innerHTML = `
             <div class="empty-state">

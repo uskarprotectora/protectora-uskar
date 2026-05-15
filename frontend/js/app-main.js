@@ -7,14 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initializeApp() {
-    // Inicializar sistema de idiomas
-    I18n.init();
-
     // Cargar los modales HTML antes de configurar los listeners
     await loadModals();
-
-    // Aplicar traducciones a los modales cargados
-    I18n.applyTranslations();
 
     // Inicializar autenticacion (restaurar sesion si existe token valido)
     await initAuth();
@@ -26,22 +20,6 @@ async function initializeApp() {
     setupPetFormListeners();
     setupAdoptionFormListeners();
     setupHelpListeners();
-    setupLanguageListeners();
-
-    // Escuchar cambios de idioma para actualizar contenido dinamico
-    window.addEventListener('languageChanged', function() {
-        // Recargar la vista actual con el nuevo idioma
-        if (AppState.currentView === 'adoption' || AppState.currentView === 'happy') {
-            updateViewTitles();
-            loadPets();
-        } else if (AppState.currentView === 'about') {
-            renderAboutPage();
-        } else if (AppState.currentView === 'contact') {
-            renderContactPage();
-        }
-        // Actualizar select de filtro de edad
-        updateAgeFilterOptions();
-    });
 }
 
 // Cargar todos los modales HTML en el contenedor
@@ -142,47 +120,6 @@ function setupMainEventListeners() {
     });
 }
 
-// Configurar listeners del selector de idioma
-function setupLanguageListeners() {
-    const langSelect = document.getElementById('langSelect');
-
-    if (langSelect) {
-        // Establecer el valor actual
-        langSelect.value = I18n.getCurrentLang();
-
-        // Cambiar idioma al seleccionar
-        langSelect.addEventListener('change', function() {
-            I18n.setLang(this.value);
-        });
-    }
-}
-
-// Actualizar titulos de la vista actual
-function updateViewTitles() {
-    const contentTitle = document.querySelector('.content-title');
-    const contentSubtitle = document.querySelector('.content-subtitle');
-
-    if (AppState.currentView === 'adoption') {
-        contentTitle.textContent = t('content.title');
-        contentSubtitle.textContent = t('content.subtitle');
-    } else if (AppState.currentView === 'happy') {
-        contentTitle.textContent = t('content.happyTitle');
-        contentSubtitle.textContent = t('content.happySubtitle');
-    }
-}
-
-// Actualizar opciones del filtro de edad
-function updateAgeFilterOptions() {
-    const ageFilter = document.getElementById('ageRangeFilter');
-    if (ageFilter) {
-        ageFilter.options[0].text = t('filter.allAges');
-        ageFilter.options[1].text = t('filter.puppy');
-        ageFilter.options[2].text = t('filter.young');
-        ageFilter.options[3].text = t('filter.adult');
-        ageFilter.options[4].text = t('filter.senior');
-    }
-}
-
 // Manejo de cambio de vista
 function handleViewChange(btn) {
     const viewValue = btn.dataset.value;
@@ -202,16 +139,16 @@ function handleViewChange(btn) {
     const addPetBtn = document.getElementById('addPetBtn');
 
     if (AppState.currentView === 'adoption') {
-        contentTitle.textContent = t('content.title');
-        contentSubtitle.textContent = t('content.subtitle');
+        contentTitle.textContent = 'Nuestros Animales';
+        contentSubtitle.textContent = 'Conoce a los animales que buscan un hogar';
         contentHeader.style.display = 'flex';
         if (filtersBar) filtersBar.style.display = 'flex';
         petsGrid.classList.remove('full-width-view');
         if (AppState.isLoggedIn) addPetBtn.classList.add('visible');
         loadPets();
     } else if (AppState.currentView === 'happy') {
-        contentTitle.textContent = t('content.happyTitle');
-        contentSubtitle.textContent = t('content.happySubtitle');
+        contentTitle.textContent = 'Finales Felices';
+        contentSubtitle.textContent = 'Animales que ya encontraron su familia';
         contentHeader.style.display = 'flex';
         if (filtersBar) filtersBar.style.display = 'flex';
         petsGrid.classList.remove('full-width-view');

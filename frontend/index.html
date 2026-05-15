@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" id="htmlRoot">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,17 +15,13 @@
             <div class="title-bar-left">
                 <button class="menu-toggle" id="menuToggle">☰</button>
                 <div class="app-icon">🐾</div>
-                <span class="app-name" data-i18n="app.name">Protectora de Animales Uskar</span>
+                <span class="app-name">Protectora de Animales Uskar</span>
             </div>
-            <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre, raza..." data-i18n-placeholder="search.placeholder">
+            <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre, raza...">
             <div class="window-controls">
-                <select class="lang-select" id="langSelect">
-                    <option value="es">🇪🇸 Español</option>
-                    <option value="en">🇬🇧 English</option>
-                </select>
                 <button class="login-btn" id="loginBtn">
                     <span>👤</span>
-                    <span data-i18n="login">Iniciar Sesión</span>
+                    <span>Iniciar Sesión</span>
                 </button>
             </div>
         </div>
@@ -38,92 +34,92 @@
             <!-- Barra Lateral -->
             <div class="sidebar" id="sidebar">
                 <div class="sidebar-header">
-                    <div class="sidebar-title" data-i18n="sidebar.forms">Formulario</div>
+                    <div class="sidebar-title">Formulario</div>
                     <button class="adoption-form-btn" id="openAdoptionFormBtn">
                         <span>📋</span>
-                        <span data-i18n="sidebar.adoptionForm">Formulario de Adopción</span>
+                        <span>Formulario de Adopción</span>
                     </button>
                     <button class="adoption-form-btn admin-only" id="viewAdoptionRequestsBtn">
                         <span>📊</span>
-                        <span data-i18n="sidebar.adoptionRequests">Solicitudes Adopción</span>
+                        <span>Solicitudes Adopción</span>
                     </button>
                     <button class="adoption-form-btn admin-only" id="viewFormsBtn">
                         <span>📝</span>
-                        <span data-i18n="sidebar.otherForms">Otros Formularios</span>
+                        <span>Otros Formularios</span>
                     </button>
                 </div>
 
                 <div class="filter-section">
-                    <div class="filter-title" data-i18n="sidebar.discover">Descubre nuestros animales</div>
+                    <div class="filter-title">Descubre nuestros animales</div>
                     <button class="filter-btn active" data-filter="view" data-value="adoption">
                         <span class="filter-icon">🐾</span>
-                        <span data-i18n="sidebar.adoptionAnimals">Animales en adopción</span>
+                        <span>Animales en adopción</span>
                     </button>
                     <button class="filter-btn" data-filter="view" data-value="happy">
                         <span class="filter-icon">🏠</span>
-                        <span data-i18n="sidebar.happyEndings">Finales Felices</span>
+                        <span>Finales Felices</span>
                     </button>
                 </div>
 
                 <div class="filter-section">
-                    <div class="filter-title" data-i18n="sidebar.aboutUs">Conócenos</div>
+                    <div class="filter-title">Conócenos</div>
                     <button class="filter-btn" data-filter="view" data-value="about">
                         <span class="filter-icon">ℹ️</span>
-                        <span data-i18n="sidebar.whoWeAre">Quiénes somos</span>
+                        <span>Quiénes somos</span>
                     </button>
                     <button class="filter-btn" data-filter="view" data-value="contact">
                         <span class="filter-icon">📞</span>
-                        <span data-i18n="sidebar.contact">Contáctanos</span>
+                        <span>Contáctanos</span>
                     </button>
                 </div>
 
                 <div class="filter-section">
-                    <div class="filter-title" data-i18n="sidebar.helpUs">Ayúdanos</div>
+                    <div class="filter-title">Ayúdanos</div>
                     <button class="filter-btn help-btn" data-action="donaciones">
                         <span class="filter-icon">💝</span>
-                        <span data-i18n="sidebar.donations">Donaciones</span>
+                        <span>Donaciones</span>
                     </button>
                     <button class="filter-btn help-btn" data-action="apadrina">
                         <span class="filter-icon">❤️</span>
-                        <span data-i18n="sidebar.sponsor">Apadrina un Animal</span>
+                        <span>Apadrina un Animal</span>
                     </button>
                     <button class="filter-btn help-btn" data-action="facturas">
                         <span class="filter-icon">🏥</span>
-                        <span data-i18n="sidebar.vetBills">Facturas Veterinarias</span>
+                        <span>Facturas Veterinarias</span>
                     </button>
                     <button class="filter-btn help-btn" data-action="voluntariado">
                         <span class="filter-icon">🤝</span>
-                        <span data-i18n="sidebar.volunteering">Voluntariado</span>
+                        <span>Voluntariado</span>
                     </button>
                     <button class="filter-btn help-btn" data-action="casaAcogida">
                         <span class="filter-icon">🏠</span>
-                        <span data-i18n="sidebar.fosterHome">Casa de Acogida</span>
+                        <span>Casa de Acogida</span>
                     </button>
                     <button class="filter-btn help-btn" data-action="teaming">
                         <span class="filter-icon">👥</span>
-                        <span data-i18n="sidebar.teaming">Teaming</span>
+                        <span>Teaming</span>
                     </button>
                 </div>
 
                 <div class="filter-section">
-                    <div class="filter-title" data-i18n="sidebar.opinion">Tu opinión</div>
+                    <div class="filter-title">Tu opinión</div>
                     <button class="filter-btn help-btn feedback-btn" data-action="feedback">
                         <span class="filter-icon">💬</span>
-                        <span data-i18n="sidebar.feedback">Danos tu opinión</span>
+                        <span>Danos tu opinión</span>
                     </button>
                 </div>
 
                 <div class="stats-section">
                     <div class="stat-item">
-                        <span class="stat-label" data-i18n="stats.total">Total Animales</span>
+                        <span class="stat-label">Total Animales</span>
                         <span class="stat-value" id="totalPets">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label" data-i18n="stats.dogs">Perros</span>
+                        <span class="stat-label">Perros</span>
                         <span class="stat-value" id="totalDogs">0</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label" data-i18n="stats.cats">Gatos</span>
+                        <span class="stat-label">Gatos</span>
                         <span class="stat-value" id="totalCats">0</span>
                     </div>
                 </div>
@@ -133,26 +129,26 @@
             <div class="content-area">
                 <div class="content-header">
                     <div>
-                        <h1 class="content-title" data-i18n="content.title">Nuestros Animales</h1>
-                        <p class="content-subtitle" data-i18n="content.subtitle">Conoce a los animales que buscan un hogar</p>
+                        <h1 class="content-title">Nuestros Animales</h1>
+                        <p class="content-subtitle">Conoce a los animales que buscan un hogar</p>
                     </div>
                     <div class="header-actions">
                         <button class="btn btn-primary admin-only" id="addPetBtn">
                             <span>➕</span>
-                            <span data-i18n="content.newAnimal">Nuevo Animal</span>
+                            <span>Nuevo Animal</span>
                         </button>
                     </div>
                 </div>
 
                 <div class="filters-bar" id="filtersBar">
                     <div class="filter-item">
-                        <label class="filter-label" data-i18n="filter.age">Edad:</label>
+                        <label class="filter-label">Edad:</label>
                         <select class="filter-select" id="ageRangeFilter">
-                            <option value="all" data-i18n="filter.allAges">Todas las edades</option>
-                            <option value="puppy" data-i18n="filter.puppy">Cachorro (0-1 año)</option>
-                            <option value="young" data-i18n="filter.young">Joven (1-3 años)</option>
-                            <option value="adult" data-i18n="filter.adult">Adulto (3-7 años)</option>
-                            <option value="senior" data-i18n="filter.senior">Senior (7+ años)</option>
+                            <option value="all">Todas las edades</option>
+                            <option value="puppy">Cachorro (0-1 año)</option>
+                            <option value="young">Joven (1-3 años)</option>
+                            <option value="adult">Adulto (3-7 años)</option>
+                            <option value="senior">Senior (7+ años)</option>
                         </select>
                     </div>
                 </div>
@@ -171,9 +167,6 @@
 
     <!-- Configuración -->
     <script src="js/config.js"></script>
-
-    <!-- Internacionalización -->
-    <script src="js/i18n.js"></script>
 
     <!-- Utilidades y Estado -->
     <script src="js/utils/helpers.js"></script>
