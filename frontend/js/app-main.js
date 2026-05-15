@@ -144,31 +144,15 @@ function setupMainEventListeners() {
 
 // Configurar listeners del selector de idioma
 function setupLanguageListeners() {
-    const langBtn = document.getElementById('langBtn');
-    const langSelector = document.getElementById('langSelector');
-    const langDropdown = document.getElementById('langDropdown');
+    const langSelect = document.getElementById('langSelect');
 
-    if (langBtn && langSelector) {
-        // Toggle dropdown
-        langBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            langSelector.classList.toggle('active');
-        });
+    if (langSelect) {
+        // Establecer el valor actual
+        langSelect.value = I18n.getCurrentLang();
 
-        // Seleccionar idioma
-        langDropdown.querySelectorAll('.lang-option').forEach(function(option) {
-            option.addEventListener('click', function() {
-                var lang = this.dataset.lang;
-                I18n.setLang(lang);
-                langSelector.classList.remove('active');
-            });
-        });
-
-        // Cerrar dropdown al hacer clic fuera
-        document.addEventListener('click', function(e) {
-            if (!langSelector.contains(e.target)) {
-                langSelector.classList.remove('active');
-            }
+        // Cambiar idioma al seleccionar
+        langSelect.addEventListener('change', function() {
+            I18n.setLang(this.value);
         });
     }
 }

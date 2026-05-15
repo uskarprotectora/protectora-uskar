@@ -377,12 +377,9 @@ var I18n = (function() {
     }
 
     function updateLanguageSelector() {
-        var langBtn = document.getElementById('langBtn');
-        if (langBtn) {
-            var flagSpan = langBtn.querySelector('.lang-flag');
-            if (flagSpan) {
-                flagSpan.textContent = currentLang === 'es' ? '🇪🇸' : '🇬🇧';
-            }
+        var langSelect = document.getElementById('langSelect');
+        if (langSelect) {
+            langSelect.value = currentLang;
         }
     }
 

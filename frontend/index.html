@@ -19,22 +19,10 @@
             </div>
             <input type="text" class="search-box" id="searchInput" placeholder="Buscar por nombre, raza..." data-i18n-placeholder="search.placeholder">
             <div class="window-controls">
-                <div class="lang-selector" id="langSelector">
-                    <button class="lang-btn" id="langBtn">
-                        <span class="lang-flag">🇪🇸</span>
-                        <span class="lang-text" data-i18n="language">Idioma</span>
-                    </button>
-                    <div class="lang-dropdown" id="langDropdown">
-                        <button class="lang-option" data-lang="es">
-                            <span>🇪🇸</span>
-                            <span>Español</span>
-                        </button>
-                        <button class="lang-option" data-lang="en">
-                            <span>🇬🇧</span>
-                            <span>English</span>
-                        </button>
-                    </div>
-                </div>
+                <select class="lang-select" id="langSelect">
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="en">🇬🇧 English</option>
+                </select>
                 <button class="login-btn" id="loginBtn">
                     <span>👤</span>
                     <span data-i18n="login">Iniciar Sesión</span>
