@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/pages/about.css">
     <link rel="stylesheet" href="css/pages/contact.css">
+    <link rel="stylesheet" href="css/pages/landing.css">
 </head>
 <body>
     <div class="app-window">
@@ -33,6 +34,30 @@
 
             <!-- Barra Lateral -->
             <div class="sidebar" id="sidebar">
+                <div class="filter-section">
+                    <div class="filter-title">Conócenos</div>
+                    <button class="filter-btn active" data-filter="view" data-value="about">
+                        <span class="filter-icon">🏡</span>
+                        <span>Quiénes somos</span>
+                    </button>
+                    <button class="filter-btn" data-filter="view" data-value="contact">
+                        <span class="filter-icon">📞</span>
+                        <span>Contáctanos</span>
+                    </button>
+                </div>
+
+                <div class="filter-section">
+                    <div class="filter-title">Descubre nuestros animales</div>
+                    <button class="filter-btn" data-filter="view" data-value="adoption">
+                        <span class="filter-icon">🐾</span>
+                        <span>Animales en adopción</span>
+                    </button>
+                    <button class="filter-btn" data-filter="view" data-value="happy">
+                        <span class="filter-icon">🏠</span>
+                        <span>Finales Felices</span>
+                    </button>
+                </div>
+
                 <div class="sidebar-header">
                     <div class="sidebar-title">Formulario</div>
                     <button class="adoption-form-btn" id="openAdoptionFormBtn">
@@ -46,30 +71,6 @@
                     <button class="adoption-form-btn admin-only" id="viewFormsBtn">
                         <span>📝</span>
                         <span>Otros Formularios</span>
-                    </button>
-                </div>
-
-                <div class="filter-section">
-                    <div class="filter-title">Descubre nuestros animales</div>
-                    <button class="filter-btn active" data-filter="view" data-value="adoption">
-                        <span class="filter-icon">🐾</span>
-                        <span>Animales en adopción</span>
-                    </button>
-                    <button class="filter-btn" data-filter="view" data-value="happy">
-                        <span class="filter-icon">🏠</span>
-                        <span>Finales Felices</span>
-                    </button>
-                </div>
-
-                <div class="filter-section">
-                    <div class="filter-title">Conócenos</div>
-                    <button class="filter-btn" data-filter="view" data-value="about">
-                        <span class="filter-icon">ℹ️</span>
-                        <span>Quiénes somos</span>
-                    </button>
-                    <button class="filter-btn" data-filter="view" data-value="contact">
-                        <span class="filter-icon">📞</span>
-                        <span>Contáctanos</span>
                     </button>
                 </div>
 
@@ -127,7 +128,7 @@
 
             <!-- Area de Contenido -->
             <div class="content-area">
-                <div class="content-header">
+                <div class="content-header" style="display: none;">
                     <div>
                         <h1 class="content-title">Nuestros Animales</h1>
                         <p class="content-subtitle">Conoce a los animales que buscan un hogar</p>
@@ -140,7 +141,7 @@
                     </div>
                 </div>
 
-                <div class="filters-bar" id="filtersBar">
+                <div class="filters-bar" id="filtersBar" style="display: none;">
                     <div class="filter-item">
                         <label class="filter-label">Edad:</label>
                         <select class="filter-select" id="ageRangeFilter">
@@ -154,8 +155,48 @@
                 </div>
 
                 <div class="content-body">
-                    <div class="pets-grid" id="petsGrid">
-                        <!-- Las tarjetas se renderizarán aquí -->
+                    <div class="pets-grid full-width-view" id="petsGrid">
+                        <div class="static-page landing-page">
+                            <div class="landing-hero">
+                                <div class="landing-hero-content">
+                                    <div class="landing-hero-icon">🐾</div>
+                                    <h1>Bienvenidos a la Protectora de Animales Uskar</h1>
+                                    <p class="landing-hero-subtitle">Rescatando vidas, creando familias desde 2018</p>
+                                    <div class="landing-hero-buttons">
+                                        <button class="landing-cta-btn primary" onclick="navigateToView('adoption')">
+                                            <span>🐕</span> Ver Animales en Adopción
+                                        </button>
+                                        <button class="landing-cta-btn secondary" onclick="navigateToView('contact')">
+                                            <span>📞</span> Contáctanos
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="landing-section">
+                                <h2>Nuestra Misión</h2>
+                                <p class="about-intro">Somos una organización sin ánimo de lucro dedicada al rescate, rehabilitación y búsqueda de hogares para animales abandonados y maltratados.</p>
+                            </div>
+                            <div class="landing-section">
+                                <h2>¿Qué Hacemos?</h2>
+                                <div class="landing-cards">
+                                    <div class="landing-card">
+                                        <span class="landing-card-icon">🚑</span>
+                                        <h3>Rescatamos</h3>
+                                        <p>Salvamos animales en situación de abandono o maltrato.</p>
+                                    </div>
+                                    <div class="landing-card">
+                                        <span class="landing-card-icon">💉</span>
+                                        <h3>Rehabilitamos</h3>
+                                        <p>Les proporcionamos atención veterinaria y mucho amor.</p>
+                                    </div>
+                                    <div class="landing-card">
+                                        <span class="landing-card-icon">🏠</span>
+                                        <h3>Encontramos Hogares</h3>
+                                        <p>Buscamos familias responsables para cada animal.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

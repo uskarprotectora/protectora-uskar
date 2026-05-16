@@ -1,0 +1,370 @@
+/* Landing Page Styles */
+
+.landing-page {
+    max-width: 75rem;
+    margin: 0 auto;
+}
+
+/* Hero Section */
+.landing-hero {
+    background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+    border-radius: 1.5rem;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 3rem;
+    box-shadow: 0 1rem 3rem rgba(161, 99, 92, 0.3);
+}
+
+.landing-hero-content {
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+.landing-hero-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0.25rem 0.5rem rgba(0, 0, 0, 0.2));
+}
+
+.landing-hero h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.landing-hero-subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+.landing-hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* CTA Buttons */
+.landing-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.landing-cta-btn.primary {
+    background: white;
+    color: #795548;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+}
+
+.landing-cta-btn.primary:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
+}
+
+.landing-cta-btn.secondary {
+    background: transparent;
+    color: white;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.landing-cta-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+.landing-cta-btn.large {
+    padding: 1.25rem 2.5rem;
+    font-size: 1.125rem;
+}
+
+/* Sections */
+.landing-section {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.landing-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3e2723;
+    margin-bottom: 2rem;
+}
+
+/* Cards Grid */
+.landing-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.5rem;
+}
+
+.landing-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(188, 170, 164, 0.2);
+}
+
+.landing-card:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 1rem 2rem rgba(161, 99, 92, 0.15);
+}
+
+.landing-card-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.landing-card h3 {
+    font-size: 1.25rem;
+    color: #5d4037;
+    margin-bottom: 0.75rem;
+}
+
+.landing-card p {
+    color: #795548;
+    line-height: 1.6;
+}
+
+/* Stats Section */
+.landing-stats-section {
+    background: linear-gradient(135deg, #efebe9 0%, #faf8f7 100%);
+    border-radius: 1.5rem;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(188, 170, 164, 0.3);
+}
+
+.landing-stats {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+
+.landing-stat {
+    text-align: center;
+}
+
+.landing-stat-number {
+    display: block;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #a1635c;
+    line-height: 1;
+}
+
+.landing-stat-label {
+    display: block;
+    margin-top: 0.5rem;
+    color: #5d4037;
+    font-weight: 500;
+}
+
+/* Help Cards */
+.landing-help-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1.25rem;
+}
+
+.landing-help-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(188, 170, 164, 0.3);
+}
+
+.landing-help-card:hover {
+    border-color: #a1635c;
+    transform: translateY(-0.25rem);
+    box-shadow: 0 0.5rem 1.5rem rgba(161, 99, 92, 0.2);
+}
+
+.landing-help-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.landing-help-card h3 {
+    font-size: 1.125rem;
+    color: #5d4037;
+    margin-bottom: 0.5rem;
+}
+
+.landing-help-card p {
+    font-size: 0.875rem;
+    color: #795548;
+    line-height: 1.5;
+}
+
+/* CTA Section */
+.landing-cta-section {
+    background: linear-gradient(135deg, #a1635c 0%, #795548 100%);
+    border-radius: 1.5rem;
+    padding: 3rem 2rem;
+    color: white;
+}
+
+.landing-cta-section h2 {
+    color: white;
+}
+
+.landing-cta-section p {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+}
+
+/* Contact Section */
+.landing-contact {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.landing-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #5d4037;
+}
+
+.landing-contact-item span {
+    font-size: 1.5rem;
+}
+
+.landing-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.landing-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 2px solid rgba(188, 170, 164, 0.3);
+    border-radius: 0.75rem;
+    color: #5d4037;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.landing-social-link:hover {
+    border-color: #a1635c;
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.25rem 0.75rem rgba(161, 99, 92, 0.15);
+}
+
+/* About intro text */
+.about-intro {
+    font-size: 1.125rem;
+    color: #5d4037;
+    line-height: 1.8;
+    max-width: 50rem;
+    margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 48rem) {
+    .landing-hero {
+        padding: 2.5rem 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .landing-hero-icon {
+        font-size: 3rem;
+    }
+
+    .landing-hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .landing-hero-subtitle {
+        font-size: 1rem;
+    }
+
+    .landing-cta-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9375rem;
+    }
+
+    .landing-section {
+        margin-bottom: 2rem;
+    }
+
+    .landing-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .landing-stats {
+        gap: 2rem;
+    }
+
+    .landing-stat-number {
+        font-size: 2.25rem;
+    }
+
+    .landing-contact {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .landing-social {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 30rem) {
+    .landing-hero {
+        padding: 2rem 1rem;
+        border-radius: 1rem;
+    }
+
+    .landing-hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .landing-hero-buttons {
+        flex-direction: column;
+    }
+
+    .landing-cta-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .landing-cards,
+    .landing-help-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

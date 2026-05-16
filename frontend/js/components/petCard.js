@@ -26,7 +26,7 @@ function createPetCard(pet) {
 
     const photoUrl = mainPhoto ? getMediaUrl(mainPhoto.url) : null;
     const imageContent = photoUrl
-        ? `<img src="${sanitizeAttr(photoUrl)}" alt="${sanitizeAttr(pet.name)}" class="pet-image" onerror="this.parentElement.innerHTML='<div class=\\'pet-image placeholder-img\\' style=\\'background: ${randomGradient};\\'>${emoji}</div>'">`
+        ? `<img src="${sanitizeAttr(photoUrl)}" alt="${sanitizeAttr(pet.name)}" class="pet-image" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\\'pet-image placeholder-img\\' style=\\'background: ${randomGradient};\\'>${emoji}</div>'">`
         : `<div class="pet-image placeholder-img" style="background: ${randomGradient};">${emoji}</div>`;
 
     return `
@@ -84,6 +84,26 @@ function createPetCard(pet) {
     `;
 }
 
+function showLoadingSkeleton() {
+    const petsGrid = document.getElementById('petsGrid');
+    const skeletonCount = 6;
+    let skeletons = '';
+
+    for (let i = 0; i < skeletonCount; i++) {
+        skeletons += `
+            <div class="pet-card skeleton-card">
+                <div class="pet-image-container skeleton-image"></div>
+                <div class="pet-info">
+                    <div class="skeleton-text skeleton-title"></div>
+                    <div class="skeleton-text skeleton-subtitle"></div>
+                    <div class="skeleton-text skeleton-desc"></div>
+                </div>
+            </div>
+        `;
+    }
+    petsGrid.innerHTML = skeletons;
+}
+
 function renderPets() {
     const petsGrid = document.getElementById('petsGrid');
 
@@ -105,6 +125,8 @@ function renderPets() {
     petsGrid.innerHTML = AppState.pets.map(pet => createPetCard(pet)).join('');
     attachPetCardListeners();
 }
+
+window.showLoadingSkeleton = showLoadingSkeleton;
 
 function attachPetCardListeners() {
     document.querySelectorAll('.pet-card').forEach(card => {

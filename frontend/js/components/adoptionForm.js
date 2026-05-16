@@ -11,7 +11,6 @@ function openAdoptionFormModal(pet = null) {
     const adoptionForm = document.getElementById('adoptionForm');
     adoptionForm.reset();
 
-    document.getElementById('otherPetsGroup').style.display = 'none';
     document.getElementById('adoptLandlordAllows').checked = true;
 
     AppState.adoptionPresentationVideo = null;
@@ -301,8 +300,7 @@ async function handleAdoptionFormSubmit(e) {
         landlordAllowsPets: document.getElementById('adoptLandlordAllows').checked,
         familyMembers: document.getElementById('adoptFamilyMembers').value,
         allAgree: document.getElementById('adoptAllAgree').checked,
-        hasOtherPets: document.getElementById('adoptHasOtherPets').checked,
-        otherPetsDescription: document.getElementById('adoptOtherPetsDesc').value || '',
+        otherPetsDescription: document.getElementById('adoptOtherPetsDesc').value,
         previousPetExperience: document.getElementById('adoptPreviousExperience').value || '',
         whyAdopt: document.getElementById('adoptWhyAdopt').value,
         hoursAlone: parseInt(document.getElementById('adoptHoursAlone').value),
@@ -347,10 +345,6 @@ function setupAdoptionFormListeners() {
 
     document.getElementById('adoptionFormModal').addEventListener('click', (e) => {
         if (e.target === document.getElementById('adoptionFormModal')) closeAdoptionFormModal();
-    });
-
-    document.getElementById('adoptHasOtherPets').addEventListener('change', (e) => {
-        document.getElementById('otherPetsGroup').style.display = e.target.checked ? 'block' : 'none';
     });
 
     const adoptVideoInput = document.getElementById('adoptPresentationVideo');

@@ -7,6 +7,13 @@ const ADOPTIONS_API_URL = BASE_URL + '/api/adoptions';
 // Cargar mascotas
 async function loadPets() {
     try {
+        // Mostrar skeleton loader si estamos en vista de mascotas
+        if (AppState.currentView === 'adoption' || AppState.currentView === 'happy') {
+            if (typeof showLoadingSkeleton === 'function') {
+                showLoadingSkeleton();
+            }
+        }
+
         let url = API_URL + '?';
 
         if (AppState.currentView === 'adoption') {
@@ -14,6 +21,9 @@ async function loadPets() {
             url += `status=active,scheduled&`;
         } else if (AppState.currentView === 'happy') {
             url += `status=inactive&`;
+        } else {
+            // Para otras vistas (about, contact), cargar todos los activos para estadísticas
+            url += `status=active,scheduled&`;
         }
 
         if (AppState.searchQuery) {
@@ -26,7 +36,16 @@ async function loadPets() {
 
         const response = await fetch(url);
         AppState.pets = await response.json();
-        renderPets();
+
+        // Solo renderizar mascotas si estamos en vista de adopción o finales felices
+        if (AppState.currentView === 'adoption' || AppState.currentView === 'happy') {
+            renderPets();
+        }
+
+        // Actualizar estadísticas de la landing si existe
+        if (typeof updateLandingStats === 'function') {
+            updateLandingStats();
+        }
     } catch (error) {
         console.error('Error cargando animales:', error);
         showToast('Error al cargar animales', 'error');

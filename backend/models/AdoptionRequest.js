@@ -87,13 +87,10 @@ const adoptionRequestSchema = new mongoose.Schema({
     },
 
     // Experiencia con animales
-    hasOtherPets: {
-        type: Boolean,
-        default: false
-    },
     otherPetsDescription: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     },
     previousPetExperience: {
         type: String,

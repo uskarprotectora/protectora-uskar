@@ -4,7 +4,7 @@ const AppState = {
     pets: [],
     adoptionRequests: [],
     formSubmissions: [],
-    currentView: 'adoption', // 'adoption', 'happy', 'about', 'contact', 'requests', 'forms'
+    currentView: 'about', // 'adoption', 'happy', 'about', 'contact', 'requests', 'forms'
     currentHelpAction: null, // Para marcar que boton de ayuda esta activo
     searchQuery: '',
     ageRange: 'all', // 'all', 'puppy', 'young', 'adult', 'senior'

@@ -7,19 +7,44 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function initializeApp() {
-    // Cargar los modales HTML antes de configurar los listeners
-    await loadModals();
+    try {
+        // Cargar los modales HTML antes de configurar los listeners
+        await loadModals();
 
-    // Inicializar autenticacion (restaurar sesion si existe token valido)
-    await initAuth();
+        // Inicializar autenticacion (restaurar sesion si existe token valido)
+        await initAuth();
 
-    loadPets();
-    loadStats();
-    setupMainEventListeners();
-    setupAuthListeners();
-    setupPetFormListeners();
-    setupAdoptionFormListeners();
-    setupHelpListeners();
+        // Configurar listeners
+        setupMainEventListeners();
+        setupAuthListeners();
+
+        try {
+            setupPetFormListeners();
+        } catch (e) {
+            console.error('Error en setupPetFormListeners:', e);
+        }
+
+        try {
+            setupAdoptionFormListeners();
+        } catch (e) {
+            console.error('Error en setupAdoptionFormListeners:', e);
+        }
+
+        try {
+            setupHelpListeners();
+        } catch (e) {
+            console.error('Error en setupHelpListeners:', e);
+        }
+
+        // Cargar datos en segundo plano (para estadisticas)
+        loadPets();
+        loadStats();
+
+        // La vista inicial es 'about' (definida en state.js)
+        // El contenido HTML ya muestra la landing page por defecto
+    } catch (error) {
+        console.error('Error inicializando la aplicación:', error);
+    }
 }
 
 // Cargar todos los modales HTML en el contenedor

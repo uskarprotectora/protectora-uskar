@@ -296,8 +296,10 @@ async function setExistingMainPhoto(petId, photoIndex) {
 async function deleteExistingPhoto(petId, photoIndex) {
     if (!confirm('Eliminar esta foto?')) return;
     try {
+        var authHeaders = getAuthHeaders();
         const response = await fetch(`${API_URL}/${petId}/photo/${photoIndex}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: authHeaders
         });
         if (response.ok) {
             const updatedPet = await response.json();
@@ -305,6 +307,8 @@ async function deleteExistingPhoto(petId, photoIndex) {
             if (index !== -1) AppState.pets[index] = updatedPet;
             renderExistingMedia(updatedPet);
             showToast('Foto eliminada', 'success');
+        } else {
+            showToast('Error: No tienes permisos para eliminar', 'error');
         }
     } catch (error) {
         showToast('Error al eliminar foto', 'error');
@@ -314,8 +318,10 @@ async function deleteExistingPhoto(petId, photoIndex) {
 async function deleteExistingVideo(petId, videoIndex) {
     if (!confirm('Eliminar este video?')) return;
     try {
+        var authHeaders = getAuthHeaders();
         const response = await fetch(`${API_URL}/${petId}/video/${videoIndex}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: authHeaders
         });
         if (response.ok) {
             const updatedPet = await response.json();
@@ -323,6 +329,8 @@ async function deleteExistingVideo(petId, videoIndex) {
             if (index !== -1) AppState.pets[index] = updatedPet;
             renderExistingMedia(updatedPet);
             showToast('Video eliminado', 'success');
+        } else {
+            showToast('Error: No tienes permisos para eliminar', 'error');
         }
     } catch (error) {
         showToast('Error al eliminar video', 'error');

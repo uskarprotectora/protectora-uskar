@@ -370,7 +370,7 @@ async function viewRequestDetails(requestId) {
                     <h4>👤 Datos Personales</h4>
                     <div class="detail-grid">
                         <div><span>Nombre:</span> ${sanitizeHtml(request.fullName)}</div>
-                        <div><span>Edad:</span> ${sanitizeHtml(request.age)} años</div>
+                        <div><span>Fecha de nacimiento:</span> ${request.birthDate ? new Date(request.birthDate).toLocaleDateString('es-ES') : 'No especificada'}</div>
                         <div><span>Email:</span> ${sanitizeHtml(request.email)}</div>
                         <div><span>Teléfono:</span> ${sanitizeHtml(request.phone)}</div>
                         <div><span>Dirección:</span> ${sanitizeHtml(request.address)}</div>
@@ -400,8 +400,7 @@ async function viewRequestDetails(requestId) {
                 <div class="detail-section">
                     <h4>🐕 Experiencia</h4>
                     <div class="detail-grid">
-                        <div><span>Otras mascotas:</span> ${request.hasOtherPets ? 'Si' : 'No'}</div>
-                        ${request.otherPetsDescription ? `<div class="full-width"><span>Descripción:</span> ${sanitizeHtml(request.otherPetsDescription)}</div>` : ''}
+                        <div class="full-width"><span>Otros animales en casa:</span> ${sanitizeHtml(request.otherPetsDescription) || 'No especificado'}</div>
                         ${request.previousPetExperience ? `<div class="full-width"><span>Experiencia previa:</span> ${sanitizeHtml(request.previousPetExperience)}</div>` : ''}
                     </div>
                 </div>
@@ -501,7 +500,7 @@ function exportAdoptionsToCSV() {
             r.hasGarden ? 'Sí' : 'No',
             r.familyMembers || '',
             r.hasChildren ? 'Sí' : 'No',
-            r.hasOtherPets ? 'Sí' : 'No',
+            (r.otherPetsDescription || '').replace(/"/g, '""').replace(/\n/g, ' '),
             r.hoursAlone || '',
             whyAdopt
         ];
