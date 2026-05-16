@@ -80,6 +80,10 @@ const petSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    adoptedAt: {
+        type: Date,
+        default: null
+    },
     owner: {
         name: {
             type: String,
@@ -106,10 +110,17 @@ const petSchema = new mongoose.Schema({
 });
 
 petSchema.pre('save', function(next) {
+    // Generar iniciales del dueño
     if (this.owner && this.owner.name && !this.owner.initials) {
         const nameParts = this.owner.name.split(' ');
         this.owner.initials = nameParts.map(part => part[0]).join('').toUpperCase().slice(0, 2);
     }
+
+    // Establecer fecha de adopción cuando el status cambia a 'inactive'
+    if (this.isModified('status') && this.status === 'inactive' && !this.adoptedAt) {
+        this.adoptedAt = new Date();
+    }
+
     next();
 });
 

@@ -71,8 +71,8 @@ router.get('/', async (req, res) => {
         // Ordenamiento diferente según el estado
         let sortCriteria;
         if (status === 'inactive') {
-            // Animales adoptados: más recientes primero (por fecha de actualización)
-            sortCriteria = { updatedAt: -1 };
+            // Animales adoptados: más recientes primero (por fecha de adopción)
+            sortCriteria = { adoptedAt: -1, updatedAt: -1 };
         } else {
             // Animales en adopción: urgentes primero, luego por orden manual
             sortCriteria = { urgent: -1, displayOrder: 1, createdAt: -1 };
