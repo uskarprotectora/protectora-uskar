@@ -170,14 +170,8 @@ function updateUIForLogin() {
         addPetBtn.classList.add('visible');
         // Solicitudes de adopción: visibles para admin y colaborador
         viewRequestsBtn.classList.add('visible');
-        // Formularios: solo visibles para admin (no para colaborador)
-        if (viewFormsBtn) {
-            if (isAdmin) {
-                viewFormsBtn.classList.add('visible');
-            } else {
-                viewFormsBtn.classList.remove('visible');
-            }
-        }
+        // Formularios: visibles para admin y colaborador
+        if (viewFormsBtn) viewFormsBtn.classList.add('visible');
         if (apadrinaBtn) apadrinaBtn.classList.add('visible');
         if (facturasVetBtn) facturasVetBtn.classList.add('visible');
     } else {
