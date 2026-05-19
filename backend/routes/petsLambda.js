@@ -78,7 +78,23 @@ router.get('/', async (req, res) => {
             sortCriteria = { urgent: -1, displayOrder: 1, createdAt: -1 };
         }
 
-        const pets = await Pet.find(query).sort(sortCriteria);
+        let pets = await Pet.find(query).sort(sortCriteria);
+
+        // En vista de adopción, poner los animales en acogida (foster) al final
+        if (status && status.includes('foster')) {
+            const statusOrder = { active: 0, scheduled: 1, foster: 2 };
+            pets = pets.sort((a, b) => {
+                // Mantener urgentes primero
+                if (a.urgent !== b.urgent) return b.urgent - a.urgent;
+                // Ordenar por status (foster al final)
+                const orderA = statusOrder[a.status] ?? 0;
+                const orderB = statusOrder[b.status] ?? 0;
+                if (orderA !== orderB) return orderA - orderB;
+                // Dentro del mismo status, ordenar por displayOrder
+                return (a.displayOrder || 0) - (b.displayOrder || 0);
+            });
+        }
+
         res.json(pets);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -171,20 +187,17 @@ router.put('/reorder', requireAuth, async (req, res) => {
             return res.status(400).json({ message: 'Cannot move further in that direction' });
         }
 
-        // Intercambiar displayOrder con el vecino
-        const targetPet = allPets[targetIndex];
-        const tempOrder = pet.displayOrder;
+        // Intercambiar posiciones en el array
+        const temp = allPets[currentIndex];
+        allPets[currentIndex] = allPets[targetIndex];
+        allPets[targetIndex] = temp;
 
-        // Si ambos tienen el mismo displayOrder, asignar valores únicos
-        if (pet.displayOrder === targetPet.displayOrder) {
-            pet.displayOrder = direction === 'up' ? targetPet.displayOrder - 1 : targetPet.displayOrder + 1;
-        } else {
-            pet.displayOrder = targetPet.displayOrder;
-            targetPet.displayOrder = tempOrder;
-        }
+        // Asignar displayOrder secuencial a todos los pets afectados
+        const updatePromises = allPets.map((p, index) => {
+            return Pet.findByIdAndUpdate(p._id, { displayOrder: index });
+        });
 
-        await pet.save();
-        await targetPet.save();
+        await Promise.all(updatePromises);
 
         res.json({ message: 'Order updated successfully' });
     } catch (error) {
@@ -303,8 +316,8 @@ async function deleteFromS3(key) {
     }
 }
 
-// Delete photo (solo admin)
-router.delete('/:id/photo/:photoIndex', requireAuth, requireRole('admin'), async (req, res) => {
+// Delete photo (admin y colaborador)
+router.delete('/:id/photo/:photoIndex', requireAuth, requireRole('admin', 'collaborator'), async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -333,8 +346,8 @@ router.delete('/:id/photo/:photoIndex', requireAuth, requireRole('admin'), async
     }
 });
 
-// Delete video (solo admin)
-router.delete('/:id/video/:videoIndex', requireAuth, requireRole('admin'), async (req, res) => {
+// Delete video (admin y colaborador)
+router.delete('/:id/video/:videoIndex', requireAuth, requireRole('admin', 'collaborator'), async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {
@@ -356,8 +369,8 @@ router.delete('/:id/video/:videoIndex', requireAuth, requireRole('admin'), async
     }
 });
 
-// Delete pet (solo admin)
-router.delete('/:id', requireAuth, requireRole('admin'), async (req, res) => {
+// Delete pet (admin y colaborador)
+router.delete('/:id', requireAuth, requireRole('admin', 'collaborator'), async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id);
         if (!pet) {

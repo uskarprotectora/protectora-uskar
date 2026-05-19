@@ -17,13 +17,13 @@ async function loadPets() {
         let url = API_URL + '?';
 
         if (AppState.currentView === 'adoption') {
-            // Incluir activos y reservados en la vista de adopción
-            url += `status=active,scheduled&`;
+            // Incluir activos, reservados y en acogida en la vista de adopción
+            url += `status=active,scheduled,foster&`;
         } else if (AppState.currentView === 'happy') {
             url += `status=inactive&`;
         } else {
             // Para otras vistas (about, contact), cargar todos los activos para estadísticas
-            url += `status=active,scheduled&`;
+            url += `status=active,scheduled,foster&`;
         }
 
         if (AppState.searchQuery) {

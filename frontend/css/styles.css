@@ -1215,6 +1215,11 @@ a.adoption-form-btn {
     color: white;
 }
 
+.status-foster {
+    background: rgba(124, 58, 237, 0.9);
+    color: white;
+}
+
 .status-inactive {
     background: rgba(100, 116, 139, 0.9);
     color: white;

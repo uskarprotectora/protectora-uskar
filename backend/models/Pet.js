@@ -69,7 +69,7 @@ const petSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'scheduled', 'inactive'],
+        enum: ['active', 'scheduled', 'foster', 'inactive'],
         default: 'active'
     },
     urgent: {
