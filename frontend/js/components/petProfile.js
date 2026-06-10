@@ -130,7 +130,7 @@ function renderProfile(pet) {
             <h3 class="profile-section-title">¿Quieres adoptarme?</h3>
             <p class="profile-description">Si estas interesado en darme un hogar, contacta con la protectora. Estaremos encantados de conocerte y contarte mas sobre mi.</p>
             <div class="profile-cta">
-                <button class="btn btn-primary btn-large" onclick="openAdoptionFormModalFromProfile('${sanitizeAttr(pet._id)}')">
+                <button class="btn btn-primary btn-large" onclick="openAdoptionFormByType('${pet.type}')">
                     ❤️ Quiero Adoptar
                 </button>
                 <button class="btn btn-secondary" onclick="openHelpModal('apadrina')">

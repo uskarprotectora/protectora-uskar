@@ -55,6 +55,7 @@ async function loadModals() {
         'components/modals/profile-modal.html',
         'components/modals/pet-modal.html',
         'components/modals/adoption-form-modal.html',
+        'components/modals/cat-adoption-form-modal.html',
         'components/modals/help-modal.html'
     ];
 
@@ -85,7 +86,7 @@ function setupMainEventListeners() {
         });
 
         // Cerrar menu al hacer click en un enlace de la sidebar
-        sidebar.querySelectorAll('.filter-btn, .adoption-form-btn').forEach(btn => {
+        sidebar.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 if (window.innerWidth <= 768) {
                     sidebar.classList.remove('active');
@@ -134,6 +135,23 @@ function setupMainEventListeners() {
         var filtersBar = document.getElementById('filtersBar');
         if (filtersBar) filtersBar.style.display = 'none';
         renderFormsView();
+    });
+
+    // Boton Formulario Adopción Gatos (Notion embed)
+    document.getElementById('openCatAdoptionFormBtn').addEventListener('click', () => {
+        document.getElementById('catAdoptionFormModal').classList.add('active');
+    });
+
+    // Cerrar modal formulario gatos
+    document.getElementById('closeCatAdoptionFormModal').addEventListener('click', () => {
+        document.getElementById('catAdoptionFormModal').classList.remove('active');
+    });
+
+    // Cerrar modal gatos al hacer clic en overlay
+    document.getElementById('catAdoptionFormModal').addEventListener('click', (e) => {
+        if (e.target.id === 'catAdoptionFormModal') {
+            document.getElementById('catAdoptionFormModal').classList.remove('active');
+        }
     });
 
     // Cerrar modal de perfil

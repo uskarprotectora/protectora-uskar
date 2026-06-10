@@ -117,7 +117,7 @@ petSchema.pre('save', function(next) {
     }
 
     // Establecer fecha de adopción cuando el status cambia a 'inactive'
-    if (this.isModified('status') && this.status === 'inactive' && !this.adoptedAt) {
+    if (this.isModified('status') && this.status === 'inactive') {
         this.adoptedAt = new Date();
     }
 

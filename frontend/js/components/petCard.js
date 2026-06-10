@@ -159,7 +159,11 @@ function attachPetCardListeners() {
             adoptBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const pet = AppState.pets.find(p => p._id === petId);
-                openAdoptionFormModal(pet);
+                if (pet && pet.type === 'cat') {
+                    document.getElementById('catAdoptionFormModal').classList.add('active');
+                } else {
+                    openAdoptionFormModal();
+                }
             });
         }
 
